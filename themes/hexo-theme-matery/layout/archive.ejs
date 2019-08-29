@@ -1,0 +1,38 @@
+<%- partial('_partial/bg-cover') %>
+
+<section class="section">
+
+    <%- partial('_widget/post-calendar') %>
+
+    <div class="container archive-container">
+        <% const groups = {};
+        const years = [];
+        page.posts.each(post => {
+            const year = post.date.year();
+            if (typeof(groups[year]) === 'undefined') {
+                groups[year] = [];
+                years.push(year);
+            }
+            groups[year].push(post);
+        });
+        years.sort((a, b) => b - a); %>
+        <% for (let year of years) { %>
+            <div class="archive">
+                <h4 class="archive-year" id="<%= year %>"><%= year %></h4>
+                <div class="articles">
+                    <% for (let post of groups[year].sort((a, b) => b.date.diff(a.date))) { %>
+                        <div class="article content>">
+                            <time class="is-text-small" datetime="<%= date_xml(post.date) %>" itemprop="datePublished">
+                                <%= date(post.date, 'MMM DD') %></time>
+                            <h6 class="is-6"><a href="<%= url_for(post.link ? post.link : post.path) %>"><%= post.title %></a></h6>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+        <% if (page.total > 1) { %>
+            <%- partial('_partial/paging') %>
+        <% } %>
+    </div>
+</section>
+

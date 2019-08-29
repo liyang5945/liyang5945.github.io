@@ -1,0 +1,41 @@
+[{
+  "name": "Inspire",
+  "artist": "Capo Productions",
+  "url": "http://imgs.liyangzone.com/music/Inspire.mp3",
+  "cover": "http://imgs.liyangzone.com/music/Inspire.jpg"
+},  {
+  "name": "Fireflies",
+  "artist": "Ryan Farish",
+  "url": "http://imgs.liyangzone.com/music/Fireflies.mp3",
+  "cover": "http://imgs.liyangzone.com/music/Fireflies.jpg"
+}, {
+  "name": "Escape",
+  "artist": "Dripice",
+  "url": "http://imgs.liyangzone.com/music/Escape.mp3",
+  "cover": "http://imgs.liyangzone.com/music/Escape.jpg"
+}, {
+  "name": "Spectre",
+  "artist": "Alan Walker",
+  "url": "http://imgs.liyangzone.com/music/Spectre.mp3",
+  "cover": "http://imgs.liyangzone.com/music/Spectre.jpg"
+}, {
+  "name": "Hope",
+  "artist": "Tobu",
+  "url": "http://imgs.liyangzone.com/music/Hope.mp3",
+  "cover": "http://imgs.liyangzone.com/music/Hope.jpg"
+}, {
+  "name": "Infectious",
+  "artist": "Tobu",
+  "url": "http://imgs.liyangzone.com/music/Infectious.mp3",
+  "cover": "http://imgs.liyangzone.com/music/Infectious.jpg"
+}, {
+  "name": "Sunburst",
+  "artist": "Tobu",
+  "url": "http://imgs.liyangzone.com/music/Sunburst.mp3",
+  "cover": "http://imgs.liyangzone.com/music/Sunburst.jpg"
+}, {
+  "name": "Seven",
+  "artist": "Tobu",
+  "url": "http://imgs.liyangzone.com/music/Seven.mp3",
+  "cover": "http://imgs.liyangzone.com/music/Seven.jpg"
+}]

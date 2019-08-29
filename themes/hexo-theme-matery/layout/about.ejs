@@ -1,0 +1,120 @@
+
+<%- partial('_partial/bg-cover') %>
+
+<main class="content">
+
+    <div id="aboutme" class="container about-container">
+        <div class="card">
+            <div class="card-content">
+                <div class="row">
+                    <div class="post-statis col l4 hide-on-med-and-down" data-aos="zoom-in-right">
+                        <%- partial('_partial/post-statis') %>
+                    </div>
+                    <div class="col s12 m12 l4">
+                        <div class="profile center-align">
+                            <div class="avatar">
+                                <img src="<%- theme.profile.avatar %>" alt="<%- config.author %>"
+                                     class="circle responsive-img avatar-img">
+                            </div>
+
+
+
+
+                            <div class="author">
+                                <div class="post-statis hide-on-large-only" data-aos="zoom-in-right">
+                                    <%- partial('_partial/post-statis') %>
+                                </div>
+                                <div class="title"><%- config.author %></div>
+                                <div class="career"><%- theme.profile.career %></div>
+
+
+
+
+                                <div class="social-link hide-on-large-only" data-aos="zoom-in-left">
+                                    <%- partial('_partial/social-link') %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col l4 hide-on-med-and-down" data-aos="zoom-in-left">
+                        <div class="social-link">
+                            <%- partial('_partial/social-link') %>
+                        </div>
+                    </div>
+                </div>
+                <div id="articleContent" class="desc-content">
+                    <h4 id="toc-heading-1"><a href="#关于我：" class="headerlink" title="关于我：" target="_blank"></a>关于我：</h4>
+                    <p>90后，一名前端开发者，现居上海。</p>
+                    <p>技术宅一枚，喜欢折腾各种电子产品、钻研各种技术。也喜欢骑行、健身等运动。</p>
+                    <p>我的人生理念：生命不息，折腾不止。自己动手，丰衣足食。</p>
+                    <h4 id="toc-heading-2"><a href="#关于博客" class="headerlink" title="关于博客" target="_blank"></a>关于博客</h4>
+                    <p>写这个博客的目的就是分享一些软件技巧、技术相关、折腾经历、生活记录等。</p>
+                    <p>我经常在搜索一些技术问题的时候，会进入到某个人的博客里，我希望将来某个人搜索相关问题的时候，也来到我的博客里，然后成功的将问题解决。也希望每一个前来访问的人都能有所收获。</p>
+
+                    <h4 id="toc-heading-2"><a href="#博客记录" class="headerlink" title="博客记录" target="_blank"></a>博客记录</h4>
+
+
+                    <p>2019年7月初，开始有了建博客的idea。</p>
+                    <p>然后研究了各种博客方案，也参观了很多大牛的博客。最后选择了Hexo静态博客生成器，因为它的定制性比较强，可以随心所欲的定制想要的界面。主题初步选择的是<code>NexT.Gemini</code>,折腾了几天后来又发现了这个更加高大上的主题 <code>hexo-theme-matery</code> </p>
+                    <p>博客空间选择：首先准备用的是Github Pages，然后发现访问速度有点感人。经过多番折腾，最终本博客采用如下方案：</p>
+                    <p>腾讯云服务器，配置为1h核2G1Mps，主要存放静态页面文件（HTML&CSS）和文章里的图片。腾讯对象存储配合腾讯CDN，存放相册缩略图，因为我发现直接存到主机里的话，加载速度非常的慢，要几十秒。七牛对象存储配合七牛CDN，存放相册大图。Staticfile CDN引用一些第三方插件的js文件和css文件，这个CDN的加载速度不错，一般不超过50ms，可以大幅提高页面加载速度。</p>
+
+
+                    <p>主题：基于<a href="https://blinkfox.github.io/" target="_blank" rel="noopener">闪烁之狐</a>的<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">hexo-theme-matery</a>修改而来。</p>
+                    <p>折腾记录：</p>
+                    <ul>
+                        <li>修改主题颜色，首页轮播图高度，和一些CSS的BUG。</li>
+                        <li>去除标签页，将标签合并到到分类页。</li>
+                        <li>修改归档页时间轴样式为普通列表样式。</li>
+                        <li>添加CNZZ站长统计。</li>
+                        <li>添加分类相册功能。</li>
+                        <li>将一些CSS和JS文件引用地址改为Staticfile CDN，提高页面加载速度。</li>
+                        <li>添加相册加密功能。</li>
+                        <li>2019-07-23 在腾讯云购入本域名。</li>
+                        <li>2019-08-12 域名备案成功。</li>
+                        <li>2019-08-21 申请了一个SSL证书，启用HTTPS。</li>
+                    </ul>
+
+
+                    <div style="margin: 0 auto;padding-top: 20px ;">
+                        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" style="width: 100%; height: 450px;" src="//music.163.com/outchain/player?type=0&id=2909217088&auto=1&height=430"></iframe>
+                    </div>
+
+                </div>
+
+
+
+                <div class="desc-content" style="padding-top: 20px;">
+                    <h4>给我留言</h4>
+
+
+
+                    <p style="font-size: 1.1rem; line-height: 2rem;">互联网的广大朋友们，欢迎光临我的小博客！在这里可以留下你的足迹。欢迎在下方留言，欢迎交换友链，一起交流学习！</p>
+
+                <% if (theme.valine && theme.valine.enable) { %>
+                        <%- partial('_partial/valine') %>
+                    <% } %>
+                </div>
+
+
+
+
+                <div class="introduction center-align" data-aos="fade-up"><%= theme.profile.introduction %></div>
+
+
+                <% if (theme.myProjects && theme.myProjects.enable) { %>
+                <%- partial('_widget/my-projects') %>
+                <% } %>
+
+                <% if (theme.mySkills && theme.mySkills.enable) { %>
+                <%- partial('_widget/my-skills') %>
+                <% } %>
+
+                <% if (theme.myGallery && theme.myGallery.enable) { %>
+                <%- partial('_widget/my-gallery') %>
+                <% } %>
+
+            </div>
+        </div>
+    </div>
+</main>
