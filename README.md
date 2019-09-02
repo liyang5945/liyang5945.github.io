@@ -11,7 +11,7 @@
 - 去除标签页，将标签合并到到分类页。
 - 修改归档页时间轴样式为普通列表样式。
 - 修改Valine评论输入框placeholder的样式。
-- 将一些CSS和JS文件引用地址改为Staticfile CDN(本地已删除)。
+- 将一些CSS和JS文件引用地址改为Staticfile CDN(主题/libs目录下的文件，本地已删除)。
 - 替换Banner图片及文章特色图片。
 - 添加CNZZ站长统计。
 
@@ -22,23 +22,23 @@
 
 在线预览：[星空无限](https://liyangzone.com)
 
-![首页](https://liyangzone.com/article_img/blog-show/blog-home.jpg)
+![blog-home.jpg](https://i.loli.net/2019/08/31/jlQBpx8nJfGuzqZ.jpg)
 
-![归档页](https://liyangzone.com/article_img/blog-show/blog-archives.jpg)
+![blog-archives.jpg](https://i.loli.net/2019/08/31/Juf6ZyeSiUXxbTk.jpg)
 
-##相册功能
+## 相册功能
 
 相册目录：
 
-![相册目录](https://liyangzone.com/article_img/blog-show/blog-gallery-1.jpg)
+![blog-gallery-1.jpg](https://i.loli.net/2019/08/31/9mlyKIgTO4Ajcs6.jpg)
 
 相册列表：
 
-![相册列表](https://liyangzone.com/article_img/blog-show/blog-gallery-2.jpg)
+![blog-gallery-3.jpg](https://i.loli.net/2019/08/31/iyJrANKxa9BMwE8.jpg)
 
 相册大图：
 
-![相册大图](https://liyangzone.com/article_img/blog-show/blog-gallery-3.jpg)
+![blog-gallery-2.jpg](https://i.loli.net/2019/08/31/DIpRMfwX6GF4WqO.jpg)
 
 ## 安装使用（Installation）
 
