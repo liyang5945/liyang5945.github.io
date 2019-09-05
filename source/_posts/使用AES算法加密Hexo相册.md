@@ -305,6 +305,7 @@ $(document).ready(
 
 需要注意的是上面HTML里引入的`crypto-js.js`这个文件，只有安装了`hexo-blog-encrypt`插件发布后才会生成，如果你不想安装这个插件，则需要手动安装`crypto-js`: `npm i crypto-js`, 然后在插件目录下找到`crypto-js.js`文件，复制出来放到`source/js`下，引用路径也要改一下。
 
+博客源码已上传至github: [点击前往](https://github.com/liyang5945/liyang5945.github.io),觉得不错的可以给个STAR支持一下。
 
 
 

@@ -273,8 +273,8 @@ valine:
 # Whether to display fork me on github icon and link, default true, You can change it to your repo address
 # 配置是否在 header 中显示 fork me on github 的图标，默认为true，你可以修改为你的仓库地址.
 githubLink:
-  enable: false
-  url: https://github.com/blinkfox/hexo-theme-matery
+  enable: true
+  url: https://github.com/liyang5945/
   title: Fork Me
 
 # The password verification feature of read post. To use this feature,

@@ -34,11 +34,13 @@
 
 相册列表：
 
-![blog-gallery-3.jpg](https://i.loli.net/2019/08/31/iyJrANKxa9BMwE8.jpg)
+![blog-gallery-2.jpg](https://i.loli.net/2019/08/31/DIpRMfwX6GF4WqO.jpg)
+
 
 相册大图：
 
-![blog-gallery-2.jpg](https://i.loli.net/2019/08/31/DIpRMfwX6GF4WqO.jpg)
+![blog-gallery-3.jpg](https://i.loli.net/2019/08/31/iyJrANKxa9BMwE8.jpg)
+
 
 ## 安装使用（Installation）
 
