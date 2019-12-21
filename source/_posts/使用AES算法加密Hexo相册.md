@@ -6,6 +6,7 @@ tags:
 - hexo
 - 相册
 - 加密
+- 教程
 categories:
 - 技术教程  
 ---
