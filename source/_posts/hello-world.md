@@ -5,12 +5,10 @@ password: 2233
 tags: 
 - hello world
 categories:
-- 日志  
+- 生活记录  
 ---
 
-
-
-hello world!
+博客问世，hello world!
 
 
 

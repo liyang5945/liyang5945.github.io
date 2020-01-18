@@ -88,12 +88,34 @@ theme: hexo-theme-matery
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-deploy:
-  type: git
-  repo: https://github.com/liyang5945/liyang5945.github.io.git
-  branch: master
-  message:
 
+# 部署相关：
+
+# 下面的写法是travis-ci部署到github-pages和腾讯cos
+
+deploy:
+  - type: git
+    branch: master
+    repo: https://gh_token@github.com/liyang5945/liyang5945.github.io.git
+  - type: cos
+    appId: cos_appId
+    secretId: cos_secretId
+    secretKey: cos_secretKey
+    bucket: cos_bucket
+    region: ap-shanghai
+
+
+# 下面的写法是本地部署到github-pages和腾讯cos
+
+#deploy:
+#  #- type: git
+#  #  repo: https://github.com/liyang5945/liyang5945.github.io
+#  - type: cos
+#    appId: ******
+#    secretId: ********
+#    secretKey: ********
+#    bucket: liyang-blog-******
+#    region: ap-shanghai
 
 # 搜索
 search:

@@ -10,7 +10,7 @@ summary: Markdown是什么？
 tags: 
 - Markdown
 categories:
-- 技术指南  
+- 技术分享
 mathjax: true
 
 ---

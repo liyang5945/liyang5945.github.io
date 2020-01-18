@@ -1,33 +1,74 @@
 /* Here is your custom css styles. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px
+}
+
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0
+}
+
+::-webkit-scrollbar-button:end:decrement,
+::-webkit-scrollbar-button:start:increment {
+  display: none;
+}
+
+::-webkit-scrollbar-corner {
+  display: block;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, .05);
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: rgba(0, 0, 0, .1);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, .15);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, .25);
+}
+
+::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-track {
+  border-right: 1px solid transparent;
+  border-left: 1px solid transparent;
+}
+
 .site-title {
   display: inline-block;
   vertical-align: top;
 }
-
 
 .right .nav-link {
   vertical-align: top;
 }
 
 .foot-bg-color {
-  background: linear-gradient(to right, #141e30, #243b55);
+  background: linear-gradient(to right, #141E30, #243B55);
 }
 
 
 /*归档页列表样式*/
-.archive-container{
-  padding: 20px ;
+.archive-container {
+  padding: 20px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-  background-color: #fff;
+  background-color: #FFFFFF;
 }
+
 .archive:not(:last-child) {
   margin-bottom: 3rem;
 }
 
 .archive .articles {
-  border-left: 1px solid #dbdbdb;
+  border-left: 1px solid #DBDBDB;
 }
 
 .archive .article {
@@ -38,7 +79,7 @@
 }
 
 .archive .article:hover {
-  border-left-color: #0f9d58 ;
+  border-left-color: #0F9D58;
 }
 
 .archive .article time {
@@ -57,37 +98,40 @@
 }
 
 .archive .article h6 a:hover {
-  border-bottom-color: #0f9d58;
+  border-bottom-color: #0F9D58;
 }
 
 
-.hbe-input-container{
+.hbe-input-container {
   width: 80%;
   max-width: 800px;
   position: relative;
   margin: 100px auto;
 }
 
-.hbe-input-container  .btn-decrypt{
+.hbe-input-container .btn-decrypt {
   display: inline-block;
   vertical-align: top;
   width: 120px;
   height: 32px;
   line-height: 32px;
   font-size: 16px;
-  color: #ffffff;
-  background-color: #3f90ff;
+  color: #FFFFFF;
+  background-color: #3F90FF;
   text-align: center;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
+
 .about-cover {
   height: 50vh;
 }
-.desc-content{
+
+.desc-content {
   padding: 0 50px;
 }
+
 @media only screen and (max-width: 601px) {
   .desc-content {
     padding: 0 15px;

@@ -1,9 +1,6 @@
 <link rel="stylesheet" href="/css/gallery.css">
-
 <link rel="stylesheet" type="text/css" href="<%- theme.libs.css.fancybox %>">
 <link rel="stylesheet" type="text/css" href="<%- theme.libs.css.justifiedGallery %>">
-
-
 <%- partial('_partial/post-cover') %>
 <%
 let galleries = [];
@@ -19,31 +16,21 @@ function getCurrentGallery(galleries, pageTitle) {
     }
 }
 var currentGallery = getCurrentGallery(galleries, pageTitle)
-
 var photos = currentGallery.photos;
-
 let imageStr = ''
-
 for (var i = 0, len = photos.length; i < len; i++) {
     var photo = photos[i];
-
     imageStr += "<a href=\"http://imgs.liyangzone.com/" + photo + "!w75\"" +
             "     class=\"photo-item\" rel=\"example_group\"" +
             "     data-fancybox=\"images\">" +
-            "      <img src=\"http://images.liyangzone.com/gallery_tiny/" + photo + "\"" +
+            "      <img src=\"https://images.liyangzone.com/gallery_tiny/" + photo + "\"" +
             "       alt=" + photo + ">" +
             "    </a>"
-
 }
 %>
-
-<!--            "          <p class=\"photo-name\">" + photo + "</p>\n" +
-文件名先注释掉-->
 <div class="container">
     <div class="photo-wrapper">
         <% if (page.password ) { %>
-
-
             <script src="/js/crypto-js.js"></script>
             <script src="/js/gallery-encrypt.js"></script>
             <div id="hbe-security">
@@ -52,32 +39,23 @@ for (var i = 0, len = photos.length; i < len; i++) {
                     <a href="javascript:;" class="btn-decrypt" id="btn_decrypt">解密</a>
                 </div>
             </div>
-            <div  id="mygallery">
-
+            <div id="mygallery">
                 <div class="waterfall" id="encrypt-blog" style="display:none">
                     <%- aes(imageStr, page.password) %>
                 </div>
             </div>
-
         <% } else { %>
             <div class="waterfall" id="encrypt-blog">
-
                 <%- imageStr %>
             </div>
         <% } %>
     </div>
 </div>
-
 <script src="<%- theme.libs.js.lazyload %>"></script>
 <script src="<%- theme.libs.js.fancybox %>"></script>
 <script src="<%- theme.libs.js.justifiedGallery %>"></script>
-
 <script>
   // $(".waterfall").lazyload();
-
   $("a[rel=example_group]").fancybox();
-
   $("#encrypt-blog").justifiedGallery({margins: 5, rowHeight: 150});
-
-
 </script>

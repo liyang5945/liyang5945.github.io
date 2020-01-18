@@ -1,0 +1,29 @@
+language: node_js
+
+node_js: stable  # 要安装的node版本为当前的稳定版
+
+before_install:
+  - export TZ='Asia/Shanghai' # 更改时区
+install:
+  - npm install
+
+script:
+  - hexo clean
+  - hexo g
+
+after_script:   # 最后执行的命令
+
+  - sed -i "s/cos_appId/${cos_appId}/g" _config.yml
+  - sed -i "s/cos_secretId/${cos_secretId}/g" _config.yml
+  - sed -i "s/cos_secretKey/${cos_secretKey}/g" _config.yml
+  - sed -i "s/cos_bucket/${cos_bucket}/g" _config.yml
+  - sed -i "s/gh_token/${Travis_Token}/g" _config.yml
+  - hexo deploy
+
+branches:
+  only:
+    - blog-source # 触发持续集成的分支
+
+env:
+  global:
+    - GH_REF: github.com/liyang5945/liyang5945.github.io.git # 就是你github上存放静态博客最终文件的仓库地址末尾加上.git

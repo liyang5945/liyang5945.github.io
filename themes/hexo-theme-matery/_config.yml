@@ -5,22 +5,22 @@ menu:
     url: /
     icon: fa-home
   Categories:
-    url: /categories
+    url: /categories/
     icon: fa-bookmark
   #Tags:
     #url: /tags
     #icon: fa-tags
   Archives:
-    url: /archives
+    url: /archives/
     icon: fa-archive
   Galleries:
-    url: /galleries
+    url: /galleries/
     icon: fa-photo
   About:
-    url: /about
+    url: /about/
     icon: fa-user-circle-o
   Friends:
-    url: /friends
+    url: /friends/
     icon: fa-address-book
 
 # Index cover carousel configuration.
@@ -137,7 +137,8 @@ copyright:
 # 考虑到mathjax加载比较耗时，你还需要在需要渲染的文章的Front-matter中再加上`mathjax: true`才行.
 mathjax:
   enable: true
-  cdn: https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+  cdn: //cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+  # cdn: https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
 # Post word count, reading duration, site total word count.
 # Before you activate, please confirm that you have installed the hexo-wordcount plugin,
@@ -318,7 +319,7 @@ libs:
     aplayer: /libs/aplayer/APlayer.min.css
     dplayer: /libs/dplayer/DPlayer.min.css
     gitalk: /libs/gitalk/gitalk.css
-    jqcloud: /libs/jqcloud/jqcloud.css
+    jqcloud: https://cdn.staticfile.org/jqcloud/1.0.4/jqcloud.min.css
     tocbot: /libs/tocbot/tocbot.css
     fancybox: https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css
     justifiedGallery: https://cdn.staticfile.org/justifiedGallery/3.7.0/css/justifiedGallery.min.css
@@ -339,7 +340,7 @@ libs:
     crypto: https://cdn.staticfile.org/crypto-js/3.1.9-1/crypto-js.min.js
     echarts: https://cdn.staticfile.org/echarts/4.2.0-rc.2/echarts.min.js
     gitalk: /libs/gitalk/gitalk.min.js
-    jqcloud: /libs/jqcloud/jqcloud-1.0.4.min.js
+    jqcloud: https://cdn.staticfile.org/jqcloud/1.0.4/jqcloud-1.0.4.min.js
     tocbot: /libs/tocbot/tocbot.min.js
     fancybox: https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js
     justifiedGallery: https://cdn.staticfile.org/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js
@@ -352,29 +353,29 @@ libs:
 # The post featured images that needs to be displayed when there is no image.
 # 无文章特色图片时需要显示的文章特色图片.
 featureImages:
--   http://images.liyangzone.com/medias/featureimages/11390867894_3265cf7046_h.jpg
--   http://images.liyangzone.com/medias/featureimages/12156466194_0b3617b44f_k.jpg
--   http://images.liyangzone.com/medias/featureimages/12563496205_cf153f31e4_k.jpg
--   http://images.liyangzone.com/medias/featureimages/12764918073_21b21449be_k.jpg
--   http://images.liyangzone.com/medias/featureimages/14184649994_e5110d3e04_b.jpg
--   http://images.liyangzone.com/medias/featureimages/14639535176_62d251a72b_h.jpg
--   http://images.liyangzone.com/medias/featureimages/14886762205_d1ecfd0a07_b.jpg
--   http://images.liyangzone.com/medias/featureimages/15719158587_5094912df4_k.jpg
--   http://images.liyangzone.com/medias/featureimages/15924164790_19f9774929_k.jpg
--   http://images.liyangzone.com/medias/featureimages/16084439413_cde81ace98_k.jpg
--   http://images.liyangzone.com/medias/featureimages/19040000589_2696c93a9e_k.jpg
--   http://images.liyangzone.com/medias/featureimages/23903085861_36603f7b56_k.jpg
--   http://images.liyangzone.com/medias/featureimages/28059160269_689d50eb05_k.jpg
--   http://images.liyangzone.com/medias/featureimages/32357705797_dba1cef4af_h.jpg
--   http://images.liyangzone.com/medias/featureimages/44045678205_615dfdd617_b.jpg
--   http://images.liyangzone.com/medias/featureimages/5733685713_c93ac9410b_b.jpg
--   http://images.liyangzone.com/medias/featureimages/7054335719_1bc20831f0_b.jpg
--   http://images.liyangzone.com/medias/featureimages/7318567386_72c53cad76_k.jpg
--   http://images.liyangzone.com/medias/featureimages/8614390498_4988d2b760_k.jpg
--   http://images.liyangzone.com/medias/featureimages/8628396788_531dde141f_h.jpg
--   http://images.liyangzone.com/medias/featureimages/8662272699_cc54258400_k.jpg
--   http://images.liyangzone.com/medias/featureimages/9480099723_45d4534604_k.jpg
--   http://images.liyangzone.com/medias/featureimages/9491229619_9eb1070c50_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/11390867894_3265cf7046_h.jpg
+-   https://images.liyangzone.com/medias/featureimages/12156466194_0b3617b44f_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/12563496205_cf153f31e4_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/12764918073_21b21449be_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/14184649994_e5110d3e04_b.jpg
+-   https://images.liyangzone.com/medias/featureimages/14639535176_62d251a72b_h.jpg
+-   https://images.liyangzone.com/medias/featureimages/14886762205_d1ecfd0a07_b.jpg
+-   https://images.liyangzone.com/medias/featureimages/15719158587_5094912df4_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/15924164790_19f9774929_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/16084439413_cde81ace98_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/19040000589_2696c93a9e_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/23903085861_36603f7b56_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/28059160269_689d50eb05_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/32357705797_dba1cef4af_h.jpg
+-   https://images.liyangzone.com/medias/featureimages/44045678205_615dfdd617_b.jpg
+-   https://images.liyangzone.com/medias/featureimages/5733685713_c93ac9410b_b.jpg
+-   https://images.liyangzone.com/medias/featureimages/7054335719_1bc20831f0_b.jpg
+-   https://images.liyangzone.com/medias/featureimages/7318567386_72c53cad76_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/8614390498_4988d2b760_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/8628396788_531dde141f_h.jpg
+-   https://images.liyangzone.com/medias/featureimages/8662272699_cc54258400_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/9480099723_45d4534604_k.jpg
+-   https://images.liyangzone.com/medias/featureimages/9491229619_9eb1070c50_k.jpg
 
   # default configs that the default policy for every articles/posts
   # default 配置文章的默认转载规则

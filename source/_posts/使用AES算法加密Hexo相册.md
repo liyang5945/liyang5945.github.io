@@ -8,7 +8,7 @@ tags:
 - 加密
 - 教程
 categories:
-- 技术教程  
+- 技术分享  
 ---
 
 本教程承接上篇[Hexo博客添加一级分类相册](/2019/07/22/hexo%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E4%B8%80%E7%BA%A7%E5%88%86%E7%B1%BB%E7%9B%B8%E5%86%8C/)。
@@ -23,22 +23,22 @@ categories:
 
 首先我发现本主题自带一个加密功能：如下图：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_120352.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_120352.png)
 
 它的实现效果是这样的：
 
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_120754.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_120754.png)
 
 在进入界面的时候就要求输入密码，不输或输入错误都会跳转到首页。
 
 在我看了源码之后发现是这样实现的，如果文章配置了加密就在页面里加上一段js代码，源码在`post.ejs`文件里，如下图；
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_121113.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_121113.png)
 
 页面内生成的js代码呢，是这样的：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_121325.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_121325.png)
 
 我们可以看到密码是直接写在页面内的，主题作者是采用`SHA256`再加密一遍密码，再用这个值当密码，防止别人识破。然而这种方式是伪加密的，查看网页的源代码就可以看到文章的内容。这种方式可以阻挡99%的人，但是对付懂行的人就不行了，有心人费点心思就能破解。
 
@@ -47,7 +47,7 @@ categories:
 
 然后我以`hexo 加密`为关键字搜索相关教程，得到的结果如下：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_115324.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_115324.png)
 
 里面的内容大同小异，不外乎两个hexo的插件：一个是`hexo-blog-encrypt`，另一个是`hexo-encrypt`。在我把两个插件都尝试过了之后，发现这两个插件只能加密`文章`，也就是hexo从md文件里读取到的文章内容。而我们的相册呢，是根据配置文件自动生成的，并没有在md文件里写着，实现不了加密。
 
@@ -80,15 +80,15 @@ categories:
 
 然后`hexo-blog-encrypt`插件就会把文章加密了，如下图：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_131238.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_131238.png)
 
 页面结构如下：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_131459.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_131459.png)
 
 文章的内容被加密成了这么一坨字符串，解密后变成了这样：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_131813.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_131813.png)
 
 文章的内容，就是两个P标签。
 
@@ -96,15 +96,15 @@ categories:
 
 那一坨字符串是怎么变成两个P标签的呢，我仔细研究后发现解密的功能在`blog-encrypt.js`这个文件里，在知道正确密码的情况下，执行了四步转换才将那个字符串解密，源码如下：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_133345.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_133345.png)
 
 那么这四步都干了什么呢，我把上面加密后的一坨字符串和相关js都放到一个html里在浏览器控制台调试一下，看看究竟是怎么解密的：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_133720.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_133720.png)
 
 控制台输出如下：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_133817.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_133817.png)
 
 我们可以看到，在第四步输出了解密后的HTML标签。
 
@@ -118,7 +118,7 @@ categories:
 ```
 解密出来的内容是一个JS对象，里面有一个words数组，展开后如下图：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_135141.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_135141.png)
 
 2、将上面那个JS对象转换为utf-8码，转换后为成为一个base64字符串。
 
@@ -151,7 +151,7 @@ const CryptoJS = require('crypto-js');
 
 在查看[官方文档](https://hexo.io/zh-cn/api/helper.html)之后发现需要自己写一个辅助函数（helper），才能在ejs里调用它：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_192430.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_192430.png)
 
 然后我们在主题根目录下新建以下目录和文件`scripts/helpers/encrypt.js`，`encrypt.js`内代码如下：
 
@@ -217,9 +217,9 @@ hexo.extend.helper.register('aes', function(content,password){
 
 这段代码的作用就是判断相册是否有密码，有则加密，没有则正常渲染，密码也是写在md文件的头部，加密后页面样式和HTML结构如下：
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_220409.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_220409.png)
 
-![](https://liyangzone.com/article_img/加密相册教程/20190730_211445.png)
+![](https://images.liyangzone.com/article_img/加密相册教程/20190730_211445.png)
 
 可以看到内容已经被加密成了一坨乱码，在这里，我手动加了一个`解密`按钮，原来插件是没有的，然后写点css美化一下，我是加到了`my.css`里面
 

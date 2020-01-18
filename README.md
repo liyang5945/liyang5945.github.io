@@ -14,6 +14,7 @@
 - 将一些CSS和JS文件引用地址改为Staticfile CDN(主题/libs目录下的文件，本地已删除)。
 - 替换Banner图片及文章特色图片。
 - 添加CNZZ站长统计。
+- 2018-01-18 添加Travis-CI持续集成。
 
 
 

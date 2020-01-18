@@ -1,23 +1,23 @@
 ---
 title: hexo博客添加一级分类相册功能
 date: 2019-07-22 10:43:47
-categories: 技术教程
+categories: 技术分享
 cover: true
 tags: 
- - hexo 
- - 相册 
- - 教程 
+ - hexo
+ - 相册
+ - 教程
 ---
 
 最近在折腾自己的博客，在折腾的过程中也参观了许多大牛的博客，发现不少博主都有个相册页面，我也想在自己的博客上面加个相册功能。但是我现在用的这个主题呢，虽然有个相册的功能，但是我感觉有点简陋，点击照片是个弹出的轮播图，照片多了的话还要一张一张的翻。如下图：
 
-![](https://liyangzone.com/article_img/添加相册教程/2019-07-22-01.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/2019-07-22-01.jpg)
 
 <!-- more -->
 
 后来在网上找了不少教程，可是实现的结果大部分都是这种：
 
-![](https://liyangzone.com/article_img/添加相册教程/不带分类的相册.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/不带分类的相册.jpg)
 
 虽然有了分类的功能，但是所有照片都是在一个页面上，图片多了会影响页面加载速度，页面也会变得很长，移动端会浪费大量流量，用户体验不是很好。
 
@@ -25,8 +25,8 @@ tags:
 
 而我想要的呢，是个类似`QQ空间`的相册，要有个相册目录界面，然后可以从目录页跳转至相册列表界面。 然后我翻遍了整个互联网终于找到了一个有相册分类功能的博客，该博客的相册界面是这样的：
 
-![](https://liyangzone.com/article_img/添加相册教程/分类相册1.jpg)
-![](https://liyangzone.com/article_img/添加相册教程/20190722-153547.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/分类相册1.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/20190722-153547.jpg)
 
 
 该博客地址：[http://www.rayblog.cn/album](http://www.rayblog.cn/album/)
@@ -60,7 +60,7 @@ tags:
 }]
 ```
 该文件包含每个友链的头像、名字、介绍、地址、标题信息，然后hexo会按照friends.ejs模板文件里的结构渲染出来列表，实现的效果就是这样的:
-![](https://liyangzone.com/article_img/添加相册教程/2019-07-22-02.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/2019-07-22-02.jpg)
 
 就是三个a标签，里面包含头像、地址等信息，点击后跳到对应的地址。
 
@@ -97,18 +97,18 @@ galleries: 相册
 
 做完以上操作后，你就会发现`相册`的菜单已经出现了：
 
-![](https://liyangzone.com/article_img/添加相册教程/2019-07-22-03.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/2019-07-22-03.jpg)
 
 点击就能跳转到`galleries`下，然而浏览器会提示你：
 
-![](https://liyangzone.com/article_img/添加相册教程/2019-07-22-04.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/2019-07-22-04.jpg)
 
 
 
 因为站点下并没有`galleries/index.html`这个文件，如何生成这个文件呢?
 在站点根目录`source`下新建`galleries`目录，然后在该目录下新建`index.md`，就会生成`index.html`文件了，然而却是这个效果：
 
-![](https://liyangzone.com/article_img/添加相册教程/2019-07-22-05.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/2019-07-22-05.jpg)
 
 
 #### 2、生成相册目录和相册列表
@@ -310,7 +310,7 @@ for (var i = 0, len = photos.length; i < len; i++) {
 
 以上代码实现的功能呢，就是读取相册配置文件并把相册目录和相册列表都渲染成HTML，用`<% %>`包起来的代码是`ejs`语法，调试的话是在本地控制台输出的而不是浏览器，就是你输入`hexo s`的地方，我这里用的是WebStorm自带的终端，看下图：
 
-![](https://liyangzone.com/article_img/添加相册教程/2019-07-22-06.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/2019-07-22-06.jpg)
 
 
 另外上面代码里引用了两个`jquery插件`，分别是`fancybox`和`justifiedGallery`, 一个是点击弹出的轮播插件，一个是自动调整图片布局的插件，需要自行下载并放到相应目录，当然，你也可以用浏览器调试工具直接在我的博客上下载，在sources里找到对应的文件，另存为就行。
@@ -370,23 +370,23 @@ layout: "gallery"
 
 建好相应目录和文件之后，如果你的图片路径也没有错的话，相册目录和列表就都会渲染出来了，如下所示：
 
-![](https://liyangzone.com/article_img/添加相册教程/2019-07-22-07.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/2019-07-22-07.jpg)
 
-![](https://liyangzone.com/article_img/添加相册教程/20190722_161044.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/20190722_161044.jpg)
 
-![](https://liyangzone.com/article_img/添加相册教程/20190722_160930.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/20190722_160930.jpg)
 
 #### 4、照片列表的布局选择
 
 
 上面的博客用的布局都比较简单粗暴，都是固定的大小和宽高比。但是不同的图片有不同的宽高比，用这种模式的话图片有两种显示方式，一是强制缩放到固定的宽高，二是裁切只显示一部分，但是都有缺点，第一个会图片会变形，第二个图片显示不全。那么有没有两全齐美的办法呢？答案是肯定的。首先我选用的是瀑布流布局，用CCS3的新特性实现的，这种模式的特点是等宽布局，固定列数，图片高度自适应，如下图：
 
-![](https://liyangzone.com/article_img/添加相册教程/20190115114259.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/20190115114259.jpg)
 
 看起来似乎没什么问题，高端大气上档次，然而做好了我发现图片的排列顺序是这个样子的，是按列竖向排列的，不太符合阅读习惯，PASS。
 
 另外一种布局呢是等高布局，如图；
-![](https://liyangzone.com/article_img/添加相册教程/20190723_110706.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/20190723_110706.jpg)
 
 这种布局是等高布局，图片高度一致，宽度自适应，图片托管网站flickr就是用的这种模式，但是用CSS方法是实现不了的，因为每一行最后张图片不一定能正好撑满这一行，需要用js动态设置图片的宽高来实现，上面引用的`justifiedGallery`插件就是来完成这个的。
 下面代码的功能就是初始化这个插件，间距是5px，每一行的高度是150px。
@@ -397,7 +397,7 @@ layout: "gallery"
 ```
 
 这两种布局呢，上面的代码里都是包含了的。是可以手动切换的。只需要把上面那句代码注释掉就会切换到瀑布流布局，效果如下图：
-![](https://liyangzone.com/article_img/添加相册教程/20190723_134939.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/20190723_134939.jpg)
 
 当然，你要是对我写的样式不满意的话也可以自己修改代码，边框和文件名都是可以去掉的。
 
@@ -409,7 +409,7 @@ layout: "gallery"
 
 最初我是采用的七牛对象存储当为图床，但是我发现一个问题，在相册列表界面下，相册图片较多或图片体积很大的情况下加载速度会很慢，也会浪费大量的流量。七牛CDN免费流量只有10G，然而我还作死的把几个图片的链接地址放到了某论坛上，图片也没有做任何处理，一个图片为几MB大小，在我放出外链几个小时之后，CDN流量就爆了，超出了约60G：
 
-![](https://liyangzone.com/article_img/添加相册教程/20190828_223502.jpg)
+![](https://images.liyangzone.com/article_img/添加相册教程/20190828_223502.jpg)
 
 为了防止类似的事情发生，以及减少CDN流量消耗，可以使用以下两种方案：
 
