@@ -4,6 +4,8 @@ date: 2020-01-16 20:25:30
 tags: 
 - hexo
 - Travis-CI
+- 教程 
+
 
 categories:
 - 技术分享  
@@ -84,7 +86,7 @@ deploy:
 
 接下来要做的就是要把github的token和cos的appId等添加到travis的环境变量里，这样travis云服务器才能帮你部署到github和cos，设置好后如下图所示：
 
-![](https://images.liyangzone.com/article_img/travis-ci/20200118_103156.png)
+![](https://images.liyangzone.com/article_img/技术相关/travis-ci/20200118_103156.png)
 
 
 #### 3. 配置travis执行脚本
@@ -165,13 +167,13 @@ after_script:
 改动本地文件然后commit，并push到github，不出意外的话可以看到travis云服务器执行命令的过程：
 
 
-![](https://images.liyangzone.com/article_img/travis-ci/20200118_115731.png)
+![](https://images.liyangzone.com/article_img/技术相关/travis-ci/20200118_115731.png)
 
-![](https://images.liyangzone.com/article_img/travis-ci/20200118_115632.png)
+![](https://images.liyangzone.com/article_img/技术相关/travis-ci/20200118_115632.png)
 
 我们再去github和腾讯cos里看一下，可以看到commit记录和文件上传日期都是最新的。
 
-![](https://images.liyangzone.com/article_img/travis-ci/20200118_115141.png)
+![](https://images.liyangzone.com/article_img/技术相关/travis-ci/20200118_115141.png)
 
-![](https://images.liyangzone.com/article_img/travis-ci/20200118_115525.png)
+![](https://images.liyangzone.com/article_img/技术相关/travis-ci/20200118_115525.png)
 
