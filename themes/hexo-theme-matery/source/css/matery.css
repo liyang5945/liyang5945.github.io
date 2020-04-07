@@ -130,6 +130,12 @@ mark {
     border-radius: 5px 5px 0 0;
 }
 
+.card .card-image .card-title {
+    padding: 15px;
+    font-size: 20px;
+}
+
+
 .container .row {
     margin-bottom: 0;
 }
@@ -191,6 +197,7 @@ header .brand-logo .logo-img {
 
 header .brand-logo .logo-span {
     font-size: 2rem;
+    font-family: 'simhei';
 }
 
 header .button-collapse i {
@@ -358,11 +365,12 @@ header .go-back i {
 }
 
 .bg-cover .title {
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 700;
     line-height: 1.85em;
     margin-bottom: 20px;
     position: relative;
+    font-family: 'simhei';
 }
 
 .bg-cover .description {

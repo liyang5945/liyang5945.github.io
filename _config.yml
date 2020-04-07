@@ -4,7 +4,7 @@
 
 # Site
 title: 星空无限
-subtitle: 千里之行，始于轮下
+subtitle: 路漫漫其修远兮，吾将上下而求索
 keywords: 星空无限 前端 技术笔记 个人随笔
 
 author: liyang
@@ -97,12 +97,12 @@ deploy:
   - type: git
     branch: master
     repo: https://gh_token@github.com/liyang5945/liyang5945.github.io.git
-  - type: cos
-    appId: cos_appId
-    secretId: cos_secretId
-    secretKey: cos_secretKey
-    bucket: cos_bucket
-    region: ap-shanghai
+  #- type: cos
+  #  appId: cos_appId
+  #  secretId: cos_secretId
+  #  secretKey: cos_secretKey
+  #  bucket: cos_bucket
+  #  region: ap-shanghai
 
 
 # 下面的写法是本地部署到github-pages和腾讯cos
