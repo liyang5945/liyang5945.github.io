@@ -41,7 +41,7 @@ tags:
 npm install xlsx --save
 npm install file-saver --save
 ```
-下载Export2Excel.js文件，放到`src/vendor`目录下，下载地址：[Export2Excel.js](https://raw.githubusercontent.com/PanJiaChen/vue-element-admin/master/src/vendor/Export2Excel.js)
+下载Export2Excel.js文件，放到`src/vendor`目录下，下载地址：[Export2Excel.js](https://raw.githubusercontent.com/PanJiaChen/vue-element-admin/master/src/vendor/Export2Excel.js)(github地址，打不开请科学上网）
 
 然后提取合并的表头数据，这种格式的表头数据比上面那种浅显易懂，如何合并可参考下面的图片，把蓝色部分合并单元格的坐标提取出来即可，下图的表头数据为：
 
