@@ -43,7 +43,7 @@ fastboot oem device-info 		:查看解锁状态
 
 #### 安装edxposed框架
 
-这里要安装两个插件：Riru-core和Riru-EdXposed。可以在Magisk Manager里面搜索下载安装，也可以手动下载zip包用Magisk Managery安装。Riru-EdXposed一般选择YAHFA版本(稳定版)。
+这里要安装两个插件：Riru-core和Riru-EdXposed。可以在Magisk Manager里面搜索下载安装，也可以手动下载zip包用Magisk Manager安装。Riru-EdXposed一般选择YAHFA版本(稳定版)。
 
 [Riru-Core github发布地址](https://github.com/RikkaApps/Riru/releases)
 [Riru-EdXposed github发布地址](https://github.com/ElderDrivers/EdXposed/releases)
