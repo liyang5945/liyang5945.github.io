@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@keyframes rainbow {
+  0%,
+  100% {
+    background: rgb(255, 0, 0);
+    background: linear-gradient(45deg, rgba(255, 0, 0, 0.3) 0%, rgba(255, 165, 0, 0.3) 100%);
+  }
+  16% {
+    background: rgb(255, 165, 0);
+    background: linear-gradient(45deg, rgba(255, 165, 0, 0.3) 0%, rgba(255, 255, 0, 0.3) 100%);
+  }
+  32% {
+    background: rgb(255, 255, 0);
+    background: linear-gradient(45deg, rgba(255, 255, 0, 0.3) 0%, rgba(0, 255, 0, 0.3) 100%);
+  }
+  48% {
+    background: rgb(0, 255, 0);
+    background: linear-gradient(45deg, rgba(0, 255, 0, 0.3) 0%, rgba(0, 127, 255, 0.3) 100%);
+  }
+  64% {
+    background: rgb(0, 127, 255);
+    background: linear-gradient(45deg, rgba(0, 127, 255, 0.3) 0%, rgba(0, 0, 255, 0.3) 100%);
+  }
+  80% {
+    background: rgb(0, 0, 255);
+    background: linear-gradient(45deg, rgba(0, 0, 255, 0.3) 0%, rgba(139, 0, 255, 0.3) 100%);
+  }
+}

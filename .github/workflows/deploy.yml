@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - blog-source
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+          npm run export
+      - name: clean useless file
+        run: |
+          find out/_next/  -name *.js -or -name *.json  |xargs rm -rf
+          find out/_next/  -type d -name data -or -name chunks -or -name 222333  |xargs rm -rf
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: master
+          folder: out
+          single-commit: true
+      - name: Deploy Cos
+        uses: TencentCloud/cos-action@v1
+        with:
+          secret_id: ${{ secrets.SECRETID }}
+          secret_key: ${{ secrets.SECRETKEY }}
+          cos_bucket: ${{ secrets.COS_BUCKET }}
+          cos_region: ${{ secrets.COS_REGION }}
+          local_path: out
+          remote_path: ''
+          clean: false
