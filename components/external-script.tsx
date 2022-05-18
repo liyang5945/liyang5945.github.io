@@ -199,6 +199,11 @@ export function ArticleScript(props) {
       dateInfoEle.style.display = 'block';
       dateInfoEle.innerText = \`本文发布于\${date}天前，文中所描述的信息可能已发生改变。\`
     }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
       `
       }}
     />

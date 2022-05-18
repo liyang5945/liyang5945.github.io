@@ -69,7 +69,7 @@ export default function Article({article}) {
       <Container>
           <>
             <main className="flex">
-              <article className={["article-content mb-5 rounded p-5 ",article.toc?'w-3/4':'w-full'].join('')}>
+              <article className={["article-content mb-5 rounded p-5 w-full ",article.toc&&'md:w-3/4'].join('')}>
                 <PostHeader title={article.title} date={article.date}/>
                 <p className="mb-5 text-sm">
                   <span className="mr-3">发布日期：{article.date}</span>
