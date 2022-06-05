@@ -56,10 +56,10 @@ export async function findPostByPath(articlePath) {
     date: post.date.format('YYYY-MM-DD'),
     author: post.author,
     wordCount: Math.round(count / 100) / 10,
-    toc: toc(post.content, {
+    toc: post.toc?toc(post.content, {
       list_number: false,
       max_depth: 4
-    }),
+    }):'',
     tags: post.tags.find({}).map(item => item.name),
     excerpt: post.excerpt || stripHTML(post.content).substring(0, 200) + '……',
     updated: post.updated,

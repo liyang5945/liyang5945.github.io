@@ -73,7 +73,7 @@ let runningOnBrowser = typeof window !== "undefined";
     let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
 let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
     if(!isBot&&supportsIntersectionObserver){
-     addScript('https://hm.baidu.com/hm.js?12d2769d561eaae20753618457e6d18e');
+     addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
      addScript('https://js.users.51.la/21306481.js');
     }
   `
@@ -175,7 +175,7 @@ export function ArticleScript(props) {
       id="ArticleTocScript"
       dangerouslySetInnerHTML={{
         __html: `
-       window.articleDate = '${JSON.stringify(props.pageProps.article.date)}';
+       window.articleDate = '${props.pageProps.article.date}';
       let tocLinks = document.querySelectorAll('.toc-text');
       let targetLinks = document.querySelectorAll('.headerlink')
       tocLinks.forEach(function (link) {
