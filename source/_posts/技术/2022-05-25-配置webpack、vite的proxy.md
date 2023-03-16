@@ -47,20 +47,42 @@ createProxyMiddleware({
 
 看到上述代码，你可能会直接把on那里面的东西直接复制到上面配置的target下面，不过我尝试了之后，并没有生效。我搜索了一下http-proxy-middleware之后，搜到了如下的代码，经过测试之后，确定可用，文章原文地址：https://juejin.cn/post/6993644913900388359 ，下面是正确的配置选项：
 ```js
-proxy: {
-  '/api/': {
-    target: 'http://www.abc.com',
-      changeOrigin: true,
-      onProxyReq: (proxyReq, req, res) => {
-      proxyReq.removeHeader('referer')  //移除请求头
-      proxyReq.removeHeader('origin') //移除请求头
-      proxyReq.setHeader('host','www.abc.com') //添加请求头
+
+module.exports = {
+  //...
+  devServer: {
+    //...
+    proxy: {
+      '/api/': {
+        target: 'http://www.abc.com',
+        changeOrigin: true,
+        onProxyReq: (proxyReq, req, res) => {
+          proxyReq.removeHeader('referer')  //移除请求头
+          proxyReq.removeHeader('origin') //移除请求头
+          proxyReq.setHeader('origin','www.abc.com') //添加请求头
+          proxyReq.setHeader('host','www.abc.com') //添加请求头
+        },
+        onProxyRes: (proxyRes, req, res) => {
+          /*添加或删除响应头有两种写法，第一种是操作 proxyRes 参数*/
+          delete proxyRes.headers['set-cookie']
+          proxyRes.headers['set-cookie'] = 'new cookie value';
+
+          /*第二种方法是操作 res 参数*/
+          res.removeHeader("Access-Control-Allow-Origin");
+          res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+          res.setHeader("Access-Control-Allow-Credentials", 'true');
+          res.setHeader("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+          res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+        },
+      }
     }
   }
 }
+
+
 ```
 
-上面的代码是移除请求头里面的referer和origin字段，因为我要请求的api对这个字段进行了校验，我们前端本地的服务器一般是localhost:8080之类的，通过浏览器请求携带的是本地地址，api拒绝请求，移除和修改这些请求头之后，就可以正常请求api了。
+上面的代码是移除请求头里面的referer和origin字段，因为我要请求的api对这个字段进行了校验，我们前端本地的服务器一般是localhost:8080之类的，通过浏览器请求携带的是本地地址，api拒绝请求，移除和修改这些请求头之后，就可以正常请求api了。如果你想修改api响应的数据，写在proxyRes事件里，上面proxyRes里的代码示例是添加允许跨域的响应头。
 
 最近vite也逐渐流行起来，我最近在新项目中也开始使用vite，查看了vite官网文档，官网给出了如下用法：
 
@@ -88,7 +110,11 @@ proxy.on('proxyRes', function (proxyRes, req, res) {
 直接将上述代码复制到configure里面就可以运行了，下面是示例：
 
 ```js
-proxy: {
+export default {
+  //...
+  server:{
+    //...
+    proxy: {
       '/api/': {
         target: 'http://www.abc.com',
         changeOrigin: true,
@@ -99,9 +125,23 @@ proxy: {
             proxyReq.removeHeader('origin') //移除请求头
             proxyReq.setHeader('host','www.abc.com') //添加请求头
           });
+          proxy.on('proxyRes', function (proxyRes, req, res) {
+            /*添加或删除响应头有两种写法，第一种是操作 proxyRes 参数*/
+            delete proxyRes.headers['set-cookie']
+            proxyRes.headers['set-cookie'] = 'new cookie value';
+
+            /*第二种方法是操作 res 参数*/
+            res.removeHeader("Access-Control-Allow-Origin");
+            res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+            res.setHeader("Access-Control-Allow-Credentials", 'true');
+            res.setHeader("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+            res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+          });
         }
       }
     }
+  }
+}
 
 ```
 
@@ -118,19 +158,3 @@ close：一旦代理 websocket 关闭，就会触发此事件。
 proxySocket（已弃用）：建议使用open.
 
 ````
-
-如果你想修改api响应的数据，代码如下，写在proxyRes事件里:
-
-```js
-// 响应头里添加允许跨域的字段
-res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Credentials", 'true');
-    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
-    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-    if(req.method=='OPTIONS'){
-      res.writeHead(204)
-    }
-//  添加cookie字段
-res.header('set-cookie',`cookieKey=${cookieValue};Path=/;SameSite=None;Secure=true;HttpOnly`)
-
-```
