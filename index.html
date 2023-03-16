@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><meta name="keywords" content="liyang&#x27;s  blog"/><meta name="description" content="liyang&#x27;s  blog"/><title>首页 | liyang&#x27;s  blog</title><meta name="next-head-count" content="9"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><div class="article-list"><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2022-06-04-openlayers-demo">分享一些openlayers地图框架的demo(vue + openlayers6)</a></h2><div class="article-info text-sm mb-2"><span>2022-06-04</span><span class="px-1.5">·</span><span>技术</span></div><div class="text-sm leading-6">最近使用openlayers v6开发了一个GIS项目，功能都是基于官方文档和示例代码实现的，关于openlayers6，能搜到的中文内容并不多，都是一些很基础的使用，现在分享一些更详细的demo，希望能帮到有需要的人。
+功能实现了这些：
+
+根据已有坐标绘制标记、线段、多边形。
+手动在地图上添加标记、线段、多边形，并获取坐标。
+动态改变地图标记物样式、文字。
+单击地图标记物弹出popup窗口、地图……</div><div class="clear-both overflow-auto"><a href="/article/2022-06-04-openlayers-demo" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2022-05-31-vue-drag-gantt-chart">Vue-Gantt-chart甘特图实现拖拽功能</a></h2><div class="article-info text-sm mb-2"><span>2022-05-31</span><span class="px-1.5">·</span><span>技术</span></div><div class="text-sm leading-6">去年做了一个展示任务计划的甘特图项目，我使用了Vue-Gantt-chart 这个插件来实现，要求实现拖拽功能还有一些别的需求，最近抽空把实现拖拽功能的代码重新整理了一下，发布出来。改动如下：
+
+样式调整，添加顶部部的时间刻度格和左侧日期。滚动插件使用 iscroll 实现，使滚动条样式在各浏览器下保持一致，支持鼠标按住拖动，类似手机上的按住滚动效果。
+
+数据分组：不同属性的甘特行可以分组，分组后……</div><div class="clear-both overflow-auto"><a href="/article/2022-05-31-vue-drag-gantt-chart" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2022-05-25-advanced-proxy-config">webpack和vite devServer的进阶用法：配置proxy修改请求和响应</a></h2><div class="article-info text-sm mb-2"><span>2022-05-25</span><span class="px-1.5">·</span><span>技术</span></div><div class="text-sm leading-6">在前端日常开发中我们一般都是配置本地开发服务器的proxy来解决跨域问题，查看官网文档或者通过搜索引擎搜出来的都是比较基础的用法：
+ proxy: &#123;
+     &#39;/api/&#39;: &#123;
+         target: &#39;http://dev.test.com&#39;
+     &#125;
+ &#125;
+
+我最近有这么一个需求，需要修改请求头里的一些……</div><div class="clear-both overflow-auto"><a href="/article/2022-05-25-advanced-proxy-config" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2022-05-17-use-nextjs-rebuild-blog">使用next.js重构博客</a></h2><div class="article-info text-sm mb-2"><span>2022-05-17</span><span class="px-1.5">·</span><span>折腾</span></div><div class="text-sm leading-6"><p>我的博客也建立快三年了，之前用的是hexo-theme-matery主题，最近感觉这个主题有点腻了。最近封闭在家，就准备进行重构一下，这一次就不准备用hexo了，虽然hexo有很多好看的主题，但是每个主题我都有觉得不满意的地方，想要修改一下，想要修改的话各种主题使用的都是ejs这种蛋疼的模板语法，改动起来也比较麻烦。</p></div><div class="clear-both overflow-auto"><a href="/article/2022-05-17-use-nextjs-rebuild-blog" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2021-10-21-solve-cors-problem-width-nginx">使用nginx修改接口响应头解决跨域问题</a></h2><div class="article-info text-sm mb-2"><span>2021-10-21</span><span class="px-1.5">·</span><span>技术</span></div><div class="text-sm leading-6">跨域这个问题对于前端来说是老生常谈了，搜索一下相关问题就会出现一堆解决方案，有的方法是通过使用nginx反向代理来解决跨域问题，不过这种方是只存在两个域的情况下，比如说我们的前端页面发布在A服务器上，然后接口是B服务器提供，我们在A服务器上通过nginx反向代理请求B服务器的接口。不过我最近碰到的问题要比这个复杂点，现在我们有三个域，我们多了一个第三方的接口在C服务器上，这个接口是第三方提供，不受……</div><div class="clear-both overflow-auto"><a href="/article/2021-10-21-solve-cors-problem-width-nginx" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2021-05-08-qiandao-lake-bike-trival">风景美如画：2021千岛湖骑行露营记</a></h2><div class="article-info text-sm mb-2"><span>2021-05-08</span><span class="px-1.5">·</span><span>生活</span></div><div class="text-sm leading-6">2021年五一我又去千岛湖浪了一波，这次出行我从年后就开始规划了，为了这次出行我做了许多的准备工作：更换了更加舒适的坐垫，购入了一个休息把提升长途骑行时手臂的舒适度，升级了更加轻量化的帐篷，最后又定制了一个前置货架，用来放帐篷和睡袋等物品。
+
+在闲鱼上定制的休息把增高块，高度为1、2、4cm，可以组合成1~7cm的高度。
+
+休息把装车效果，舒适度max+，之前捡垃圾翻新的iphone7用来导航也非……</div><div class="clear-both overflow-auto"><a href="/article/2021-05-08-qiandao-lake-bike-trival" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2020-11-23-root-xiaomi-device-without-recovery">小米手机不使用第三方recovery ROOT教程</a></h2><div class="article-info text-sm mb-2"><span>2020-11-23</span><span class="px-1.5">·</span><span>折腾</span></div><div class="text-sm leading-6">上个月我买了一部小米10至尊纪念版，由于小米自带的换机软件不支持一些应用数据的还原，所以我需要使用钛备份来还原应用和数据。但是钛备份需要root才能用，因为机器刚出没多久，第三方的recovery也没有，所以需要找到一种不使用recovery来获取root权限的方法。经过仔细寻找之后，我在一个国外网站找到了不使用recovery获取root权限的方法（原始教程地址），下面是中文详细教程：
+1、先去……</div><div class="clear-both overflow-auto"><a href="/article/2020-11-23-root-xiaomi-device-without-recovery" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2020-11-16-drip-lake-riding-notes">滴水湖骑行露营记</a></h2><div class="article-info text-sm mb-2"><span>2020-11-16</span><span class="px-1.5">·</span><span>生活</span></div><div class="text-sm leading-6">上周六是阴历二十九，正值月亏，天气晴朗，我又跑到滴水湖进行了一次露营，只为再看一次纯净的星空。
+
+当晚露营在南汇观海公园的广场，旁边就是海，天空偶尔会飘来几片云，不过一会就刮走了
+
+还碰到两个老哥，一个玩单反，一个玩望远镜，这两位老哥都是狠人，跑到这里一宿不睡觉只为拍照、观星。玩单反的老哥给我看了他的朋友以前在这里拍过的照片，我一看，holy shit，竟然拍到了银河，搞得我也想买台相机来玩摄影了……</div><div class="clear-both overflow-auto"><a href="/article/2020-11-16-drip-lake-riding-notes" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2020-11-12-renew-a-damaged-iphone7">捡垃圾真香，翻新一台 300 块的 iPhone7</a></h2><div class="article-info text-sm mb-2"><span>2020-11-12</span><span class="px-1.5">·</span><span>折腾</span></div><div class="text-sm leading-6">不久前本垃圾佬忽然想买一台iphone7来玩，买来做什么后面会说。本垃圾佬在闲鱼搜寻数日之后，终于发现了完美的目标，一台仅售300块伊拉克成色的iphone7，卖家描述是这样的：
+
+本佬感觉可以买回来折腾一番，并酝酿了一些折腾计划(换壳，换屏)，遂果断拍下，并又在闲鱼上买了一个亮黑色外壳和一个99新的原装拆机屏幕总成
+
+手机收到后确实如卖家描述，是美版卡贴三网机，指纹正常，不过我高估了屏幕的划伤程……</div><div class="clear-both overflow-auto"><a href="/article/2020-11-12-renew-a-damaged-iphone7" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article><article class="article-block p-5 py-4 mb-8 rounded-sm clear-both"><h2 class="article-title text-2xl mb-2"><a href="/article/2020-10-26-jiulong-mountain-riding-notes">嘉兴九龙山、淀山湖二日游：骑行露营、观海观星、观日出日落</a></h2><div class="article-info text-sm mb-2"><span>2020-10-26</span><span class="px-1.5">·</span><span>生活</span></div><div class="text-sm leading-6">骑行+露营的玩法也是我在几年前就有的想法，不过这个想法直到到去年才得以实施，去年10月份我就买了一些露营装备，并于10月底到滴水湖尝试着露营了一次，不过因为阴天并没有看到日出和星空，比较遗憾。
+
+今年因为疫情也没怎么出过远门骑行，上周末我又进行了一次骑行+露营的尝试，目标是嘉兴平湖市的九龙山景区，准备到海边露营去看一次日出，回程再环个淀山湖，到淀山湖东部看日落。整个行程如下图，周六途经金山区到九龙……</div><div class="clear-both overflow-auto"><a href="/article/2020-10-26-jiulong-mountain-riding-notes" class="read-all inline-block float-right text-blue-500">阅读全文</a></div></article></div><div class="page-paginator text-center"><a class="inline-block px-3 py-1 m-3 paginator-link active" href="/">1</a><a class="inline-block px-3 py-1 m-3 paginator-link false" href="/page/2">2</a><a class="inline-block px-3 py-1 m-3 paginator-link false" href="/page/3">3</a></div></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

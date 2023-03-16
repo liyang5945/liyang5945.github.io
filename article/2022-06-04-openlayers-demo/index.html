@@ -1,0 +1,489 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>分享一些openlayers地图框架的demo(vue + openlayers6) | liyang&#x27;s  blog</title><meta name="keywords" content="openlayers 地图"/><meta name="description" content="最近使用openlayers v6开发了一个GIS项目，功能都是基于官方文档和示例代码实现的，关于openlayers6，能搜到的中文内容并不多，都是一些很基础的使用，现在分享一些更详细的demo，希望能帮到有需要的人。
+功能实现了这些：
+
+根据已有坐标绘制标记、线段、多边形。
+手动在地图上添加标记、线段、多边形，并获取坐标。
+动态改变地图标记物样式、文字。
+单击地图标记物弹出popup窗口、地图……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">分享一些openlayers地图框架的demo(vue + openlayers6)</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2022-06-04</span><span>文章字数：<!-- -->2.1<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>最近使用openlayers v6开发了一个GIS项目，功能都是基于官方文档和示例代码实现的，关于openlayers6，能搜到的中文内容并不多，都是一些很基础的使用，现在分享一些更详细的demo，希望能帮到有需要的人。</p>
+<p>功能实现了这些：</p>
+<ul>
+<li>根据已有坐标绘制标记、线段、多边形。</li>
+<li>手动在地图上添加标记、线段、多边形，并获取坐标。</li>
+<li>动态改变地图标记物样式、文字。</li>
+<li>单击地图标记物弹出popup窗口、地图标记物右键菜单。</li>
+<li>根据websocket推送数据改变标记位置。</li>
+<li>历史轨迹功能、轨迹动画功能。</li>
+<li>图层切换功能。</li>
+</ul>
+<p>动图演示：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/openlayers.gif"></p>
+<p>示例代码：</p>
+<p>初始化地图</p>
+<pre><code class="js">
+import Map from &quot;ol/Map&quot;
+import View from &quot;ol/View&quot;
+import XYZ from &#39;ol/source/XYZ&#39;
+import &#123;OSM, Vector as VectorSource&#125; from &quot;ol/source&quot;
+import &#123;Tile as TileLayer, Vector as VectorLayer&#125; from &quot;ol/layer&quot;
+initMap() &#123;
+  this.arcgisMapSource = new XYZ(&#123;
+    ratio: 1,
+    params: &#123;
+      isBaseLayer: true,
+      visibility: true,
+      projection: &#39;EPSG:3857&#39;,
+      format: &quot;image/png&quot;
+    &#125;,
+    url: &#39;https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/&#123;z&#125;/&#123;y&#125;/&#123;x&#125;&#39;,
+  &#125;)
+  this.baseLayer = new TileLayer(&#123;
+    source: this.arcgisMapSource
+  &#125;)
+
+  this.mapData = new Map(&#123;
+    layers: [
+      this.baseLayer,
+    ],
+    target: &quot;map&quot;,
+    view: new View(&#123;
+      center: fromLonLat([121.49309680, 31.18520803]),
+      zoom: 10,
+      maxZoom: 20,
+    &#125;)
+  &#125;);
+&#125;
+</code></pre>
+<p>根据已有坐标绘制图形，这里我绘制了两个标记，一个用png图片，一个用svg图片，使用svg的话有个坑就是svg里面如果有#fff这样的颜色值，需要escape转义一下，或者把颜色值改为rgb(x,x,x)这样的</p>
+<pre><code class="js">
+/*根据已有坐标绘制点*/
+    drawMarker() &#123;
+      // 
+      let iconFeature = new Feature(&#123;
+        geometry: new Point(fromLonLat([121.49309680, 31.18520803])),
+        name: &#39;标记1 svg&#39;, // name和type是我自己加的属性，也可以用别的
+        type: &#39;marker&#39;,
+      &#125;)
+      let iconStyle = new Style(&#123;
+        text: new Text(&#123;
+          font: &#39;16px sans-serif &#39;,
+          text: &#39;标记1&#39;,
+          offsetY: 25,
+          fill: new Fill(&#123;
+            color: &#39;#FF0000&#39;
+          &#125;),
+        &#125;),
+        image: new Icon(&#123;
+          anchor: [0.5, 0.5],
+          anchorXUnits: &#39;fraction&#39;,
+          anchorYUnits: &#39;fraction&#39;,
+          // src: &#39;data:image/svg+xml;utf8,&#39; + markerSvg, // 无需转义的svg
+          src: &#39;data:image/svg+xml;utf8,&#39; + escape(markerSvg),
+          imgSize: [32, 32],
+          rotateWithView: true,
+        &#125;),
+      &#125;)
+      iconFeature.setStyle(iconStyle)
+      this.areaVectorSource.addFeature(iconFeature)
+
+      let iconFeature1 = new Feature(&#123;
+        geometry: new Point(fromLonLat([121.69840380683587, 31.139965591074088])),
+        name: &#39;标记2 png 旋转45度&#39;,
+        type: &#39;marker&#39;,
+      &#125;)
+      let iconStyle1 = new Style(&#123;
+        text: new Text(&#123;
+          font: &#39;16px sans-serif &#39;,
+          text: &#39;标记2&#39;,
+          offsetY: 25,
+          fill: new Fill(&#123;
+            color: &#39;#FF0000&#39;
+          &#125;),
+        &#125;),
+        image: new Icon(&#123;
+          anchor: [0.5, 0.5],
+          anchorXUnits: &#39;fraction&#39;,
+          anchorYUnits: &#39;fraction&#39;,
+          src: &#39;img/arrow-up.png&#39;,
+          imgSize: [32, 32],
+          rotateWithView: true,
+          rotation: Math.PI / 180 * 45 //  旋转角度，单位弧度
+        &#125;),
+      &#125;)
+      iconFeature1.setStyle(iconStyle1)
+      this.areaVectorSource.addFeature(iconFeature1)
+    &#125;,
+    /*已有坐标绘制线*/
+    drawLineString() &#123;
+      const linePoints = [[121.56794116035155,31.560996120782647],[121.45121142402344,31.518860903482263],[121.45395800605469,31.432189936615572],[121.47181078925782,31.382962620417374],[121.56107470527343,31.41578370076762],[121.5981535626953,31.44390691899946],[121.65995165839841,31.41578370076762],[121.6970305158203,31.360684638818043],[121.73548266425782,31.310246553689936],[121.74509570136718,31.27025111578449],[121.80552050605466,31.22915949137321]]
+      const lineFeature = new Feature(&#123;
+        geometry: new LineString(linePoints.map(item =&gt; fromLonLat(item))),
+        name: &#39;line1&#39;, //添加的自定义属性
+        type: &#39;line&#39;, //添加的自定义属性
+      &#125;)
+
+      let lineStyle = new Style(&#123;
+        fill: new Fill(&#123;
+          color: &quot;rgba(255, 0, 0, 0.2)&quot;
+        &#125;),
+        stroke: new Stroke(&#123;
+          color: &quot;rgba(255, 0, 0, 1)&quot;,
+          width: 3
+        &#125;),
+      &#125;)
+
+      lineFeature.setStyle(lineStyle);
+
+      this.areaVectorSource.addFeature(lineFeature)
+
+    &#125;,
+</code></pre>
+<p>修改标记物的样式：</p>
+<pre><code class="js">changePolygonStyle() &#123;
+      let features = this.areaVectorSource.getFeatures()
+      features.forEach(item =&gt; &#123;
+        console.log(item.getProperties());
+        let type = item.getProperties().type
+        if (type &amp;&amp; type == &#39;area&#39;) &#123;
+          console.log(item);
+          const style = new Style(&#123;
+            fill: new Fill(&#123;
+              color: &quot;rgba(255,0,0,.5)&quot;
+            &#125;),
+            stroke: new Stroke(&#123;
+              color: &quot;rgb(85,9,178)&quot;,
+              width: 3
+            &#125;),
+          &#125;)
+          item.setStyle(style)
+        &#125;
+      &#125;)
+    &#125;,
+</code></pre>
+<p>根据后台推送修改标记物位置，原始需求：从后台获取一个车辆列表，建立一个websocket连接，后台推送一些车辆的位置信息过来，前端实时改变车辆位置，位置信息里还有角度，也要改变车头方向。<br>因为要获取到openlayers控件的标记物比较麻烦，图上车辆3的标记物是一个html元素，使用openlayers的getPixelFromCoordinate方法可以将GPS坐标转换为屏幕坐标，例：getPixelFromCoordinate(fromLonLat([121.49309680, 31.18520803])) &#x3D; [506.5,468.5]，然后修改绝对定位值改变元素位置。</p>
+<pre><code class="js">
+ setCurrentPosition(markerItem) &#123;
+      let targetItem = this.markerList.find(item =&gt; markerItem.name == item.name)
+      let screenPoint = this.getScreePoint(markerItem)
+      targetItem[&#39;left&#39;] = screenPoint[0];
+      targetItem[&#39;top&#39;] = screenPoint[1];
+      targetItem[&#39;timeDiff&#39;] = new Date().getTime() - new Date(markerItem.time).getTime()
+      targetItem[&#39;rotation&#39;] = markerItem.rotation;
+      // 这里需求是只展示5分钟内的数据
+      this.visibleMarkerList = this.markerList.filter(item =&gt; item.timeDiff &lt; 300 * 1000) 
+    &#125;,
+    addHtmlMarker() &#123;
+      const that = this
+
+      function fakeTrackData(name, trackList) &#123;
+        let trackIndex = 0, len = trackList.length
+        setInterval(() =&gt; &#123;
+
+          let point = trackList[trackIndex]
+          let nextPoint = trackList[trackIndex + 1]
+          
+          // 这里引入了一个库 @turf/turf, 用来计算两个坐标点的角度，仅做前端展示用，实际后台推送数据有真实角度
+          let bearing = bearingFunc(turfPoint(point), turfPoint(nextPoint))
+          const markerItem = &#123;
+            name: name,
+            time: new Date().getTime(),
+            rotation: bearing,
+            speed: `50km/h`,
+            lon: point[0],
+            lat: point[1]
+          &#125;
+          that.setCurrentPosition(markerItem)
+          trackIndex += 1
+          if (trackIndex &gt;= len - 2) &#123;
+            trackIndex = 0
+          &#125;
+        &#125;, 1000)
+      &#125;
+      fakeTrackData(&quot;车辆3&quot;, trackData) // mock 位置数据
+    &#125;,
+</code></pre>
+<p>显示历史轨迹，根据一组坐标先绘制一条线，然后遍历数组画轨迹点，并在开头和结尾的轨迹点标上文字，单击轨迹点可以弹出速度时间信息。</p>
+<pre><code class="js">
+addTrackPath() &#123;
+      const trackPoints = trackData.map(item =&gt; &#123;
+        return &#123;
+          lon: item[0],
+          lat: item[1],
+          speed: 50,
+          time: new Date()
+        &#125;
+      &#125;)
+      const featureList = []
+      const len = trackPoints.length
+      /* 画轨迹点, 并在起始点添加文字*/
+      trackPoints.forEach((item, index) =&gt; &#123;
+        let pointObj = &#123;
+          type: &#39;Feature&#39;,
+          &#39;geometry&#39;: &#123;
+            &#39;type&#39;: &#39;Point&#39;,
+            &#39;coordinates&#39;: fromLonLat([item.lon, item.lat]),
+          &#125;,
+          properties: &#123;
+            &#39;name&#39;: `轨迹点$&#123;index+1&#125;`,
+            &#39;type&#39;: &#39;trackPoint&#39;,
+            &#39;speed&#39;: item.speed,
+            &#39;time&#39;: item.time
+          &#125;
+        &#125;
+        let pointStyle = new Style(&#123;
+          image: new CircleStyle(&#123;
+            radius: 4,
+            fill: new Fill(&#123;
+              color: &#39;#32E08D&#39;,
+            &#125;),
+          &#125;),
+        &#125;)
+
+        if (index === 0) &#123;
+          pointStyle = new Style(&#123;
+            text: new Text(&#123;
+              font: &#39;14px sans-serif &#39;,
+              text: &#39;起&#39;,
+              offsetY: -10,
+              fill: new Fill(&#123;
+                color: &#39;#32E08D&#39;
+              &#125;)
+            &#125;),
+            image: new CircleStyle(&#123;
+              radius: 4,
+              fill: new Fill(&#123;
+                color: &#39;#1466E0&#39;,
+              &#125;),
+            &#125;),
+          &#125;)
+        &#125;
+
+        if (index === len - 1) &#123;
+          pointStyle = new Style(&#123;
+            image: new CircleStyle(&#123;
+              radius: 4,
+              fill: new Fill(&#123;
+                color: &#39;#E01430&#39;,
+              &#125;),
+            &#125;),
+            text: new Text(&#123;
+              font: &#39;14px sans-serif &#39;,
+              text: &#39;终&#39;,
+              offsetY: -10,
+              fill: new Fill(&#123;
+                color: &#39;#E01430&#39;
+              &#125;)
+            &#125;),
+          &#125;)
+        &#125;
+        const pointFeature = new GeoJSON().readFeature(pointObj)
+        pointFeature.setStyle(pointStyle)
+        featureList.push(pointFeature)
+      &#125;)
+
+      /* 画轨迹线*/
+      const polyline = polylineTool.encode(trackPoints.map(item =&gt; &#123;
+        return [item.lat.toFixed(6), item.lon.toFixed(6)]
+      &#125;), 6)
+      const route = new Polyline(&#123;
+        factor: 1e6,
+      &#125;).readGeometry(polyline, &#123;
+        dataProjection: &#39;EPSG:4326&#39;,
+        featureProjection: &#39;EPSG:3857&#39;,
+      &#125;);
+
+      const routeFeature = new Feature(&#123;
+        type: &#39;route&#39;,
+        geometry: route,
+      &#125;);
+
+      const routeStyle = new Style(&#123;
+        stroke: new Stroke(&#123;
+          color: &#39;#32E08D&#39;,
+          width: 3,
+        &#125;),
+        fill: new Fill(&#123;
+          color: &#39;rgba(0, 0, 255, 0.1)&#39;,
+        &#125;),
+      &#125;)
+      routeFeature.setStyle(routeStyle)
+      featureList.push(routeFeature)
+      this.trackVectorSource.addFeatures(featureList)
+    &#125;,
+</code></pre>
+<p>轨迹动画，这里参考了官方的示例代码：<a href="https://openlayers.org/en/latest/examples/feature-move-animation.html">https://openlayers.org/en/latest/examples/feature-move-animation.html</a> ，这里我将官方的小圆圈图标改成一个箭头，并添加了动态计算角度的方法，角度可以随轨迹变化。官方示例代码中<code>data/polyline/route.json</code>的数据都是乱码的，这个数据格式是<code>Google Static Maps Polyline Encoding</code>，如果要转换为这种格式需要一个加密、解密方法，我也放在项目中了。</p>
+<pre><code class="js">
+moveFeature(event) &#123;
+      function getRotation(prev, next) &#123;
+        const dx = prev[0] - next[0]
+        const dy = prev[1] - next[1]
+        return Math.atan2(dy, dx)
+      &#125;
+
+      const speed = 150;
+      const time = event.frameState.time;
+      const elapsedTime = time - lastTime;
+      distance = (distance + (speed * elapsedTime) / 1e6) % 2;
+      lastTime = time;
+
+      let realDistance = distance &gt; 1 ? distance - 1 : distance
+      const currentCoordinate = route.getCoordinateAt(
+          realDistance
+      );
+
+      const nextCoordinate = route.getCoordinateAt(Math.min(realDistance + 0.0001, 1))
+
+      rotation = getRotation(currentCoordinate, nextCoordinate)
+
+      position.setCoordinates(currentCoordinate);
+      const vectorContext = getVectorContext(event);
+      vectorContext.setStyle(new Style(&#123;
+        image: new Icon(&#123;
+          anchor: [0.5, 0.5],
+          anchorXUnits: &#39;fraction&#39;,
+          anchorYUnits: &#39;fraction&#39;,
+          src: &#39;data:image/svg+xml;utf8,&#39; + arrowSvgPath,
+          imgSize: [32, 32],
+          rotation: -rotation - 90 * Math.PI / 180
+        &#125;),
+      &#125;));
+      vectorContext.drawGeometry(position);
+      this.mapData.render();
+    &#125;,
+</code></pre>
+<p>为地图标记物添加事件，单击弹出popup、右键弹出菜单，这里使用了v-contextmenu这个组件</p>
+<pre><code class="js"> this.mapData.on(&#39;click&#39;, function (evt) &#123;
+        var feature = that.mapData.forEachFeatureAtPixel(evt.pixel,
+            function (feature) &#123;
+              return feature
+            &#125;
+        )
+        if (feature) &#123;
+          const coordinate = evt.coordinate
+          const featureProperties = feature.getProperties()
+          if ([&#39;marker&#39;, &#39;line&#39;, &#39;area&#39;, &#39;trackPoint&#39;].includes(featureProperties.type)) &#123;
+            overlay.setPosition(coordinate)
+            that.showPopup(content, featureProperties)
+          &#125;
+        &#125; else &#123;
+          overlay.setPosition(undefined);
+        &#125;
+      &#125;)
+
+      this.mapData.getViewport().addEventListener(&#39;contextmenu&#39;, evt =&gt; &#123;
+        evt.preventDefault();
+        var feature = that.mapData.forEachFeatureAtPixel(that.mapData.getEventPixel(evt),
+            function (feature) &#123;
+              return feature
+            &#125;
+        )
+        const menuPosition = &#123;
+          left: evt.clientX,
+          top: evt.clientY
+        &#125;
+        if (feature) &#123;
+          const coordinate = evt.coordinate
+          const featureProperties = feature.getProperties()
+          console.log(feature, featureProperties);
+          that.$refs.featureContextmenu.show(menuPosition)
+          this.currentFeature = feature
+        &#125; else &#123;
+        &#125;
+      &#125;)
+</code></pre>
+<p>图层切换：原需求是切换到一个卫星图层，这里我修改为高德地图</p>
+<pre><code class="js">
+ toggleMapSource() &#123;
+      this.mapSourceIndex = !this.mapSourceIndex
+      this.mapSourceIndex ? this.baseLayer.setSource(this.autonaviMapSource) : this.baseLayer.setSource(this.arcgisMapSource)
+    &#125;,
+</code></pre>
+<h3 id="在线演示：https-liyang5945-github-io-openlayers-demo"><a href="#在线演示：https-liyang5945-github-io-openlayers-demo" class="headerlink" title="在线演示：https://liyang5945.github.io/openlayers-demo"></a>在线演示：<a href="https://liyang5945.github.io/openlayers-demo">https://liyang5945.github.io/openlayers-demo</a></h3><h3 id="github地址：https-github-com-liyang5945-openlayers-demo"><a href="#github地址：https-github-com-liyang5945-openlayers-demo" class="headerlink" title="github地址：https://github.com/liyang5945/openlayers-demo"></a>github地址：<a href="https://github.com/liyang5945/openlayers-demo">https://github.com/liyang5945/openlayers-demo</a></h3></div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2022-06-04';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

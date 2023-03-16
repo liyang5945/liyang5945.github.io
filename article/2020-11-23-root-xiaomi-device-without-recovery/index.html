@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>小米手机不使用第三方recovery ROOT教程 | liyang&#x27;s  blog</title><meta name="keywords" content="MIUI  小米手机ROOT"/><meta name="description" content="上个月我买了一部小米10至尊纪念版，由于小米自带的换机软件不支持一些应用数据的还原，所以我需要使用钛备份来还原应用和数据。但是钛备份需要root才能用，因为机器刚出没多久，第三方的recovery也没有，所以需要找到一种不使用recovery来获取root权限的方法。经过仔细寻找之后，我在一个国外网站找到了不使用recovery获取root权限的方法（原始教程地址），下面是中文详细教程：
+1、先去……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">小米手机不使用第三方recovery ROOT教程</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2020-11-23</span><span>文章字数：<!-- -->0.6<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>上个月我买了一部小米10至尊纪念版，由于小米自带的换机软件不支持一些应用数据的还原，所以我需要使用钛备份来还原应用和数据。但是钛备份需要root才能用，因为机器刚出没多久，第三方的recovery也没有，所以需要找到一种不使用recovery来获取root权限的方法。经过仔细寻找之后，我在一个国外网站找到了不使用recovery获取root权限的方法（<a href="https://www.getdroidtips.com/root-xiaomi-mi-10-ultra/">原始教程地址</a>），下面是中文详细教程：</p>
+<p>1、先去官网申请解锁bootloader，等待168小时后解锁手机，解锁时会清空数据，注意备份应用和文件。<br>2、在电脑上下载和你手机版本号相同的卡刷包rom，版本一定要一致！使用解压软件打开提取里面的boot.img文件，并用数据线传到手机里。官网rom下载地址: <a href="http://www.miui.com/download.html">http://www.miui.com/download.html</a></p>
+<p><img src="https://images.liyangzone.com/article_img/root-xiaomi-device/Image036.png"></p>
+<p>3、手机上安装<code>Magisk Manager</code>APP ,然后打开<code>安装</code>按钮，之后选择最后一项<code>选择并修补一个文件</code>，然后会弹出文件选择框，选择之前复制到手机上的<code>boot.img</code>文件，选中文件之后点<code>开始</code>，按钮，接下来<code>Magisk Manager</code>APP会下载一个压缩包文件并制作一个打上root补丁的img文件，稍等片刻就会制作好，制作好的文件在如下位置，之后将该文件复制到电脑。</p>
+<p><img src="https://images.liyangzone.com/article_img/root-xiaomi-device/Screenshot1.jpg"></p>
+<p><img src="https://images.liyangzone.com/article_img/root-xiaomi-device/Screenshot2.jpg"></p>
+<p><img src="https://images.liyangzone.com/article_img/root-xiaomi-device/Screenshot3.jpg"></p>
+<p>4、按音量减+开机键进入fastboot模式，连接电脑，使用fastboot刷入打好补丁的img文件，命令为 <code>fastboot flash boot magisk_patched.img</code></p>
+<p>完成之后使用<code>fastboot reboot</code>命令重启手机，开机之后手机root成功。</p>
+<p><img src="https://images.liyangzone.com/article_img/root-xiaomi-device/Image039.png"></p>
+<p><img src="https://images.liyangzone.com/article_img/root-xiaomi-device/Screenshot4.jpg"></p>
+<p>PS:</p>
+<ul>
+<li>Magisk Manager官网下载地址：<a href="https://magiskmanager.com,注意不要使用小米自带浏览器下载,会被替换成其他垃圾软件./">https://magiskmanager.com，注意不要使用小米自带浏览器下载，会被替换成其他垃圾软件。</a></li>
+<li>因为Magisk服务器被墙，步骤三使用<code>Magisk Manager</code>APP制作补丁img文件的过程需要科学上网，不然制作不成功。</li>
+<li>fastboot工具在小米解锁软件的目录里可以找到，记得安装驱动。</li>
+<li>如果root之后系统有更新的话先不要更新，先刷入原版boot.img文件后才能更新成功，更新成功之后再按本教教程操作一遍即可（下载最新版本ROM&gt;提取boot.img&gt;打补丁&gt;刷入手机）。</li>
+<li>理论上此方法适用于所有小米手机，稳定版rom也能root。</li>
+</ul>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2020-11-23';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

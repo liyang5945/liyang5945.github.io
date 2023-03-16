@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>使用js-xlsx插件导出多级表头excel | liyang&#x27;s  blog</title><meta name="keywords" content="教程 excel 多级表头"/><meta name="description" content="最近项目里有这么一个需求，把一个多级表头的table导出为excel格式。然后在网上找到一篇文章：js-xlsx导出自定义合并列头实现思路，我按照他的教程操作之后发现比较繁琐，这篇文章的思路就是就是新建一个excel，然后用js来读取它的多级表头数据，再把json格式的表头数据复制到项目中使用。核心就是这个json格式的多级表头数据，这样一个多级表头导出来是这个样子的:
+
+&amp;#123;
+    &amp;……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">使用js-xlsx插件导出多级表头excel</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2020-02-27</span><span>文章字数：<!-- -->1.7<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>最近项目里有这么一个需求，把一个多级表头的table导出为excel格式。然后在网上找到一篇文章：<a href="https://www.jianshu.com/p/9a465d7d1448">js-xlsx导出自定义合并列头实现思路</a>，我按照他的教程操作之后发现比较繁琐，这篇文章的思路就是就是新建一个excel，然后用js来读取它的多级表头数据，再把json格式的表头数据复制到项目中使用。核心就是这个json格式的多级表头数据，这样一个多级表头导出来是这个样子的:</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%AF%BC%E5%87%BA%E5%A4%9A%E7%BA%A7%E8%A1%A8%E5%A4%B4excel/20200227_101309.png"></p>
+<pre><code class="json">&#123;
+    &quot;!ref&quot;: &quot;A1:F3&quot;, &quot;A1&quot;: &#123;&quot;t&quot;: &quot;s&quot;, &quot;v&quot;: &quot;日期&quot;, &quot;r&quot;: &quot;日期&quot;, &quot;h&quot;: &quot;日期&quot;, &quot;w&quot;: &quot;日期&quot;&#125;,
+    &quot;B1&quot;: &#123;&quot;t&quot;: &quot;s&quot;, &quot;v&quot;: &quot;配送信息&quot;, &quot;r&quot;: &quot;配送信息&quot;, &quot;h&quot;: &quot;配送信息&quot;, &quot;w&quot;: &quot;配送信息&quot;&#125;,
+    &quot;B2&quot;: &#123;&quot;t&quot;: &quot;s&quot;, &quot;v&quot;: &quot;姓名&quot;, &quot;r&quot;: &quot;姓名&quot;, &quot;h&quot;: &quot;姓名&quot;, &quot;w&quot;: &quot;姓名&quot;&#125;,
+    &quot;C2&quot;: &#123;&quot;t&quot;: &quot;s&quot;, &quot;v&quot;: &quot;地址&quot;, &quot;r&quot;: &quot;地址&quot;, &quot;h&quot;: &quot;地址&quot;, &quot;w&quot;: &quot;地址&quot;&#125;,
+    &quot;C3&quot;: &#123;&quot;t&quot;: &quot;s&quot;, &quot;v&quot;: &quot;省份&quot;, &quot;r&quot;: &quot;省份&quot;, &quot;h&quot;: &quot;省份&quot;, &quot;w&quot;: &quot;省份&quot;&#125;,
+    &quot;D3&quot;: &#123;&quot;t&quot;: &quot;s&quot;, &quot;v&quot;: &quot;市区&quot;, &quot;r&quot;: &quot;市区&quot;, &quot;h&quot;: &quot;市区&quot;, &quot;w&quot;: &quot;市区&quot;&#125;,
+    &quot;E3&quot;: &#123;&quot;t&quot;: &quot;s&quot;, &quot;v&quot;: &quot;地址&quot;, &quot;r&quot;: &quot;地址&quot;, &quot;h&quot;: &quot;地址&quot;, &quot;w&quot;: &quot;地址&quot;&#125;,
+    &quot;F3&quot;: &#123;&quot;t&quot;: &quot;s&quot;, &quot;v&quot;: &quot;邮编&quot;, &quot;r&quot;: &quot;邮编&quot;, &quot;h&quot;: &quot;邮编&quot;, &quot;w&quot;: &quot;邮编&quot;&#125;,
+    &quot;!margins&quot;: &#123;&quot;left&quot;: 0.7, &quot;right&quot;: 0.7, &quot;top&quot;: 0.75, &quot;bottom&quot;: 0.75, &quot;header&quot;: 0.3, &quot;footer&quot;: 0.3&#125;,
+    &quot;!merges&quot;: [&#123;&quot;s&quot;: &#123;&quot;c&quot;: 0, &quot;r&quot;: 0&#125;, &quot;e&quot;: &#123;&quot;c&quot;: 0, &quot;r&quot;: 2&#125;&#125;, &#123;
+      &quot;s&quot;: &#123;&quot;c&quot;: 1, &quot;r&quot;: 0&#125;, &quot;e&quot;: &#123;&quot;c&quot;: 5, &quot;r&quot;: 0&#125;
+    &#125;, &#123;&quot;s&quot;: &#123;&quot;c&quot;: 1, &quot;r&quot;: 1&#125;, &quot;e&quot;: &#123;&quot;c&quot;: 1, &quot;r&quot;: 2&#125;&#125;, &#123;&quot;s&quot;: &#123;&quot;c&quot;: 2, &quot;r&quot;: 1&#125;, &quot;e&quot;: &#123;&quot;c&quot;: 5, &quot;r&quot;: 1&#125;&#125;]
+  &#125;
+</code></pre>
+<p>我暂时没看出来这种格式的规律是什么，如果想要修改表头格式的化就感觉比较麻烦，需要修改excel再导出一次。</p>
+<p>后来在开源项目<a href="https://panjiachen.gitee.io/vue-element-admin/">vue-element-admin</a>上也找到了这个功能，使用方法比较简单。</p>
+<h3 id="使用教程"><a href="#使用教程" class="headerlink" title="使用教程"></a>使用教程</h3><p>使用npm安装<code>xlsx</code>和<code>file-saver</code>插件</p>
+<pre><code class="shell">npm install xlsx --save
+npm install file-saver --save
+</code></pre>
+<p>下载Export2Excel.js文件，放到<code>src/vendor</code>目录下，下载地址：<a href="https://raw.githubusercontent.com/PanJiaChen/vue-element-admin/master/src/vendor/Export2Excel.js">Export2Excel.js</a>(github地址，打不开请科学上网）</p>
+<p>然后提取合并的表头数据，这种格式的表头数据比上面那种浅显易懂，如何合并可参考下面的图片，把蓝色部分合并单元格的坐标提取出来即可，下图的表头数据为：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%AF%BC%E5%87%BA%E5%A4%9A%E7%BA%A7%E8%A1%A8%E5%A4%B4excel/20200227_111320.png"></p>
+<pre><code class="js">
+const multiHeader =
+                   [
+                     [&#39;日期&#39;, &#39;配送信息&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;],
+                     [&#39;&#39;, &#39;姓名&#39;, &#39;地址&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;]
+                   ] // 前两行的表头数据，二维数组，不够的用空白补全
+const header = [&#39;&#39;, &#39;&#39;, &#39;省份&#39;, &#39;市区&#39;, &#39;地址&#39;, &#39;邮编&#39;] // 最后一行的表头数据，合并过的也要用空白补全
+const merges = [&#39;A1:A3&#39;, &#39;B1:F1&#39;, &#39;B2:B3&#39;, &#39;C2:F2&#39;] //合并单元格的数据
+</code></pre>
+<p>vue文件源码：</p>
+<pre><code class="html">&lt;template&gt;
+  &lt;div style=&quot;padding: 20px;&quot;&gt;
+    &lt;div style=&quot;padding: 20px 0;&quot;&gt;
+      &lt;el-button size=&quot;small&quot; type=&quot;primary&quot; @click=&quot;handleDownload&quot;&gt;导出EXCEl&lt;/el-button&gt;
+    &lt;/div&gt;
+    &lt;el-table
+      class=&quot;center-table&quot;
+      :data=&quot;tableData&quot;
+      size=&quot;small&quot;
+    &gt;
+      &lt;el-table-column
+        prop=&quot;date&quot;
+        label=&quot;日期&quot;
+        width=&quot;150&quot;
+      /&gt;
+      &lt;el-table-column label=&quot;配送信息&quot;&gt;
+        &lt;el-table-column
+          prop=&quot;name&quot;
+          label=&quot;姓名&quot;
+          width=&quot;120&quot;
+        /&gt;
+        &lt;el-table-column label=&quot;地址&quot;&gt;
+          &lt;el-table-column
+            prop=&quot;province&quot;
+            label=&quot;省份&quot;
+            width=&quot;120&quot;
+          /&gt;
+          &lt;el-table-column
+            prop=&quot;city&quot;
+            label=&quot;市区&quot;
+            width=&quot;120&quot;
+          /&gt;
+          &lt;el-table-column
+            prop=&quot;address&quot;
+            label=&quot;地址&quot;
+          /&gt;
+          &lt;el-table-column
+            prop=&quot;zip&quot;
+            label=&quot;邮编&quot;
+            width=&quot;120&quot;
+          /&gt;
+        &lt;/el-table-column&gt;
+      &lt;/el-table-column&gt;
+    &lt;/el-table&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+
+export default &#123;
+  name: &#39;MergeHeader&#39;,
+  data() &#123;
+    return &#123;
+      tableData: [&#123;
+        date: &#39;2016-05-03&#39;,
+        name: &#39;王小虎&#39;,
+        province: &#39;上海&#39;,
+        city: &#39;普陀区&#39;,
+        address: &#39;上海市普陀区金沙江路 1518 弄&#39;,
+        zip: 200333
+      &#125;, &#123;
+        date: &#39;2016-05-02&#39;,
+        name: &#39;王小虎&#39;,
+        province: &#39;上海&#39;,
+        city: &#39;普陀区&#39;,
+        address: &#39;上海市普陀区金沙江路 1518 弄&#39;,
+        zip: 200333
+      &#125;, &#123;
+        date: &#39;2016-05-04&#39;,
+        name: &#39;王小虎&#39;,
+        province: &#39;上海&#39;,
+        city: &#39;普陀区&#39;,
+        address: &#39;上海市普陀区金沙江路 1518 弄&#39;,
+        zip: 200333
+      &#125;, &#123;
+        date: &#39;2016-05-01&#39;,
+        name: &#39;王小虎&#39;,
+        province: &#39;上海&#39;,
+        city: &#39;普陀区&#39;,
+        address: &#39;上海市普陀区金沙江路 1518 弄&#39;,
+        zip: 200333
+      &#125;, &#123;
+        date: &#39;2016-05-08&#39;,
+        name: &#39;王小虎&#39;,
+        province: &#39;上海&#39;,
+        city: &#39;普陀区&#39;,
+        address: &#39;上海市普陀区金沙江路 1518 弄&#39;,
+        zip: 200333
+      &#125;, &#123;
+        date: &#39;2016-05-06&#39;,
+        name: &#39;王小虎&#39;,
+        province: &#39;上海&#39;,
+        city: &#39;普陀区&#39;,
+        address: &#39;上海市普陀区金沙江路 1518 弄&#39;,
+        zip: 200333
+      &#125;, &#123;
+        date: &#39;2016-05-07&#39;,
+        name: &#39;王小虎&#39;,
+        province: &#39;上海&#39;,
+        city: &#39;普陀区&#39;,
+        address: &#39;上海市普陀区金沙江路 1518 弄&#39;,
+        zip: 200333
+      &#125;]
+    &#125;
+  &#125;,
+  methods: &#123;
+    handleDownload() &#123;
+        import(&#39;@/vendor/Export2Excel&#39;).then(excel =&gt; &#123;
+          const multiHeader =
+                            [
+                              [&#39;日期&#39;, &#39;配送信息&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;], //第一行
+                              [&#39;&#39;, &#39;姓名&#39;, &#39;地址&#39;, &#39;&#39;, &#39;&#39;, &#39;&#39;] //第二行
+                            ] // 前两行的表头数据，二维数组，不够的用空白补全
+          const header = [&#39;&#39;, &#39;&#39;, &#39;省份&#39;, &#39;市区&#39;, &#39;地址&#39;, &#39;邮编&#39;] // 最后一行的表头数据
+          const filterVal = [&#39;date&#39;, &#39;name&#39;, &#39;province&#39;, &#39;city&#39;, &#39;address&#39;, &#39;zip&#39;]
+          const list = this.tableData
+          const data = this.formatJson(filterVal, list)
+          const merges = [&#39;A1:A3&#39;, &#39;B1:F1&#39;, &#39;B2:B3&#39;, &#39;C2:F2&#39;] // 合并单元格的数据，如何合并参考上面图片的蓝色背景部分
+          excel.export_json_to_excel(&#123;
+            multiHeader,
+            header,
+            merges,
+            data
+          &#125;)
+        &#125;)
+    &#125;,
+    formatJson(filterVal, jsonData) &#123;
+      return jsonData.map(v =&gt; filterVal.map(j =&gt; &#123;
+        return v[j]
+      &#125;))
+    &#125;
+  &#125;
+&#125;
+&lt;/script&gt;
+&lt;style&gt;
+    .center-table td, .center-table th &#123;
+        text-align: center;
+    &#125;
+&lt;/style&gt;
+</code></pre>
+<p>界面如图：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%AF%BC%E5%87%BA%E5%A4%9A%E7%BA%A7%E8%A1%A8%E5%A4%B4excel/20200227_111142.png"></p>
+<p>导出来的excel如图：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%AF%BC%E5%87%BA%E5%A4%9A%E7%BA%A7%E8%A1%A8%E5%A4%B4excel/20200227_111833.png"></p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2020-02-27';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

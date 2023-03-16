@@ -1,0 +1,429 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>hexo博客添加一级分类相册功能 | liyang&#x27;s  blog</title><meta name="keywords" content="hexo 相册 教程"/><meta name="description" content="&lt;p&gt;最近在折腾自己的博客，在折腾的过程中也参观了许多大牛的博客，发现不少博主都有个相册页面，我也想在自己的博客上面加个相册功能。但是我现在用的这个主题呢，虽然有个相册的功能，但是我感觉有点简陋，点击照片是个弹出的轮播图，照片多了的话还要一张一张的翻。如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/2019-07-22-01.jpg&quot;&gt;&lt;/p&gt;"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">hexo博客添加一级分类相册功能</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2019-07-22</span><span>文章字数：<!-- -->4.1<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>最近在折腾自己的博客，在折腾的过程中也参观了许多大牛的博客，发现不少博主都有个相册页面，我也想在自己的博客上面加个相册功能。但是我现在用的这个主题呢，虽然有个相册的功能，但是我感觉有点简陋，点击照片是个弹出的轮播图，照片多了的话还要一张一张的翻。如下图：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/2019-07-22-01.jpg"></p>
+<span id="more"></span>
+
+<p>后来在网上找了不少教程，可是实现的结果大部分都是这种：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/%E4%B8%8D%E5%B8%A6%E5%88%86%E7%B1%BB%E7%9A%84%E7%9B%B8%E5%86%8C.jpg"></p>
+<p>虽然有了分类的功能，但是所有照片都是在一个页面上，图片多了会影响页面加载速度，页面也会变得很长，移动端会浪费大量流量，用户体验不是很好。</p>
+<p>该博客地址：<a href="http://lawlite.me/photos/">http://lawlite.me/photos</a></p>
+<p>而我想要的呢，是个类似<code>QQ空间</code>的相册，要有个相册目录界面，然后可以从目录页跳转至相册列表界面。 然后我翻遍了整个互联网终于找到了一个有相册分类功能的博客，该博客的相册界面是这样的：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/%E5%88%86%E7%B1%BB%E7%9B%B8%E5%86%8C1.jpg"><br><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190722-153547.jpg"></p>
+<p>该博客地址：<a href="http://www.rayblog.cn/album/">http://www.rayblog.cn/album</a></p>
+<p>好吧，这就是我想要的效果，而且博客下面还有教程，我研究了半天，把代码都拷到本机运行了之后，发现他这个教程也只是实现了相册的列表界面，至于目录界面是怎么弄出来的只是一笔带过。并没有实现的细节。我个人猜测他的目录界面是一个<code>album/index.md</code>文件，然后md文件里手动写的HTML代码。 </p>
+<p>虽然这种方式我也能实现，但我并不想这么做，因为我感觉在markdown文件里面写HTML和js不是很优雅，也有些繁琐，假如要添加一个相册的话还要手动修改里面的HTML代码，添加对应的链接。</p>
+<p>后来我仔细研究了这个主题的源码，发现这个主题的<code>友情链接</code>界面实现的方式是这样的，读取<code>sources/_data/friends.json</code>文件,该文件内容如下：</p>
+<pre><code class="json">[&#123;
+  &quot;avatar&quot;: &quot;http://image.luokangyuan.com/1_qq_27922023.jpg&quot;,
+  &quot;name&quot;: &quot;码酱&quot;,
+  &quot;introduction&quot;: &quot;我不是大佬，只是在追寻大佬的脚步&quot;,
+  &quot;url&quot;: &quot;http://luokangyuan.com/&quot;,
+  &quot;title&quot;: &quot;前去学习&quot;
+&#125;, &#123;
+  &quot;avatar&quot;: &quot;http://image.luokangyuan.com/4027734.jpeg&quot;,
+  &quot;name&quot;: &quot;闪烁之狐&quot;,
+  &quot;introduction&quot;: &quot;编程界大佬，技术牛，人还特别好，不懂的都可以请教大佬&quot;,
+  &quot;url&quot;: &quot;https://blinkfox.github.io/&quot;,
+  &quot;title&quot;: &quot;前去学习&quot;
+&#125;, &#123;
+  &quot;avatar&quot;: &quot;http://image.luokangyuan.com/avatar.jpg&quot;,
+  &quot;name&quot;: &quot;ja_rome&quot;,
+  &quot;introduction&quot;: &quot;平凡的脚步也可以走出伟大的行程&quot;,
+  &quot;url&quot;: &quot;ttps://me.csdn.net/jlh912008548&quot;,
+  &quot;title&quot;: &quot;前去学习&quot;
+&#125;]
+</code></pre>
+<p>该文件包含每个友链的头像、名字、介绍、地址、标题信息，然后hexo会按照friends.ejs模板文件里的结构渲染出来列表，实现的效果就是这样的:<br><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/2019-07-22-02.jpg"></p>
+<p>就是三个a标签，里面包含头像、地址等信息，点击后跳到对应的地址。</p>
+<p>那么我们也能自定义一个相册的配置文件和模板文件，然后hexo读取这个配置文件，自动生成目录界面和列表界面，这样的话，只需要修改这个配置文件就能完成对相册的各种操作（增删改）。</p>
+<p>好吧，有了思路，就已经成功一半了，至于代码实现呢，就只是时间问题了。花了一个周末的时间我终于把它实现了。下面是具体实现过程:</p>
+<h4 id="1、添加【相册】菜单"><a href="#1、添加【相册】菜单" class="headerlink" title="1、添加【相册】菜单"></a>1、添加【相册】菜单</h4><p>这里要修改几个文件：</p>
+<p>该主题的配置文件<code>_config.yml</code> ，不要跟站点根目录下的同名文件搞混了，在<code>menu</code>下添加以下代码:</p>
+<pre><code class="yaml">Galleries:
+    url: /galleries
+    icon: fa-photo
+</code></pre>
+<p>该主题的语言配置文件目录 <code>languages</code>下的 <code>default.yml</code>和<code>zh-CN.yml</code>，分别是英文和中文的配置文件，分别添加以下内容，</p>
+<pre><code class="yaml">galleries: galleries
+
+galleries: 相册
+</code></pre>
+<p>该主题目录下<code>layout/_partial/navigation.ejs</code>和<code>layout/_partial/mobile-nav.ejs</code>文件里添加</p>
+<pre><code class="js">    menuMap.set(&quot;Galleries&quot;, &quot;相册&quot;);
+</code></pre>
+<p>至于添加到什么位置，你打开文件就知道了，里面会有类似格式的代码，很容易找到的。</p>
+<p>做完以上操作后，你就会发现<code>相册</code>的菜单已经出现了：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/2019-07-22-03.jpg"></p>
+<p>点击就能跳转到<code>galleries</code>下，然而浏览器会提示你：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/2019-07-22-04.jpg"></p>
+<p>因为站点下并没有<code>galleries/index.html</code>这个文件，如何生成这个文件呢?<br>在站点根目录<code>source</code>下新建<code>galleries</code>目录，然后在该目录下新建<code>index.md</code>，就会生成<code>index.html</code>文件了，然而却是这个效果：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/2019-07-22-05.jpg"></p>
+<h4 id="2、生成相册目录和相册列表"><a href="#2、生成相册目录和相册列表" class="headerlink" title="2、生成相册目录和相册列表"></a>2、生成相册目录和相册列表</h4><p>这是为什么呢？因为hexo把这个文件当成一个普通的文章来渲染了，而我们需要自定义样式，不能让它渲染成普通的文章。要让它渲染成一个<code>layout</code>,也就是我们自定义的模板。需要以下操作：<br>在<code>index.md</code>文件里添加以下内容，注意，那几个中划线也不要少了。</p>
+<pre><code class="yaml">---
+title: 相册
+layout: &quot;galleries&quot;
+---
+</code></pre>
+<p>首先添加自定义CSS样式文件，该<code>主题</code>目录下的<code>source/css</code>里新建<code>gallery.css</code>文件，复制以下css样式进去：</p>
+<pre><code class="css">.gallery-wrapper&#123;
+  padding-top: 30px;
+&#125;
+.gallery-wrapper .gallery-box&#123;
+  padding: 5px !important;
+&#125;
+
+.gallery-wrapper .gallery-item &#123;
+  display: block;
+  overflow: hidden;
+  background-color: #fff;
+  padding: 5px;
+  padding-bottom: 0;
+  position: relative;
+  -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22);
+&#125;
+
+.gallery-cover-box&#123;
+  width: 100%;
+  padding-top: 60%;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+  background: center center no-repeat;
+  -webkit-background-size: cover;
+  background-size: cover;
+&#125;
+
+.gallery-cover-box .gallery-cover-img &#123;
+  display: inline-block;
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+&#125;
+.gallery-item .gallery-name&#123;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  color: #666;
+  margin: 0;
+&#125;
+
+.waterfall &#123;
+  column-count: 3;
+  column-gap: 1em;
+&#125;
+.photo-wrapper&#123;
+  padding-top: 20px;
+&#125;
+.photo-item &#123;
+  display: block;
+  padding: 10px;
+  padding-bottom: 0;
+  margin-bottom: 14px;
+  font-size: 0;
+  -moz-page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  break-inside: avoid;
+  background: white;
+  -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.22);
+&#125;
+.photo-item img &#123;
+  width: 100%;
+&#125;
+.photo-item .photo-name&#123;
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-top: 1px solid #dddddd;
+&#125;
+
+/*适配移动端布局*/
+@media only screen and (max-width: 601px) &#123;
+  .waterfall &#123;
+    column-count: 2;
+    column-gap: 1em;
+  &#125;
+&#125;
+
+</code></pre>
+<p>在该主题<code>layout</code>目录下新建<code>galleries.ejs</code>文件，添加以下代码：</p>
+<pre><code class="html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/css/gallery.css&quot;&gt;
+
+&lt;%- partial(&#39;_partial/bg-cover&#39;) %&gt;
+
+&lt;main class=&quot;content&quot;&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;% if (site.data &amp;&amp; site.data.galleries) &#123; %&gt;
+        &lt;% var galleries = site.data.galleries; %&gt;
+        &lt;div class=&quot;gallery-wrapper row&quot;&gt;
+            &lt;% for (var i = 0, len = galleries.length; i &lt; len; i++) &#123; %&gt;
+            &lt;% var gallery = galleries[i]; %&gt;
+            &lt;div class=&quot;col s6 m4 l4 xl3 gallery-box&quot;&gt;
+                &lt;a href=&quot;./&lt;%- gallery.name %&gt;&quot; class=&quot;gallery-item&quot; data-aos=&quot;zoom-in-up&quot;&gt;
+                    &lt;div class=&quot;gallery-cover-box&quot; style=&quot;background-image: url(http://图片地址.com/&lt;%- gallery.cover%&gt;);&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;gallery-name&quot;&gt;
+                        &lt;%- gallery.name %&gt;
+                    &lt;/p&gt;
+                &lt;/a&gt;
+            &lt;/div&gt;
+            &lt;% &#125; %&gt;
+        &lt;/div&gt;
+        &lt;% &#125; %&gt;
+    &lt;/div&gt;
+&lt;/main&gt;
+
+
+</code></pre>
+<p>同目录下新建<code>gallery.ejs</code>，添加以下代码：</p>
+<pre><code class="html">&lt;link rel=&quot;stylesheet&quot; href=&quot;/css/gallery.css&quot;&gt;
+&lt;link type=&quot;text/css&quot; href=&quot;/libs/fancybox/jquery.fancybox.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;link type=&quot;text/css&quot; href=&quot;/libs/justifiedGallery/justifiedGallery.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+
+&lt;%- partial(&#39;_partial/post-cover&#39;) %&gt;
+&lt;%
+let galleries = [];
+if (site.data &amp;&amp; site.data.galleries) &#123;
+    galleries = site.data.galleries;
+&#125;
+var pageTitle = page.title;
+function getCurrentGallery(galleries, pageTitle) &#123;
+    for (let i = 0; i &lt; galleries.length; i++) &#123;
+        if (galleries[i][&#39;name&#39;] == pageTitle) &#123;
+            return galleries[i];
+        &#125;
+    &#125;
+&#125;
+var currentGallery = getCurrentGallery(galleries, pageTitle)
+
+var photos = currentGallery.photos;
+
+let imageStr = &#39;&#39;
+
+for (var i = 0, len = photos.length; i &lt; len; i++) &#123;
+    var photo = photos[i];
+
+    imageStr += &quot;&lt;a href=\&quot;http://图片地址.com/&quot; + photo + &quot;\&quot;&quot; +
+            &quot;     class=\&quot;photo-item\&quot; rel=\&quot;example_group\&quot;&quot; +
+            &quot;     data-fancybox=\&quot;images\&quot;&gt;&quot; +
+            &quot;      &lt;img src=\&quot;http://图片地址.com/&quot; + photo + &quot;\&quot;&quot; +
+            &quot;       alt=&quot; + photo + &quot;&gt;\n&quot; +
+            &quot;    &lt;/a&gt;&quot;
+
+&#125;
+%&gt;
+
+&lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;photo-wrapper&quot;&gt;
+        &lt;div class=&quot;waterfall&quot; id=&quot;mygallery&quot;&gt;
+            &lt;%- imageStr %&gt;
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;script src=&quot;/libs/fancybox/fancybox.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/libs/justifiedGallery/justifiedGallery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+
+  $(&quot;a[rel=example_group]&quot;).fancybox();
+  $(&quot;#mygallery&quot;).justifiedGallery(&#123;margins: 5, rowHeight: 150&#125;);
+
+&lt;/script&gt;
+</code></pre>
+<p>以上代码实现的功能呢，就是读取相册配置文件并把相册目录和相册列表都渲染成HTML，用<code>&lt;% %&gt;</code>包起来的代码是<code>ejs</code>语法，调试的话是在本地控制台输出的而不是浏览器，就是你输入<code>hexo s</code>的地方，我这里用的是WebStorm自带的终端，看下图：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/2019-07-22-06.jpg"></p>
+<p>另外上面代码里引用了两个<code>jquery插件</code>，分别是<code>fancybox</code>和<code>justifiedGallery</code>, 一个是点击弹出的轮播插件，一个是自动调整图片布局的插件，需要自行下载并放到相应目录，当然，你也可以用浏览器调试工具直接在我的博客上下载，在sources里找到对应的文件，另存为就行。</p>
+<h4 id="3、制作相册配置文件"><a href="#3、制作相册配置文件" class="headerlink" title="3、制作相册配置文件"></a>3、制作相册配置文件</h4><p>在<code>站点</code>目录<code>sources/_data/</code>下新建一个<code>galleries.json</code>的文件，模板如下：</p>
+<pre><code class="json">[
+  &#123;
+    &quot;name&quot;: &quot;2017&quot;,
+    &quot;cover&quot;: &quot;2017/IMG_20171109_124516.jpg&quot;,
+    &quot;description&quot;: &quot;2017年记录&quot;,
+    &quot;photos&quot;: [
+      &quot;2017/IMG_20170924_110224.jpg&quot;,
+      &quot;2017/IMG_20170924_113412.jpg&quot;,
+      &quot;2017/IMG_20171109_124516.jpg&quot;,
+      &quot;2017/IMG_20171125_125304.jpg&quot;,
+      &quot;2017/IMG_20171126_181605.jpg&quot;
+    ]
+  &#125;,
+  &#123;
+    &quot;name&quot;: &quot;2018&quot;,
+    &quot;cover&quot;: &quot;2018/IMG_20181124_125818.jpg&quot;,
+    &quot;description&quot;: &quot;2018年记录&quot;,
+    &quot;photos&quot;: [
+      &quot;2018/IMG_20180204_113055.jpg&quot;,
+      &quot;2018/IMG_20180204_113302.jpg&quot;,
+      &quot;2018/IMG_20180204_113442.jpg&quot;,
+      &quot;2018/IMG_20180208_083336.jpg&quot;
+    ]
+  &#125;,
+  &#123;
+    &quot;name&quot;: &quot;2019&quot;,
+    &quot;cover&quot;: &quot;2019/IMG_20190331_165713_1.jpg&quot;,
+    &quot;description&quot;: &quot;2019年记录&quot;,
+    &quot;photos&quot;: [
+      &quot;2019/IMG_20190118_200104.jpg&quot;,
+      &quot;2019/IMG_20190118_200120.jpg&quot;,
+      &quot;2019/IMG_20190118_200456.jpg&quot;
+    ]
+  &#125;
+]
+</code></pre>
+<p>就是一个包含多个相册的列表JSON，每个相册有以下字段，<code>name</code>是相册标题，<code>cover</code>是封面图片，从相册里随便选一个就行，<code>description</code>是相册介绍，<code>photos</code>是图片列表。图片较少的话手动复制进去就行，如果你图片较多的话推荐使用脚本之类的东西自动生成，我是使用了上面博客里的js文件生成的。我这里使用了七牛对象存储做为图床，需要在代码里加上七牛的地址才能正常显示。</p>
+<p>配置文件建好了之后还没完，只剩最后一个步骤了，在<code>galleries</code>下建立对应的相册名称目录和文件，比如我这三个相册需要建 2017 2018 2019三个目录，然后下面再分别新建<code>index.md</code>文件，文件内容为:</p>
+<pre><code class="html">---
+title: 2017
+layout: &quot;gallery&quot;
+---
+</code></pre>
+<p>建好相应目录和文件之后，如果你的图片路径也没有错的话，相册目录和列表就都会渲染出来了，如下所示：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/2019-07-22-07.jpg"></p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190722_161044.jpg"></p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190722_160930.jpg"></p>
+<h4 id="4、照片列表的布局选择"><a href="#4、照片列表的布局选择" class="headerlink" title="4、照片列表的布局选择"></a>4、照片列表的布局选择</h4><p>上面的博客用的布局都比较简单粗暴，都是固定的大小和宽高比。但是不同的图片有不同的宽高比，用这种模式的话图片有两种显示方式，一是强制缩放到固定的宽高，二是裁切只显示一部分，但是都有缺点，第一个会图片会变形，第二个图片显示不全。那么有没有两全齐美的办法呢？答案是肯定的。首先我选用的是瀑布流布局，用CCS3的新特性实现的，这种模式的特点是等宽布局，固定列数，图片高度自适应，如下图：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190115114259.jpg"></p>
+<p>看起来似乎没什么问题，高端大气上档次，然而做好了我发现图片的排列顺序是这个样子的，是按列竖向排列的，不太符合阅读习惯，PASS。</p>
+<p>另外一种布局呢是等高布局，如图；<br><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190723_110706.jpg"></p>
+<p>这种布局是等高布局，图片高度一致，宽度自适应，图片托管网站flickr就是用的这种模式，但是用CSS方法是实现不了的，因为每一行最后张图片不一定能正好撑满这一行，需要用js动态设置图片的宽高来实现，上面引用的<code>justifiedGallery</code>插件就是来完成这个的。<br>下面代码的功能就是初始化这个插件，间距是5px，每一行的高度是150px。</p>
+<pre><code class="js">  $(&quot;#mygallery&quot;).justifiedGallery(&#123;margins: 5, rowHeight: 150&#125;);
+</code></pre>
+<p>这两种布局呢，上面的代码里都是包含了的。是可以手动切换的。只需要把上面那句代码注释掉就会切换到瀑布流布局，效果如下图：<br><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190723_134939.jpg"></p>
+<p>当然，你要是对我写的样式不满意的话也可以自己修改代码，边框和文件名都是可以去掉的。</p>
+<h4 id="5、图床相关事项"><a href="#5、图床相关事项" class="headerlink" title="5、图床相关事项"></a>5、图床相关事项</h4><p>2019-08-28更新:</p>
+<p>最初我是采用的七牛对象存储当为图床，但是我发现一个问题，在相册列表界面下，相册图片较多或图片体积很大的情况下加载速度会很慢，也会浪费大量的流量。七牛CDN免费流量只有10G，然而我还作死的把几个图片的链接地址放到了某论坛上，图片也没有做任何处理，一个图片为几MB大小，在我放出外链几个小时之后，CDN流量就爆了，超出了约60G：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E6%B7%BB%E5%8A%A0%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190828_223502.jpg"></p>
+<p>为了防止类似的事情发生，以及减少CDN流量消耗，可以使用以下两种方案：</p>
+<p>一是手动生成图片的缩略图到另外一个新目录，保持与原相册目录结构一致。比如我一个图片路径为 &#x2F;gallery&#x2F;2017&#x2F;XXX.jpg,缩略图结构应为&#x2F;gallery-tiny&#x2F;2017&#x2F;XXX.jpg。</p>
+<p>在相册列表界面应使用缩略图而不是使用原图。上面代码中 <code>a标签</code>里的地址是大图地址，点击弹出的时候才会加载，<code>img</code>标签里的地址是缩略图地址。</p>
+<p>缩略图大小我调整为600px宽度，这样每个图片体积可减少到100KB以下。这样一个100张图片的相册，缩略图也不超过10MB。缩略图我使用 <code>Light Image Resizer</code> 软件批量生成。</p>
+<p>上面对应的代码需要改为:</p>
+<pre><code class="js">
+ imageStr += &quot;&lt;a href=\&quot;http://imgs.liyangzone.com/&quot; + photo + &quot;\&quot;&quot; +
+            &quot;     class=\&quot;photo-item\&quot; rel=\&quot;example_group\&quot;&quot; +
+            &quot;     data-fancybox=\&quot;images\&quot;&gt;&quot; +
+            &quot;      &lt;img src=\&quot;http://imgs.liyangzone.com/gallery-tiny/&quot; + photo + &quot;\&quot;&quot; +
+            &quot;       alt=&quot; + photo + &quot;&gt;&quot; +
+            &quot;    &lt;/a&gt;&quot;
+</code></pre>
+<p>二是使用七牛自带的<code>图片样式</code>功能，该功能提供简单快捷的图片格式转换、缩略、剪裁功能。只需要填写几个参数，即可对图片进行缩略操作，生成各种缩略图。比如我建立了一个名为 <code>w33</code> 的图片样式，该样式的功能就是生成原图33%大小的缩略图。假如一个100×100的图片，在图片地址后面加上这个样式后就变成33×33大小的了。对应代码需改为：</p>
+<pre><code class="js">
+ imageStr += &quot;&lt;a href=\&quot;http://imgs.liyangzone.com/&quot; + photo + &quot;!w95\&quot;&quot; +
+            &quot;     class=\&quot;photo-item\&quot; rel=\&quot;example_group\&quot;&quot; +
+            &quot;     data-fancybox=\&quot;images\&quot;&gt;&quot; +
+            &quot;      &lt;img src=\&quot;http://imgs.liyangzone.com/&quot; + photo + &quot;!w33\&quot;&quot; +
+            &quot;       alt=&quot; + photo + &quot;&gt;&quot; +
+            &quot;    &lt;/a&gt;&quot;
+</code></pre>
+<p>列表页使用33%大小的样式，查看大图使用95%大小的。上面的叹号是样式分隔符，七牛默认的分隔符有四个:</p>
+<pre><code class="html">- _ ! /
+</code></pre>
+<p>也可以改成下面的：</p>
+<pre><code class="html">~ ` @ $ ^ &amp; * ( ) + = &#123; &#125; [ ] | : ; &quot; &#39; &lt; &gt;
+</code></pre>
+<p>生成的图片地址是这样的,你可以复制到地址栏查看效果：</p>
+<pre><code class="html">http://imgs.liyangzone.com/2017/IMG_20170508_163002.jpg!w33
+http://imgs.liyangzone.com/2017/IMG_20170508_163002.jpg!w75
+</code></pre>
+<p>另外建议开启七牛的原图保护功能并配置Referer防盗链，防止被恶意刷流量。</p>
+<p>我目前使用的是第一种方案，只是把缩略图放到腾讯CDN了，不想麻烦的可以使用第二种。</p>
+<p>博客源码已上传至github: <a href="https://github.com/liyang5945/liyang5945.github.io">点击前往</a>,觉得不错的可以给个STAR支持一下。</p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2019-07-22';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

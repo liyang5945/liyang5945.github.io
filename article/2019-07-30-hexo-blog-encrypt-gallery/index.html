@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>使用AES算法加密Hexo相册 | liyang&#x27;s  blog</title><meta name="keywords" content="hexo 相册 教程 加密"/><meta name="description" content="本教程承接上篇Hexo博客添加一级分类相册。
+在上篇教程中，我们已经实现了hexo的分类相册功能。然后我发现那个大佬的相册竟然还有加密的功能（点击进入大佬的相册），在大佬的这篇教程下面，还有一个参考资料：使用AES算法加密hexo文章，可惜的是链接已经失效了，不过也没有关系，在网上查找相关资料后，我也把它实现了，本篇教程就来实现相册加密功能。
+先来科普一下AES加密算法：高级加密标准（英语：Adv……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">使用AES算法加密Hexo相册</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2019-07-30</span><span>文章字数：<!-- -->2.4<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>本教程承接上篇<a href="/2019/07/22/hexo%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E4%B8%80%E7%BA%A7%E5%88%86%E7%B1%BB%E7%9B%B8%E5%86%8C/">Hexo博客添加一级分类相册</a>。</p>
+<p>在上篇教程中，我们已经实现了hexo的分类相册功能。然后我发现那个大佬的相册竟然还有加密的功能（点击进入<a href="http://www.rayblog.cn/album/">大佬的相册</a>），在大佬的这篇<a href="http://www.rayblog.cn/posts/uncategorized/2017-07-05-establish-blog.html">教程</a>下面，还有一个参考资料：使用AES算法加密hexo文章，可惜的是链接已经失效了，不过也没有关系，在网上查找相关资料后，我也把它实现了，本篇教程就来实现相册加密功能。</p>
+<p>先来科普一下AES加密算法：高级加密标准（英语：Advanced Encryption Standard，缩写：AES），在密码学中又称Rijndael加密法，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级加密标准由美国国家标准与技术研究院（NIST）于2001年11月26日发布于FIPS PUB 197，并在2002年5月26日成为有效的标准。2006年，高级加密标准已然成为对称密钥加密中最流行的算法之一。</p>
+<h4 id="1、主题自带的加密"><a href="#1、主题自带的加密" class="headerlink" title="1、主题自带的加密"></a>1、主题自带的加密</h4><p>首先我发现本主题自带一个加密功能：如下图：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_120352.png"></p>
+<p>它的实现效果是这样的：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_120754.png"></p>
+<p>在进入界面的时候就要求输入密码，不输或输入错误都会跳转到首页。</p>
+<p>在我看了源码之后发现是这样实现的，如果文章配置了加密就在页面里加上一段js代码，源码在<code>post.ejs</code>文件里，如下图；</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_121113.png"></p>
+<p>页面内生成的js代码呢，是这样的：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_121325.png"></p>
+<p>我们可以看到密码是直接写在页面内的，主题作者是采用<code>SHA256</code>再加密一遍密码，再用这个值当密码，防止别人识破。然而这种方式是伪加密的，查看网页的源代码就可以看到文章的内容。这种方式可以阻挡99%的人，但是对付懂行的人就不行了，有心人费点心思就能破解。</p>
+<h4 id="2、Hexo插件加密"><a href="#2、Hexo插件加密" class="headerlink" title="2、Hexo插件加密"></a>2、Hexo插件加密</h4><p>然后我以<code>hexo 加密</code>为关键字搜索相关教程，得到的结果如下：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_115324.png"></p>
+<p>里面的内容大同小异，不外乎两个hexo的插件：一个是<code>hexo-blog-encrypt</code>，另一个是<code>hexo-encrypt</code>。在我把两个插件都尝试过了之后，发现这两个插件只能加密<code>文章</code>，也就是hexo从md文件里读取到的文章内容。而我们的相册呢，是根据配置文件自动生成的，并没有在md文件里写着，实现不了加密。</p>
+<p>好吧，那我就研究一下这两个插件的原理，看它们是如何实现文章加密的。</p>
+<p>先使用<code>hexo-blog-encrypt</code>插件，给<a href="">hello world</a>这篇文章加密试试：<br>首先启用该插件，在根目录的_config.yml中启用该插件，添加以下代码:</p>
+<pre><code class="yaml"># Security  
+  encrypt: 
+  enable: true
+</code></pre>
+<p>然后设置文章的密码，在文章头部加上<code>password</code>字段,密码为2233:</p>
+<pre><code class="markdown">
+---
+title: Hello，world！
+date: 2019-07-15 17:25:30
+password: 2233
+tags: 
+- hello world
+categories:
+- 日志  
+---
+</code></pre>
+<p>然后<code>hexo-blog-encrypt</code>插件就会把文章加密了，如下图：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_131238.png"></p>
+<p>页面结构如下：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_131459.png"></p>
+<p>文章的内容被加密成了这么一坨字符串，解密后变成了这样：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_131813.png"></p>
+<p>文章的内容，就是两个P标签。</p>
+<h4 id="3、插件的加密过程"><a href="#3、插件的加密过程" class="headerlink" title="3、插件的加密过程"></a>3、插件的加密过程</h4><p>那一坨字符串是怎么变成两个P标签的呢，我仔细研究后发现解密的功能在<code>blog-encrypt.js</code>这个文件里，在知道正确密码的情况下，执行了四步转换才将那个字符串解密，源码如下：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_133345.png"></p>
+<p>那么这四步都干了什么呢，我把上面加密后的一坨字符串和相关js都放到一个html里在浏览器控制台调试一下，看看究竟是怎么解密的：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_133720.png"></p>
+<p>控制台输出如下：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_133817.png"></p>
+<p>我们可以看到，在第四步输出了解密后的HTML标签。</p>
+<p>解密步骤如下：</p>
+<p>1、根据密码使用AES算法将密文解密，解密的代码为：</p>
+<pre><code class="js">  let content = CryptoJS.AES.decrypt(encriptHtmlStr, password);
+</code></pre>
+<p>解密出来的内容是一个JS对象，里面有一个words数组，展开后如下图：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_135141.png"></p>
+<p>2、将上面那个JS对象转换为utf-8码，转换后为成为一个base64字符串。</p>
+<p>3、解码base64字符串，解码后是一个经过js转码(escape)的字符串。</p>
+<p>4、解码(unescape)上面的字符串，最终结果为HTML标签。</p>
+<p>既然知道了解密的过程，那么可以推断加密过程就是上述步骤的逆操作，在查看<code>hexo-blog-encrypt</code>的源码之后（在<code>node_modules</code>目录下），果不其然，找到如下代码：</p>
+<pre><code class="js">data.content = escape(data.content);
+data.content = CryptoJS.enc.Utf8.parse(data.content);
+data.content = CryptoJS.enc.Base64.stringify(data.content);
+data.content = CryptoJS.AES.encrypt(data.content, String(data.password)).toString();
+</code></pre>
+<p>CryptoJS是引入的<code>npm</code>插件<code>crypto-js</code></p>
+<pre><code class="js">
+const CryptoJS = require(&#39;crypto-js&#39;);
+</code></pre>
+<p>那么我们也能写一个加密函数，在生成HTML字符串的时候加密它，然后把加密后的字符串渲染出来。</p>
+<h4 id="4、加密辅助函数"><a href="#4、加密辅助函数" class="headerlink" title="4、加密辅助函数"></a>4、加密辅助函数</h4><p>然而在实际操作的时候我发现在ejs文件里面用常规的方法引入<code>npm</code>插件是不行的，无论是<code>import &#39;crypto-js&#39;</code>还是 <code>require(&#39;crypto-js&#39;)</code>都是不行的。那么如何在ejs里面调用外部函数呢？ </p>
+<p>在查看<a href="https://hexo.io/zh-cn/api/helper.html">官方文档</a>之后发现需要自己写一个辅助函数（helper），才能在ejs里调用它：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_192430.png"></p>
+<p>然后我们在主题根目录下新建以下目录和文件<code>scripts/helpers/encrypt.js</code>，<code>encrypt.js</code>内代码如下：</p>
+<pre><code class="js">
+/* global hexo */
+
+
+&#39;use strict&#39;;
+
+const CryptoJS = require(&#39;crypto-js&#39;);
+
+hexo.extend.helper.register(&#39;aes&#39;, function(content,password)&#123;
+
+  content = escape(content);
+  content = CryptoJS.enc.Utf8.parse(content);
+  content = CryptoJS.enc.Base64.stringify(content);
+  content = CryptoJS.AES.encrypt(content, String(password)).toString();
+
+  return content;
+&#125;);
+
+</code></pre>
+<p>注册一个名为<code>aes</code>的辅助函数，这样才能在ejs文件里使用它。</p>
+<p>然后将<code>gallery.ejs</code>文件内中间的HTML部分改成如下代码：</p>
+<pre><code class="html">&lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;photo-wrapper&quot;&gt;
+        &lt;% if (page.password ) &#123; %&gt;
+
+            &lt;script src=&quot;/lib/crypto-js.js&quot;&gt;&lt;/script&gt;
+            &lt;script src=&quot;/js/gallery-encrypt.js&quot;&gt;&lt;/script&gt;
+            &lt;div id=&quot;hbe-security&quot;&gt;
+                &lt;div class=&quot;hbe-input-container&quot;&gt;
+                    &lt;input type=&quot;password&quot; class=&quot;hbe-form-control&quot; id=&quot;pass&quot;  placeholder=&quot;请输入密码查看内容&quot;/&gt;
+                    &lt;a href=&quot;javascript:;&quot; class=&quot;btn-decrypt&quot; id=&quot;btn_decrypt&quot;&gt;解密&lt;/a&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div  id=&quot;mygallery&quot;&gt;
+                &lt;div class=&quot;waterfall&quot; id=&quot;encrypt-blog&quot; style=&quot;display:none&quot;&gt;
+                    &lt;%- aes(imageStr, page.password) %&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;% &#125; else &#123; %&gt;
+            &lt;div class=&quot;waterfall&quot; id=&quot;encrypt-blog&quot;&gt;
+                &lt;%- imageStr %&gt;
+            &lt;/div&gt;
+        &lt;% &#125; %&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>初始化<code>justifiedGallery</code>插件的那句代码修改成下面的，就是改了一个id</p>
+<pre><code class="js">  $(&quot;#encrypt-blog&quot;).justifiedGallery(&#123;margins: 5, rowHeight: 150&#125;);
+</code></pre>
+<p>这段代码的作用就是判断相册是否有密码，有则加密，没有则正常渲染，密码也是写在md文件的头部，加密后页面样式和HTML结构如下：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_220409.png"></p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/%E5%8A%A0%E5%AF%86%E7%9B%B8%E5%86%8C%E6%95%99%E7%A8%8B/20190730_211445.png"></p>
+<p>可以看到内容已经被加密成了一坨乱码，在这里，我手动加了一个<code>解密</code>按钮，原来插件是没有的，然后写点css美化一下，我是加到了<code>my.css</code>里面</p>
+<pre><code class="css">.hbe-input-container  .btn-decrypt&#123;
+  display: inline-block;
+  vertical-align: top;
+  width: 120px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #3f90ff;
+  text-align: center;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+&#125;
+</code></pre>
+<h4 id="5、修改解密js文件"><a href="#5、修改解密js文件" class="headerlink" title="5、修改解密js文件"></a>5、修改解密js文件</h4><p>因为和文章的加密有点区别，而且插件的解密操作会在id为<code>encrypt-blog</code>的div上加上一些样式，会导致<code>justifiedGallery</code>样式错乱，所以是不能直接用文章的解密js文件（<code>/lib/blog-encrypt.js</code>）的。此文件在发布后才会生成，在<code>hexo-blog-encrypt</code>插件的目录（<code>node_modules/hexo-blog-encrypt</code>）下也能找到，需要做些修改才能解密相册，找到该文件后复制一份，重命名为<code>gallery-encrypt.js</code>,放到主题目录<code>source/js</code>下，替换文件尾部<code>$(document).ready()</code>里面的代码如下：</p>
+<pre><code class="js">
+$(document).ready(
+  function () &#123;
+    let password = String(getCookie(GenerateCookieName()));
+    console.log(`Get password from Cookie:$&#123;password&#125;`);
+
+    if (password != &#39;&#39;) &#123;
+
+      if (!decryptAES(password)) &#123;
+        // Delete cookie
+        setCookie(COOKIE_NAME, password, -5);
+      &#125; else &#123;
+
+        document.getElementById(&#39;encrypt-blog&#39;).removeAttribute(&#39;style&#39;);
+
+        $(&quot;#encrypt-blog&quot;).justifiedGallery(&#123;margins: 5, rowHeight: 150&#125;);
+      &#125;
+    &#125;
+    document.getElementById(&#39;pass&#39;).onkeypress = function (keyPressEvent) &#123;
+
+      password = String(document.getElementById(&#39;pass&#39;).value);
+      if (keyPressEvent.keyCode === 13) &#123;
+
+        const result = decryptAES(password);
+
+        if (result) &#123;
+          document.getElementById(&#39;encrypt-blog&#39;).removeAttribute(&#39;style&#39;);
+
+          $(&quot;#encrypt-blog&quot;).justifiedGallery(&#123;margins: 5, rowHeight: 150&#125;);
+
+          setCookie(GenerateCookieName(), password, 30);
+        &#125;
+      &#125;
+    &#125;;
+    $(&#39;#btn_decrypt&#39;).on(&#39;click&#39;, function () &#123;
+
+      password = String(document.getElementById(&#39;pass&#39;).value);
+
+      const result = decryptAES(password);
+
+      if (result) &#123;
+
+        document.getElementById(&#39;encrypt-blog&#39;).removeAttribute(&#39;style&#39;);
+
+        $(&quot;#encrypt-blog&quot;).justifiedGallery(&#123;margins: 5, rowHeight: 150&#125;);
+
+        setCookie(GenerateCookieName(), password, 30);
+      &#125;
+    &#125;);
+  &#125;
+);
+</code></pre>
+<p>这段代码的作用就是在解密后清除id为<code>encrypt-blog</code>这个div的样式，然后再初始化 <code>justifiedGallery</code>插件，解决图片错乱的问题，还有给按钮绑定解密的操作。</p>
+<p>至此，相册的加密功能也已经实现了。你可以前往<a href="/galleries/private/">体验一下</a>，看你能不能破解。</p>
+<h4 id="6、注意事项"><a href="#6、注意事项" class="headerlink" title="6、注意事项"></a>6、注意事项</h4><p>需要注意的是上面HTML里引入的<code>crypto-js.js</code>这个文件，只有安装了<code>hexo-blog-encrypt</code>插件发布后才会生成，如果你不想安装这个插件，则需要手动安装<code>crypto-js</code>: <code>npm i crypto-js</code>, 然后在插件目录下找到<code>crypto-js.js</code>文件，复制出来放到<code>source/js</code>下，引用路径也要改一下。</p>
+<p>博客源码已上传至github: <a href="https://github.com/liyang5945/liyang5945.github.io">点击前往</a>,觉得不错的可以给个STAR支持一下。</p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2019-07-30';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

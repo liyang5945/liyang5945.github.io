@@ -1,0 +1,565 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>Markdown使用指南 | liyang&#x27;s  blog</title><meta name="keywords" content="Markdown"/><meta name="description" content="&lt;h3 id=&quot;1-Markdown是什么？&quot;&gt;&lt;a href=&quot;#1-Markdown是什么？&quot; class=&quot;headerlink&quot; title=&quot;1. Markdown是什么？&quot;&gt;&lt;/a&gt;1. Markdown&lt;em&gt;是什么&lt;/em&gt;？&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Markdown&lt;/strong&gt;是一种轻量级&lt;strong&gt;标记语言&lt;/strong&gt;，它以纯文本形式(&lt;em&gt;易读、易写、易更改&lt;/em&gt;)编写文档，并最终以HTML格式发布。&lt;br&gt;&lt;strong&gt;Markdown&lt;/strong&gt;也可以理解为将以MARKDOWN语法编写的语言转换成HTML内容的工具。    &lt;/p&gt;
+&lt;h3 id=&quot;2-谁创造了它？&quot;&gt;&lt;a href=&quot;#2-谁创造了它？&quot; class=&quot;headerlink&quot; title=&quot;2. 谁创造了它？&quot;&gt;&lt;/a&gt;2. &lt;em&gt;谁&lt;/em&gt;创造了它？&lt;/h3&gt;&lt;p&gt;它由&lt;a href=&quot;http://www.aaronsw.com/&quot;&gt;&lt;strong&gt;Aaron Swartz&lt;/strong&gt;&lt;/a&gt;和&lt;strong&gt;John Gruber&lt;/strong&gt;共同设计，&lt;strong&gt;Aaron Swartz&lt;/strong&gt;是一位有着&lt;strong&gt;开挂&lt;/strong&gt;一般人生经历的程序员。维基百科对他的&lt;a href=&quot;http://zh.wikipedia.org/wiki/%E4%BA%9A%E4%BC%A6%C2%B7%E6%96%AF%E6%B2%83%E8%8C%A8&quot;&gt;介绍&lt;/a&gt;是：&lt;strong&gt;软件工程师、作家、政治组织者、互联网活动家、维基百科人&lt;/strong&gt;。    &lt;/p&gt;
+&lt;p&gt;他有着足以让你跪拜的人生经历：    &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;14岁&lt;/strong&gt;参与RSS 1.0规格标准的制订。     &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2004&lt;/strong&gt;年入读&lt;strong&gt;斯坦福&lt;/strong&gt;，之后退学。   &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2005&lt;/strong&gt;年创建&lt;a href=&quot;http://infogami.org/&quot;&gt;Infogami&lt;/a&gt;，之后与&lt;a href=&quot;http://www.reddit.com/&quot;&gt;Reddit&lt;/a&gt;合并成为其合伙人。   &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2010&lt;/strong&gt;年创立求进会（Demand Progress），积极参与禁止网络盗版法案（SOPA）活动，最终该提案被撤回。   &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2011&lt;/strong&gt;年7月19日，因被控从MIT和JSTOR下载480万篇学术论文并以免费形式上传于网络被捕。     &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2013&lt;/strong&gt;年1月自杀身亡。"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">Markdown使用指南</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2019-07-17</span><span>文章字数：<!-- -->4.7<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><h3 id="1-Markdown是什么？"><a href="#1-Markdown是什么？" class="headerlink" title="1. Markdown是什么？"></a>1. Markdown<em>是什么</em>？</h3><p><strong>Markdown</strong>是一种轻量级<strong>标记语言</strong>，它以纯文本形式(<em>易读、易写、易更改</em>)编写文档，并最终以HTML格式发布。<br><strong>Markdown</strong>也可以理解为将以MARKDOWN语法编写的语言转换成HTML内容的工具。    </p>
+<h3 id="2-谁创造了它？"><a href="#2-谁创造了它？" class="headerlink" title="2. 谁创造了它？"></a>2. <em>谁</em>创造了它？</h3><p>它由<a href="http://www.aaronsw.com/"><strong>Aaron Swartz</strong></a>和<strong>John Gruber</strong>共同设计，<strong>Aaron Swartz</strong>是一位有着<strong>开挂</strong>一般人生经历的程序员。维基百科对他的<a href="http://zh.wikipedia.org/wiki/%E4%BA%9A%E4%BC%A6%C2%B7%E6%96%AF%E6%B2%83%E8%8C%A8">介绍</a>是：<strong>软件工程师、作家、政治组织者、互联网活动家、维基百科人</strong>。    </p>
+<p>他有着足以让你跪拜的人生经历：    </p>
+<ul>
+<li><strong>14岁</strong>参与RSS 1.0规格标准的制订。     </li>
+<li><strong>2004</strong>年入读<strong>斯坦福</strong>，之后退学。   </li>
+<li><strong>2005</strong>年创建<a href="http://infogami.org/">Infogami</a>，之后与<a href="http://www.reddit.com/">Reddit</a>合并成为其合伙人。   </li>
+<li><strong>2010</strong>年创立求进会（Demand Progress），积极参与禁止网络盗版法案（SOPA）活动，最终该提案被撤回。   </li>
+<li><strong>2011</strong>年7月19日，因被控从MIT和JSTOR下载480万篇学术论文并以免费形式上传于网络被捕。     </li>
+<li><strong>2013</strong>年1月自杀身亡。    <span id="more"></span></li>
+</ul>
+<p><img src="https://github.com/younghz/Markdown/raw/master/resource/Aaron_Swartz.jpg" alt="Aaron Swartz"></p>
+<p>天才都有早逝的归途。</p>
+<h3 id="3-为什么要使用它？"><a href="#3-为什么要使用它？" class="headerlink" title="3. 为什么要使用它？"></a>3. <em>为什么</em>要使用它？</h3><ul>
+<li>它是易读（看起来舒服）、易写（语法简单）、易更改<strong>纯文本</strong>。处处体现着<strong>极简主义</strong>的影子。</li>
+<li>兼容HTML，可以转换为HTML格式发布。</li>
+<li>跨平台使用。</li>
+<li>越来越多的网站支持Markdown。</li>
+<li>更方便清晰地组织你的电子邮件。（Markdown-here, Airmail）</li>
+<li>摆脱Word（我不是认真的）。</li>
+</ul>
+<h3 id="4-谁在用？"><a href="#4-谁在用？" class="headerlink" title="4. 谁在用？"></a>4. <em>谁</em>在用？</h3><p>Markdown的使用者：</p>
+<ul>
+<li>GitHub</li>
+<li>简书</li>
+<li>Stack Overflow</li>
+<li>Apollo</li>
+<li>Moodle</li>
+<li>Reddit</li>
+<li>等等</li>
+</ul>
+<h3 id="5-尝试一下"><a href="#5-尝试一下" class="headerlink" title="5. 尝试一下"></a>5. 尝试一下</h3><hr>
+<h4 id="1-斜体和粗体"><a href="#1-斜体和粗体" class="headerlink" title="1. 斜体和粗体"></a>1. 斜体和粗体</h4><pre><code>*斜体*或_斜体_
+**粗体**
+***加粗斜体***
+~~删除线~~
+</code></pre>
+<p>view</p>
+<p><em>斜体</em>或_斜体_</p>
+<p><strong>粗体</strong></p>
+<p><em><strong>加粗斜体</strong></em></p>
+<p><del>删除线</del></p>
+<hr>
+<h4 id="2-分级标题"><a href="#2-分级标题" class="headerlink" title="2. 分级标题"></a>2. 分级标题</h4><pre><code># 一级标题
+## 二级标题
+### 三级标题
+#### 四级标题
+##### 五级标题
+###### 六级标题
+</code></pre>
+<p>由于用了[TOC]标记编辑器会把所有标题写到目录大纲中，在这里写的演示标题也会列进去，所以就不演示了。同学们自己在编辑器中观察，很简单，一级标题字号最大，依级递减。</p>
+<hr>
+<h4 id="3-超链接"><a href="#3-超链接" class="headerlink" title="3. 超链接"></a>3. 超链接</h4><p>Markdown 支持两种形式的链接语法： 行内式和参考式两种形式，行内式一般使用较多。</p>
+<h5 id="3-1-行内式"><a href="#3-1-行内式" class="headerlink" title="3.1. 行内式"></a>3.1. 行内式</h5><p>语法说明：</p>
+<p>[]里写链接文字，()里写链接地址, ()中的”“中可以为链接指定title属性，title属性可加可不加。title属性的效果是鼠标悬停在链接上会出现指定的 title文字。链接地址与链接标题前有一个空格。</p>
+<pre><code class="markdown">欢迎来到[liyang&#39;s blog](https://liyangzone.com)
+
+欢迎来到[liyang&#39;s blog](https://liyangzone.com &quot;liyang&#39;s blog&quot;)
+</code></pre>
+<p>view</p>
+<p>欢迎来到<a href="https://liyangzone.com/">liyang’s blog</a></p>
+<p>欢迎来到<a href="https://liyangzone.com/" title="liyang&#39;s blog">liyang’s blog</a></p>
+<h5 id="3-2-参考式"><a href="#3-2-参考式" class="headerlink" title="3.2. 参考式"></a>3.2. 参考式</h5><p>参考式超链接一般用在学术论文上面，或者另一种情况，如果某一个链接在文章中多处使用，那么使用引用 的方式创建链接将非常好，它可以让你对链接进行统一的管理。</p>
+<p>语法说明：<br>参考式链接分为两部分，文中的写法 [链接文字][链接标记]，在文本的任意位置添加[链接标记]:链接地址 “链接标题”，链接地址与链接标题前有一个空格。</p>
+<p>如果链接文字本身可以做为链接标记，你也可以写成[链接文字][]<br>[链接文字]：链接地址的形式，见代码的最后一行。</p>
+<pre><code class="markdown">我经常去的几个网站[Google][1],[YouTube][2],[YouTube][]。
+
+[1]:http://www.google.com
+[2]:https://www.youtube.com &quot;YouTube&quot;
+[YouTube]:https://www.youtube.com
+</code></pre>
+<p>我经常去的几个网站<a href="http://www.google.com/">Google</a>,<a href="https://www.youtube.com/" title="YouTube">YouTube</a>,<a href="https://www.youtube.com/">YouTube</a>。</p>
+<h5 id="3-3-自动链接"><a href="#3-3-自动链接" class="headerlink" title="3.3. 自动链接"></a>3.3. 自动链接</h5><p>语法说明：<br>Markdown 支持以比较简短的自动链接形式来处理网址和电子邮件信箱，只要是用&lt;&gt;包起来， Markdown 就会自动把它转成链接。一般网址的链接文字就和链接地址一样，例如：</p>
+<pre><code class="markdown">&lt;http://example.com/&gt;
+&lt;address@example.com&gt;
+</code></pre>
+<p>view</p>
+<p><a href="http://example.com/">http://example.com/</a><br><a href="mailto:&#x61;&#x64;&#x64;&#114;&#101;&#x73;&#115;&#64;&#x65;&#120;&#x61;&#109;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#x6d;">&#x61;&#x64;&#x64;&#114;&#101;&#x73;&#115;&#64;&#x65;&#120;&#x61;&#109;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#x6d;</a></p>
+<hr>
+<h4 id="4-锚点"><a href="#4-锚点" class="headerlink" title="4. 锚点"></a>4. 锚点</h4><p>网页中，锚点其实就是页内超链接，也就是链接本文档内部的某些元素，实现当前页面中的跳转。比如我这里写下一个锚点，点击回到目录，就能跳转到目录。 在目录中点击这一节，就能跳过来。还有下一节的注脚。这些根本上都是用锚点来实现的。</p>
+<p>注意： </p>
+<ol>
+<li>Markdown Extra 只支持在标题后插入锚点，其它地方无效。 </li>
+<li>Leanote 编辑器右侧显示效果区域暂时不支持锚点跳转，所以点来点去发现没有跳转不必惊慌，但是你发布成笔记或博文后是支持跳转的。</li>
+</ol>
+<pre><code class="markdown"> 跳转测试&#123;#toc-heading-18&#125;
+</code></pre>
+<p>跳转到<a href="#toc-heading-18">页尾</a>，这个有点问题，会跳转到新标签页的页尾，因为hexo会在生成的a标签上加上<code>target=&quot;_blank&quot;</code>这个属性，暂时无法解决。</p>
+<hr>
+<h4 id="5-列表"><a href="#5-列表" class="headerlink" title="5. 列表"></a>5. 列表</h4><h5 id="5-1-无序列表"><a href="#5-1-无序列表" class="headerlink" title="5.1. 无序列表"></a>5.1. 无序列表</h5><p>使用 *，+，- 表示无序列表。</p>
+<pre><code class="markdown">- 无序列表项 一
+- 无序列表项 二
+- 无序列表项 三
+</code></pre>
+<p>view</p>
+<ul>
+<li>无序列表项 一</li>
+<li>无序列表项 二</li>
+<li>无序列表项 三</li>
+</ul>
+<h5 id="5-2-有序列表"><a href="#5-2-有序列表" class="headerlink" title="5.2. 有序列表"></a>5.2. 有序列表</h5><p>有序列表则使用数字接着一个英文句点。</p>
+<pre><code class="markdown">1. 有序列表项 一
+2. 有序列表项 二
+3. 有序列表项 三
+</code></pre>
+<p>view</p>
+<ol>
+<li>有序列表项 一</li>
+<li>有序列表项 二</li>
+<li>有序列表项 三</li>
+</ol>
+<h5 id="5-3-定义型列表"><a href="#5-3-定义型列表" class="headerlink" title="5.3. 定义型列表"></a>5.3. 定义型列表</h5><p>语法说明：</p>
+<p>定义型列表由名词和解释组成。一行写上定义，紧跟一行写上解释。解释的写法:紧跟一个缩进(Tab)</p>
+<pre><code class="markdown">代码块 1 Markdown
+:    轻量级文本标记语言，可以转换成html，pdf等格式（左侧有一个可见的冒号和四个不可见的空格）
+
+代码块 2
+:   这是代码块的定义（左侧有一个可见的冒号和四个不可见的空格）
+
+        代码块（左侧有八个不可见的空格）
+</code></pre>
+<p>view</p>
+<dl><dt>代码块 1 Markdown</dt><dd>轻量级文本标记语言，可以转换成html，pdf等格式（左侧有一个可见的冒号和四个不可见的空格）</dd></dl><dl><dt>代码块 2</dt><dd>这是代码块的定义（左侧有一个可见的冒号和四个不可见的空格）</dd></dl><pre><code>    代码块（左侧有八个不可见的空格）
+</code></pre>
+<h5 id="5-3-列表缩进"><a href="#5-3-列表缩进" class="headerlink" title="5.3. 列表缩进"></a>5.3. 列表缩进</h5><p>语法说明：</p>
+<p>列表项目标记通常是放在最左边，但是其实也可以缩进，最多 3 个空格，项目标记后面则一定要接着至少一个空格或制表符。</p>
+<pre><code class="markdown">*   轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。
+那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。 
+软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！ 
+*   那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。 
+寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。 
+但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！ 
+悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。
+</code></pre>
+<p>view</p>
+<ul>
+<li>轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。<br>那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。<br>软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！ </li>
+<li>那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。<br>寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。<br>但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！<br>悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。</li>
+</ul>
+<h5 id="5-4-包含段落的列表"><a href="#5-4-包含段落的列表" class="headerlink" title="5.4. 包含段落的列表"></a>5.4. 包含段落的列表</h5><p>语法说明：</p>
+<p>列表项目可以包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符（显示效果与代码一致）：</p>
+<pre><code class="markdown">*   轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。
+那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。 
+软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！
+
+     那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。 
+寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。 
+但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！
+
+*    悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。
+</code></pre>
+<p>view</p>
+<ul>
+<li><p>轻轻的我走了， 正如我轻轻的来； 我轻轻的招手， 作别西天的云彩。<br>那河畔的金柳， 是夕阳中的新娘； 波光里的艳影， 在我的心头荡漾。<br>软泥上的青荇， 油油的在水底招摇； 在康河的柔波里， 我甘心做一条水草！</p>
+<p> 那榆荫下的一潭， 不是清泉， 是天上虹； 揉碎在浮藻间， 沉淀着彩虹似的梦。</p>
+</li>
+</ul>
+<p>寻梦？撑一支长篙， 向青草更青处漫溯； 满载一船星辉， 在星辉斑斓里放歌。<br>但我不能放歌， 悄悄是别离的笙箫； 夏虫也为我沉默， 沉默是今晚的康桥！ </p>
+<ul>
+<li>悄悄的我走了， 正如我悄悄的来； 我挥一挥衣袖， 不带走一片云彩。</li>
+</ul>
+<h5 id="5-5-包含引用的列表"><a href="#5-5-包含引用的列表" class="headerlink" title="5.5. 包含引用的列表"></a>5.5. 包含引用的列表</h5><p>语法说明：</p>
+<p>如果要在列表项目内放进引用，那 &gt; 就需要缩进：</p>
+<pre><code class="markdown">*   阅读的方法:
+    &gt; 打开书本。
+    &gt; 打开电灯。
+</code></pre>
+<p>view</p>
+<ul>
+<li>阅读的方法:<blockquote>
+<p>打开书本。<br>打开电灯。</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="5-6-包含代码区块的引用"><a href="#5-6-包含代码区块的引用" class="headerlink" title="5.6. 包含代码区块的引用"></a>5.6. 包含代码区块的引用</h5><p>语法说明：<br>如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符：</p>
+<h5 id="5-7-一个特殊情况"><a href="#5-7-一个特殊情况" class="headerlink" title="5.7. 一个特殊情况"></a>5.7. 一个特殊情况</h5><p>在特殊情况下，项目列表很可能会不小心产生，像是下面这样的写法：</p>
+<pre><code class="markdown">1986. What a great season.
+</code></pre>
+<p>会显示成：</p>
+<ol start="1986">
+<li>What a great season.</li>
+</ol>
+<p>换句话说，也就是在行首出现数字-句点-空白，要避免这样的状况，你可以在句点前面加上反斜杠：</p>
+<pre><code class="markdown">1986\. What a great season.
+</code></pre>
+<p>才会正常显示成：</p>
+<p>1986. What a great season.</p>
+<hr>
+<h4 id="6-引用"><a href="#6-引用" class="headerlink" title="6. 引用"></a>6. 引用</h4><p>语法说明：</p>
+<p>引用需要在被引用的文本前加上&gt;符号。</p>
+<pre><code class="markdown">&gt; 这是一个有两段文字的引用,
+无意义的占行文字1.
+无意义的占行文字2.
+
+&gt; 无意义的占行文字3.
+无意义的占行文字4.
+</code></pre>
+<p>view</p>
+<blockquote>
+<p>这是一个有两段文字的引用,<br>无意义的占行文字1.<br>无意义的占行文字2.</p>
+</blockquote>
+<blockquote>
+<p>无意义的占行文字3.<br>无意义的占行文字4.</p>
+</blockquote>
+<h5 id="6-1-引用的多层嵌套"><a href="#6-1-引用的多层嵌套" class="headerlink" title="6.1. 引用的多层嵌套"></a>6.1. 引用的多层嵌套</h5><p>区块引用可以嵌套（例如：引用内的引用），只要根据层次加上不同数量的 &gt; ：</p>
+<pre><code class="markdown">&gt;&gt;&gt; 请问 Markdwon 怎么用？ - 小白
+
+&gt;&gt; 自己看教程！ - 愤青
+
+&gt; 教程在哪？ - 小白
+</code></pre>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>请问 Markdwon 怎么用？ - 小白</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>自己看教程！ - 愤青</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>教程在哪？ - 小白</p>
+</blockquote>
+<h5 id="6-2-引用其它要素"><a href="#6-2-引用其它要素" class="headerlink" title="6.2. 引用其它要素"></a>6.2. 引用其它要素</h5><p>引用的区块内也可以使用其他的 Markdown 语法，包括标题、列表、代码区块等：</p>
+<pre><code class="markdown">&gt; 1.   这是第一行列表项。
+&gt; 2.   这是第二行列表项。
+&gt; 
+&gt; 给出一些例子代码：
+&gt; 
+&gt;     return shell_exec(&quot;echo $input | $markdown_script&quot;);
+</code></pre>
+<blockquote>
+<ol>
+<li>这是第一行列表项。</li>
+<li>这是第二行列表项。</li>
+</ol>
+<p>给出一些例子代码：</p>
+<pre><code>return shell_exec(&quot;echo $input | $markdown_script&quot;);
+</code></pre>
+</blockquote>
+<hr>
+<h4 id="7-插入图像"><a href="#7-插入图像" class="headerlink" title="7. 插入图像"></a>7. 插入图像</h4><p>图片的创建方式与超链接相似，而且和超链接一样也有两种写法，行内式和参考式写法。</p>
+<p>语法中图片Alt的意思是如果图片因为某些原因不能显示，就用定义的图片Alt文字来代替图片。 图片Title则和链接中的Title一样，表示鼠标悬停与图片上时出现的文字。 Alt 和 Title 都不是必须的，可以省略，但建议写上。</p>
+<h5 id="7-1-行内式"><a href="#7-1-行内式" class="headerlink" title="7.1. 行内式"></a>7.1. 行内式</h5><p>语法说明：![图片Alt](图片地址 “图片Title”)</p>
+<pre><code class="markdown">美丽风景： 
+![美丽风景](https://yuhongjun.github.io/assets/media/scenery.jpeg &quot;美丽风景&quot;)
+</code></pre>
+<p>view<br>美丽风景：<br><img src="https://yuhongjun.github.io/assets/media/scenery.jpeg" alt="美丽风景" title="美丽风景"></p>
+<p>7.2. 参考式</p>
+<p>语法说明：</p>
+<p>在文档要插入图片的地方写![图片Alt][标记]</p>
+<p>在文档的最后写上[标记]:图片地址 “Title”</p>
+<pre><code class="markdown">![美丽风景](https://yuhongjun.github.io/assets/media/scenery.jpeg &quot;美丽风景&quot;)
+
+[scenery]:https://yuhongjun.github.io/assets/media/scenery.jpeg &quot;美丽风景&quot;
+</code></pre>
+<p>view<br><img src="https://yuhongjun.github.io/assets/media/scenery.jpeg" alt="美丽风景" title="美丽风景"></p>
+<hr>
+<h4 id="8-内容目录"><a href="#8-内容目录" class="headerlink" title="8. 内容目录"></a>8. 内容目录</h4><p>在段落中填写 [TOC] 以显示全文内容的目录结构。</p>
+<p>效果参见最上方的目录</p>
+<hr>
+<h4 id="9-注脚"><a href="#9-注脚" class="headerlink" title="9. 注脚"></a>9. 注脚</h4><p>语法说明：</p>
+<p>在需要添加注脚的文字后加上脚注名字[^注脚名字],称为加注。 然后在文本的任意位置(一般在最后)添加脚注，脚注前必须有对应的脚注名字。</p>
+<p>注意：经测试注脚与注脚之间必须空一行，不然会失效。成功后会发现，即使你没有把注脚写在文末，经Markdown转换后，也会自动归类到文章的最后。</p>
+<pre><code class="markdown">使用 Markdown[^1]可以效率的书写文档, 直接转换成 HTML[^2], 你可以使用 Leanote[^Le] 编辑器进行书写。
+
+[^1]:Markdown是一种纯文本标记语言
+
+[^2]:HyperText Markup Language 超文本标记语言
+
+[^Le]:开源笔记平台，支持Markdown和笔记直接发为博文
+</code></pre>
+<p>view</p>
+<p>使用 Markdown<a href="Markdown%E6%98%AF%E4%B8%80%E7%A7%8D%E7%BA%AF%E6%96%87%E6%9C%AC%E6%A0%87%E8%AE%B0%E8%AF%AD%E8%A8%80">^1</a>可以效率的书写文档, 直接转换成 HTML[^2], 你可以使用 Leanote<a href="%E5%BC%80%E6%BA%90%E7%AC%94%E8%AE%B0%E5%B9%B3%E5%8F%B0%EF%BC%8C%E6%94%AF%E6%8C%81Markdown%E5%92%8C%E7%AC%94%E8%AE%B0%E7%9B%B4%E6%8E%A5%E5%8F%91%E4%B8%BA%E5%8D%9A%E6%96%87">^Le</a> 编辑器进行书写。</p>
+<p>[^2]:HyperText Markup Language 超文本标记语言</p>
+<p>注：脚注自动被搬运到最后面，请到文章末尾查看，并且脚注后方的链接可以直接跳转回到加注的地方。</p>
+<hr>
+<h4 id="10-LaTeX-公式"><a href="#10-LaTeX-公式" class="headerlink" title="10. LaTeX 公式"></a>10. LaTeX 公式</h4><h5 id="10-1-表示行内公式："><a href="#10-1-表示行内公式：" class="headerlink" title="10.1. $ 表示行内公式："></a>10.1. $ 表示行内公式：</h5><pre><code class="markdown">质能守恒方程可以用一个很简洁的方程式 $E=mc^2$ 来表达。
+</code></pre>
+<p>view<br>质能守恒方程可以用一个很简洁的方程式 $E&#x3D;mc^2$ 来表达。</p>
+<h5 id="10-2-表示整行公式："><a href="#10-2-表示整行公式：" class="headerlink" title="10.2 $$ 表示整行公式："></a>10.2 $$ 表示整行公式：</h5><pre><code class="markdown">$$\sum_&#123;i=1&#125;^n a_i=0$$
+$$f(x_1,x_x,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2 $$
+$$\sum^&#123;j-1&#125;_&#123;k=0&#125;&#123;\widehat&#123;\gamma&#125;_&#123;kj&#125; z_k&#125;$$
+</code></pre>
+<p>访问 <a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference" title="MathJax basic tutorial and quick reference">MathJax</a> 参考更多使用方法。</p>
+<hr>
+<hr>
+<h4 id="11-表格"><a href="#11-表格" class="headerlink" title="11 .表格"></a>11 .表格</h4><p>语法说明：</p>
+<p>不管是哪种方式，第一行为表头，第二行分隔表头和主体部分，第三行开始每一行为一个表格行。<br>列于列之间用管道符|隔开。原生方式的表格每一行的两边也要有管道符。<br>第二行还可以为不同的列指定对齐方向。默认为左对齐，在-右边加上:就右对齐。</p>
+<ol>
+<li>简单方式写表格：</li>
+</ol>
+<pre><code class="markdown">学号|姓名|分数
+-|-|-
+小明|男|75
+小红|女|79
+小陆|男|92
+</code></pre>
+<p>2.原生方式写表格：</p>
+<pre><code class="markdown">|学号|姓名|分数|
+|-|-|-|
+|小明|男|75|
+|小红|女|79|
+|小陆|男|92|
+</code></pre>
+<p>3.为表格第二列指定方向：</p>
+<pre><code class="markdown">产品|价格
+-|-:
+Leanote 高级账号|60元/年
+Leanote 超级账号|120元/年
+</code></pre>
+<p>view</p>
+<ol>
+<li>简单方式写表格：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>学号</th>
+<th>姓名</th>
+<th>分数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小明</td>
+<td>男</td>
+<td>75</td>
+</tr>
+<tr>
+<td>小红</td>
+<td>女</td>
+<td>79</td>
+</tr>
+<tr>
+<td>小陆</td>
+<td>男</td>
+<td>92</td>
+</tr>
+</tbody></table>
+<p>2.原生方式写表格：</p>
+<table>
+<thead>
+<tr>
+<th>学号</th>
+<th>姓名</th>
+<th>分数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小明</td>
+<td>男</td>
+<td>75</td>
+</tr>
+<tr>
+<td>小红</td>
+<td>女</td>
+<td>79</td>
+</tr>
+<tr>
+<td>小陆</td>
+<td>男</td>
+<td>92</td>
+</tr>
+</tbody></table>
+<p>3.为表格第二列指定方向：</p>
+<table>
+<thead>
+<tr>
+<th>产品</th>
+<th align="right">价格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Leanote 高级账号</td>
+<td align="right">60元&#x2F;年</td>
+</tr>
+<tr>
+<td>Leanote 超级账号</td>
+<td align="right">120元&#x2F;年</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="12-分隔线"><a href="#12-分隔线" class="headerlink" title="12. 分隔线"></a>12. 分隔线</h4><p>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线：</p>
+<pre><code class="markdown">* * *
+
+***
+
+*****
+
+- - -
+
+---------------------------------------
+</code></pre>
+<p>显示效果都一样</p>
+<hr>
+<h4 id="13-代码"><a href="#13-代码" class="headerlink" title="13. 代码"></a>13. 代码</h4><p>对于程序员来说这个功能是必不可少的，插入程序代码的方式有两种，一种是利用缩进(Tab), 另一种是利用”&#96;”符号（一般在ESC键下方）包裹代码。</p>
+<p>语法说明：</p>
+<ol>
+<li>插入行内代码，即插入一个单词或者一句代码的情况，使用<code>code</code>这样的形式插入。</li>
+<li>插入多行代码，可以使用缩进或者“<code> code “</code>,具体看示例。</li>
+</ol>
+<p><strong>注意： 缩进式插入前方必须有空行</strong></p>
+<h5 id="13-1-行内式"><a href="#13-1-行内式" class="headerlink" title="13.1. 行内式"></a>13.1. 行内式</h5><pre><code class="markdown">C语言里的函数 `scanf()` 怎么使用？
+</code></pre>
+<p>view<br>C语言里的函数 <code>scanf()</code> 怎么使用？</p>
+<h5 id="13-2-缩进式多行代码"><a href="#13-2-缩进式多行代码" class="headerlink" title="13.2. 缩进式多行代码"></a>13.2. 缩进式多行代码</h5><p>缩进 4 个空格或是 1 个制表符</p>
+<p>一个代码区块会一直持续到没有缩进的那一行（或是文件结尾）。</p>
+<pre><code>    #include &lt;stdio.h&gt;
+    int main(void)
+    &#123;
+        printf(&quot;Hello world&quot;);
+    &#125;
+</code></pre>
+<p>view</p>
+<pre><code class="c">    #include &lt;stdio.h&gt;
+    int main(void)
+    &#123;
+        printf(&quot;Hello world&quot;);
+    &#125;
+</code></pre>
+<h5 id="13-3-用六个-96-包裹多行代码"><a href="#13-3-用六个-96-包裹多行代码" class="headerlink" title="13.3. 用六个&#96;包裹多行代码"></a>13.3. 用六个&#96;包裹多行代码</h5><pre><code class="j">` ` `
+#include &lt;stdio.h&gt;
+int main(void)
+&#123;
+    printf(&quot;Hello world&quot;);
+&#125;
+` ` `
+</code></pre>
+<p>另外说明一下，第一个 &#96;&#96;&#96;后可以加上代码的类型，js代码就加上js,css就加上css，渲染出来的样式会有区别。比如下面这段，虽然内容基本差不多，第一个是js，第二个是json，渲染出来就是不一样的。如果不加的话文字都是白色的。</p>
+<pre><code class="js">
+var object =&#123;
+  &quot;avatar&quot;: &quot;http://image.luokangyuan.com/1_qq_27922023.jpg&quot;,
+  &quot;name&quot;: &quot;码酱&quot;,
+  &quot;introduction&quot;: &quot;我不是大佬，只是在追寻大佬的脚步&quot;,
+&#125;
+
+</code></pre>
+<pre><code class="json">&#123;
+  &quot;avatar&quot;: &quot;http://image.luokangyuan.com/1_qq_27922023.jpg&quot;,
+  &quot;name&quot;: &quot;码酱&quot;,
+  &quot;introduction&quot;: &quot;我不是大佬，只是在追寻大佬的脚步&quot;
+&#125;
+</code></pre>
+<pre><code>
+var object =&#123;
+  &quot;avatar&quot;: &quot;http://image.luokangyuan.com/1_qq_27922023.jpg&quot;,
+  &quot;name&quot;: &quot;码酱&quot;,
+  &quot;introduction&quot;: &quot;我不是大佬，只是在追寻大佬的脚步&quot;,
+&#125;
+</code></pre>
+<h5 id="13-5-HTML-原始码"><a href="#13-5-HTML-原始码" class="headerlink" title="13.5. HTML 原始码"></a>13.5. HTML 原始码</h5><p>在代码区块里面， &amp; 、 &lt; 和 &gt; 会自动转成 HTML 实体，这样的方式让你非常容易使用 Markdown 插入范例用的 HTML 原始码，只需要复制贴上，剩下的 Markdown 都会帮你处理，例如：</p>
+<p>第一个例子：</p>
+<pre><code class="markdown">&lt;div class=&quot;footer&quot;&gt;
+   © 2018 ***
+&lt;/div&gt;
+</code></pre>
+<p>view</p>
+<div class="footer">
+   © 2018 ***
+</div>
+
+<hr>
+<p> 还有一个流程图，hexo暂时渲染不出来，一般人也用不到，就去掉了。</p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2019-07-17';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

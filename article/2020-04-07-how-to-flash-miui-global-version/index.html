@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>小米手机刷MIUI国际版折腾记录 | liyang&#x27;s  blog</title><meta name="keywords" content="MIUI国际版"/><meta name="description" content="本人现在使用的是一部红米NOTE5，配置是高通骁龙636+6G+64G，之前用的系统都是MIUI9，一直都没更新过，最近更新了MIUI11，就准备升级一下，更新了国行的系统之后发现广告太多实在受不了。就刷了个MIUI国际版，记录一下折腾的过程。
+MIUI国际版优点：广告较少，带有谷歌服务框架。
+解锁bootloader具体教程可参官网文章:小米手机解锁 Bootloader 教程和常见问题，新手机……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">小米手机刷MIUI国际版折腾记录</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2020-04-07</span><span>文章字数：<!-- -->1.5<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>本人现在使用的是一部红米NOTE5，配置是高通骁龙636+6G+64G，之前用的系统都是MIUI9，一直都没更新过，最近更新了MIUI11，就准备升级一下，更新了国行的系统之后发现广告太多实在受不了。就刷了个MIUI国际版，记录一下折腾的过程。</p>
+<p>MIUI国际版优点：广告较少，带有谷歌服务框架。</p>
+<h4 id="解锁bootloader"><a href="#解锁bootloader" class="headerlink" title="解锁bootloader"></a>解锁bootloader</h4><p>具体教程可参官网文章:<a href="https://www.xiaomi.cn/post/17982230">小米手机解锁 Bootloader 教程和常见问题</a>，新手机的话需要登上小米账号等半个月左右。</p>
+<h4 id="刷入TWRP-recovery"><a href="#刷入TWRP-recovery" class="headerlink" title="刷入TWRP recovery"></a>刷入TWRP recovery</h4><p>官网地址<a href="https://twrp.me/">https://twrp.me/</a>。<br>按手机电源+音量下键进入fastboot模式，使用fastboot刷入recovery。下面是一些fastboot命令：</p>
+<pre><code class="cmd">fastboot devices			:列出fastboot设备
+fastboot reboot				:重启设备
+fastboot reboot-bootloader		:重启到fastboot模式
+fastboot flash ^&lt;分区名称^&gt; ^&lt;镜像文件名^&gt;	:刷写分区
+fastboot oem reboot-^&lt;模式名称^&gt; 		:重启到相应模式
+fastboot oem device-info 		:查看解锁状态
+</code></pre>
+<p>刷入recovery命令为 <code>fastboot flash recovery  XXXX.img</code> ，刷写完成后执行<code>fastboot reboot</code>进行重启，手机黑屏时要快速按住电源键+音量上键，大概3~5秒就进入recovery模式。</p>
+<h4 id="刷机"><a href="#刷机" class="headerlink" title="刷机"></a>刷机</h4><p>刷机包从官网下载稳定版即可,<a href="http://c.mi.com/miuidownload/index">国际版MIUI下载地址</a>，这里有个坑就是MIUI11的安卓版本是9，安卓9的data分区是启用强制加密的，再次进入recovery时就会提示解锁data分区，让输入密码，并且密码也不是锁屏密码，这个坑后来导致我手机资料全清，如何取消强制加密后面会说。</p>
+<p>刷完机还有个坑就是官方系统会在重启时将第三方recovery替换掉，等下系统初始化完成后，再刷一遍TWRP recovery，重启时会有禁止恢复官方recovery的选项。</p>
+<h4 id="ROOT系统"><a href="#ROOT系统" class="headerlink" title="ROOT系统"></a>ROOT系统</h4><p>最新的安卓ROOT工具是Magisk: <a href="https://github.com/topjohnwu/Magisk/releases">Magisk gitHub发布地址</a>，下载zip安装包，跟刷机一样，用recovery刷入，刷完后手机里会出现Magisk Manager APP(ROOT权限管理工具)。</p>
+<h4 id="安装edxposed框架"><a href="#安装edxposed框架" class="headerlink" title="安装edxposed框架"></a>安装edxposed框架</h4><p>这里要安装两个插件：Riru-core和Riru-EdXposed。可以在Magisk Manager里面搜索下载安装，也可以手动下载zip包用Magisk Manager安装。Riru-EdXposed一般选择YAHFA版本(稳定版)。</p>
+<p><a href="https://github.com/RikkaApps/Riru/releases">Riru-Core github发布地址</a><br><a href="https://github.com/ElderDrivers/EdXposed/releases">Riru-EdXposed github发布地址</a></p>
+<p><img src="https://images.liyangzone.com/article_img/%E5%85%B6%E4%BB%96%E5%88%86%E4%BA%AB/MIUI%E5%9B%BD%E9%99%85%E7%89%88%E6%8A%98%E8%85%BE/1.jpg"></p>
+<p>然后安装EdXposed Manager APP：<a href="https://github.com/ElderDrivers/EdXposedManager/releases">github发布地址</a>。</p>
+<p><img src="https://images.liyangzone.com/article_img/%E5%85%B6%E4%BB%96%E5%88%86%E4%BA%AB/MIUI%E5%9B%BD%E9%99%85%E7%89%88%E6%8A%98%E8%85%BE/2.jpg"></p>
+<p>安装好之后就能可以在里面下载你想要的xposed模块了,这里要注意要装完edxposed框架再安装EdXposed Manager。</p>
+<h4 id="卸载内置软件"><a href="#卸载内置软件" class="headerlink" title="卸载内置软件"></a>卸载内置软件</h4><p>卸载内置软件方法有多种，这里我在PC端使用adb命令进行卸载：</p>
+<p>首先启用手机开发者模式并连接电脑，启用USB调试，执行<code>adb shell</code>进入shell模式，执行<code>pm list packages</code>命令查看所有软件包名，可使用grep过滤包名，比如<code>pm list packages | grep miui </code>，过滤包名中含有<code>miui</code>的。如果分不清包名与软件对应关系，就到系统的应用管理里面查看详情（应用详情右上角的叹号图标）。得到软件包名后然后执行 <code>pm unistall --user 0 </code> +包名进行卸载，可批量复制多条一起卸载，注意不要卸载系统更新，会导致开不了机。</p>
+<p>下面是我卸载的软件包名，用不到的都删了。</p>
+<pre><code class="cmd">pm uninstall --user 0 com.xiaomi.midrop
+pm uninstall --user 0 com.google.android.apps.docs
+pm uninstall --user 0 com.xiaomi.joyose
+pm uninstall --user 0 com.google.android.inputmethod.latin
+pm uninstall --user 0 com.miui.msa.global
+pm uninstall --user 0 com.google.android.apps.maps
+pm uninstall --user 0 com.google.android.apps.youtube
+pm uninstall --user 0 com.google.android.gm
+pm uninstall --user 0 com.android.email
+pm uninstall --user 0 com.miui.yellowpage
+pm uninstall --user 0 com.miui.android.fashiongallery
+pm uninstall --user 0 com.miui.videoplayer
+pm uninstall --user 0 com.google.android.apps.photos
+pm uninstall --user 0 com.facebook.services
+pm uninstall --user 0 com.facebook.system
+pm uninstall --user 0 com.xiaomi.glgm
+pm uninstall --user 0 com.google.android.marvin.talkback
+pm uninstall --user 0 com.google.android.apps.tachyon
+pm uninstall --user 0 com.miui.screenrecorder
+</code></pre>
+<h4 id="其他选项：主题、字体、显示农历等"><a href="#其他选项：主题、字体、显示农历等" class="headerlink" title="其他选项：主题、字体、显示农历等"></a>其他选项：主题、字体、显示农历等</h4><p>主题&amp;字体相关：国际版的主题里面不能换字体，而且里面是主题还老是下载失败。修改字体的话需要一个第三方软件<code>MUI custom font installer</code>，在play商店里面可以搜到。下载失败这个问题暂时没找到解决办法，只能在国行的系统里面下载，然后在国际版里导入主题。</p>
+<p><img src="https://images.liyangzone.com/article_img/%E5%85%B6%E4%BB%96%E5%88%86%E4%BA%AB/MIUI%E5%9B%BD%E9%99%85%E7%89%88%E6%8A%98%E8%85%BE/4.jpg"></p>
+<p>这里推荐一个我一直用的字体：方正中等线，这个字体是Windows Phone系统的默认中文字体，感觉很舒服。国行主题商店里有这个字体下载，是要收费的，不过在方正字库的官网可以免费下载到。</p>
+<p><img src="https://images.liyangzone.com/article_img/%E5%85%B6%E4%BB%96%E5%88%86%E4%BA%AB/MIUI%E5%9B%BD%E9%99%85%E7%89%88%E6%8A%98%E8%85%BE/3.jpg"></p>
+<p>国际版日历显示农历<br>system&#x2F;build.prop 文件里加上一行代码即可，我在网上找的其他教程写的是把language和region等选项改为CN，不过实测之后发现会卡米,只加上这一条则不会。</p>
+<pre><code class="cmd">
+ro.miui.mcc=9454
+</code></pre>
+<p>禁用加密：刷完系统后不要重启，使用recovery挂载vendor分区，然后把vendor&#x2F;etc目录下的<code>fstab.qcom</code>文件复制出来修改，这里我是复制到一张sd卡上然后在电脑上修改。把里面的<code>forceencrypt</code>(强制加密)替换为<code>encryptable</code>(可选加密)，修改完成后替换原文件即可，这里建议与上面的build.prop文件一起修改并替换，替换完成后重启等待进入系统。</p>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><p>国际版rom第一次进入系统后需要连接谷歌服务器进行更新，没有梯子的话是连接不上的。你需要带梯子的路由器或用电脑共享，电脑端梯子软件选择允许来自局域网的连接，手机和电脑连接同一个wifi（确保在一个局域网内），手机端在wifi热点的代理选项处配置pc端的局域网ip和端口即可，比如192.168.1.103，端口一般为1080。</p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2020-04-07';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

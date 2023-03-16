@@ -1,0 +1,201 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>使用Travis-CI部署hexo博客到腾讯cos&amp;github-pages | liyang&#x27;s  blog</title><meta name="keywords" content="hexo 教程 Travis-CI"/><meta name="description" content="前言以前我的博客静态文件是放在一个带宽1Mbps的腾讯云主机上，文章里的图片也是放在云主机上的，当有些文章图片较多的时候，加载就会变得很慢。后来我将静态文件和图片全部迁移到腾讯对象存储(cos)里，并配置了CDN加速，从此加载速度不再是瓶颈，可以做到基本秒开。
+具体方案是将静态文件和图片文件分别放到两个存储桶里，放静态文件的存储桶CDN设置博客主域名，放图片的存储桶CDN设置二级域名，比如我设置了……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">使用Travis-CI部署hexo博客到腾讯cos&amp;github-pages</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2020-01-16</span><span>文章字数：<!-- -->2.2<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>以前我的博客静态文件是放在一个带宽1Mbps的腾讯云主机上，文章里的图片也是放在云主机上的，当有些文章图片较多的时候，加载就会变得很慢。后来我将静态文件和图片全部迁移到腾讯对象存储(cos)里，并配置了CDN加速，从此加载速度不再是瓶颈，可以做到基本秒开。</p>
+<p>具体方案是将静态文件和图片文件分别放到两个存储桶里，放静态文件的存储桶CDN设置博客主域名，放图片的存储桶CDN设置二级域名，比如我设置了图片CDN二级域名为<code>images.liyangzone.com</code>，写文章的时候先上传图片到存储桶，然后在文章里就可以直接引用图片了。比如我在存储桶根目录上传了一张名为<code>test.jpg</code>的图片，它的地址就是<code>images.liyangzone.com/test.jpg</code>，而且支持多级目录，比一些图床什么的要方便很多，有些图床虽然免费，但是它的文件名一般是一个无规律的字符串，类似这种<code>https://i.loli.net/2020/01/17/Mb1fywFLrJ8khUS.png</code>，当你传了很多图片时可能会一脸懵逼，分不清哪张是什么内容了，不利于维护。</p>
+<p>而博客静态文件呢，我们可以用<code>hexo-deployer-cos</code>这个插件来替我们完成，具体配置教程可参考此文章：<a href="https://cloud.tencent.com/developer/article/1185253">如何在腾讯云COS部署HEXO博客</a>。<br>配置完了cos各种参数后，执行<code>hexo d</code>命令就会将本地文件上传至cos了，可是这种方式需要本地安装nodejs和hexo，如果想在别的电脑上写文章就不方便了，有没有一种更加便捷的部署方式呢？答案是有的，那就是——<strong>持续集成</strong>。</p>
+<h3 id="什么是持续集成"><a href="#什么是持续集成" class="headerlink" title="什么是持续集成"></a>什么是持续集成</h3><p>持续集成（Continuous Integration）是一种软件开发实践。 在持续集成中，团队成员频繁集成他们的工作成果，一般每人每天至少集成一次，也可以多次。 每次集成会经过自动构建（包括自动测试）的检验，以尽快发现集成错误。</p>
+<h3 id="什么是Travis-CI"><a href="#什么是Travis-CI" class="headerlink" title="什么是Travis CI"></a>什么是Travis CI</h3><p>Travis CI 是目前新兴的开源持续集成构建项目，它与 jenkins，GO 的很明显的特别在于采用 yaml 格式，同时它是在线的服务，不像 jenkins 需要你本地搭建服务器，简洁清新独树一帜。目前大多数的 Github 项目都已经移入到 Travis CI 的构建队列中，据说Travis CI 每天运行超过 4000 次完整构建。对于做开源项目或者 Github 的使用者，如果你的项目还没有加入 Travis CI 构建队列，那么我真的想对你说 OUT 了。</p>
+<h3 id="为什么选择Travis-CI"><a href="#为什么选择Travis-CI" class="headerlink" title="为什么选择Travis CI"></a>为什么选择Travis CI</h3><p>为什么我们要选择 Travis 呢，因为它和 Github 集成的程度非常高，对于 Github 上的开源项目，可以免费在 Travis 上构建（为免费的互联网精神干杯🍻），而非开源的私有项目想在 Travis 上构建价格还是非常感人的。</p>
+<h3 id="折腾Travis-CI后有能达到什么效果？"><a href="#折腾Travis-CI后有能达到什么效果？" class="headerlink" title="折腾Travis CI后有能达到什么效果？"></a>折腾Travis CI后有能达到什么效果？</h3><ol>
+<li>直接在线编辑文件，立即生效：<br>假设你已经发表了一篇文章，过了几天你在朋友机器上浏览发现有几个明显的错别字，对于有强迫症的，这是不能容忍的。 但你手头又没有完整的hexo+nodejs+git的开发环境，重新下载git，node，hexo配置会花费不少时间，特别不划算。</li>
+</ol>
+<p>  如果按照这篇完整折腾完，你可以直接用浏览器访问github个人项目仓库，直接编辑那篇post的原md文件，前后2分钟改完。 稍等片刻，你的博客就自动更新了。<br> 2. 自动部署，同时部署到多个地方：<br>hexo在部署的时候可以设置部署到多端，只需在博客配置文件里设置多个deploy即可，本篇文章暂时只写两种，gh-pages和cos。部署到更多地方也是支持的，比如gitlab，国内的coding等。<br> 3. 部署快捷方便：<br>手动deploy需要推送public整个folder到github上，当后期网站文章、图片较多时候，对于天朝的网络，有时候连接github 就是不顺畅，经常要傻等不少上传时间。<br>有了CI，你可以只提交post文件里单独的md文件即可，很快很爽，谁用谁知道。</p>
+<h3 id="Travis自动构建原理"><a href="#Travis自动构建原理" class="headerlink" title="Travis自动构建原理"></a>Travis自动构建原理</h3><ol>
+<li>每当我们在本地写好了博文之后，push到博客仓库的<code>blog-source</code>分支。</li>
+<li>Travis上可以对这个项目的<code>blog-source</code>分支设置钩子，每当检测到 push 的时候就去仓库 clone 源代码到Travis的云服务器上。</li>
+<li>Travis云服务器按顺序执行一系列构建脚本，比如 <code>npm install</code>、<code>hexo g</code> 、<code>hexo d</code>等。</li>
+</ol>
+<h3 id="如何操作"><a href="#如何操作" class="headerlink" title="如何操作"></a>如何操作</h3><h4 id="1-配置hexo多端部署"><a href="#1-配置hexo多端部署" class="headerlink" title="1. 配置hexo多端部署"></a>1. 配置hexo多端部署</h4><p>修改博客根目录配置文件<code>_config.yml</code>，参考<a href="https://hexo.io/zh-cn/docs/one-command-deployment">hexo官方文档-部署</a>，我这里只设置了两个，github-pages和cos，下面的写法是travis-ci部署到github-pages和腾讯cos</p>
+<pre><code class="yaml">#deploy:
+- type: git
+  branch: master
+  repo: https://gh_token@github.com/liyang5945/liyang5945.github.io.git
+- type: cos
+  appId: cos_appId
+  secretId: cos_secretId
+  secretKey: cos_secretKey
+  bucket: cos_bucket
+  region: ap-shanghai
+</code></pre>
+<p>如果你感觉travis太麻烦，下面的写法是本地部署到github-pages和腾讯cos，注意不要把真实的secretId等值提交到github上面，腾讯云会检测到并打电话提示你有安全风险（不要问我我咋知道的），建议本地部署的时候复制进去，部署完删除即可。</p>
+<pre><code class="yaml">deploy:
+  - type: git
+    repo: https://github.com/liyang5945/liyang5945.github.io
+  - type: cos
+    appId: #你的appId
+    secretId: #你的secretId
+    secretKey: #你的secretKey
+    bucket: #此项格式为存储桶名称+appId
+    region: ap-shanghai
+</code></pre>
+<h4 id="2-注册travis账号，配置环境变量"><a href="#2-注册travis账号，配置环境变量" class="headerlink" title="2. 注册travis账号，配置环境变量"></a>2. 注册travis账号，配置环境变量</h4><p>注册travis-ci账号，新建项目等操作参考此贴：<a href="https://www.jianshu.com/p/e22c13d85659">手把手教你使用Travis CI自动部署你的Hexo博客到Github上</a>，这里不再细说。</p>
+<p>接下来要做的就是要把github的token和cos的appId等添加到travis的环境变量里，这样travis云服务器才能帮你部署到github和cos，设置好后如下图所示：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/travis-ci/20200118_103156.png"></p>
+<h4 id="3-配置travis执行脚本"><a href="#3-配置travis执行脚本" class="headerlink" title="3. 配置travis执行脚本"></a>3. 配置travis执行脚本</h4><p>最后还需要新建一个travis配置文件<code>.travis.yml</code>，放到博客根目录下，我的配置文件如下：</p>
+<pre><code class="yaml">language: node_js
+
+node_js: stable  # 要安装的node版本为当前的稳定版
+
+before_install:
+  - export TZ=&#39;Asia/Shanghai&#39; # 更改时区
+install:
+  - npm install
+
+script:
+  - hexo g
+
+after_script:   # 最后执行的命令
+
+  - sed -i &quot;s/cos_appId/$&#123;cos_appId&#125;/g&quot; _config.yml
+  - sed -i &quot;s/cos_secretId/$&#123;cos_secretId&#125;/g&quot; _config.yml
+  - sed -i &quot;s/cos_secretKey/$&#123;cos_secretKey&#125;/g&quot; _config.yml
+  - sed -i &quot;s/cos_bucket/$&#123;cos_bucket&#125;/g&quot; _config.yml
+  - sed -i &quot;s/gh_token/$&#123;Travis_Token&#125;/g&quot; _config.yml
+  - hexo deploy
+
+branches:
+  only:
+    - blog-source # 触发持续集成的分支
+
+env:
+  global:
+    - GH_REF: github.com/liyang5945/liyang5945.github.io.git # 就是你github上存放静态博客最终文件的仓库地址末尾加上.git
+</code></pre>
+<p>后面的那几条<code>sed</code>语句的作用就是从我们配置的环境变量里读取真实的cos_appId等参数替换本地（travis云服务器本地）的<code>_config.yml</code>里的形参。<br>替换成真实值之后，再执行<code>hexo -d</code>命令，部署到gh-pages和cos。</p>
+<p>如果你只需要部署到gh-pages，下面的部署命令还可以写出下面这样，你可以手动设置commit信息。</p>
+<pre><code class="yaml">after_script:
+  - cd ./public
+  - git init
+  - git config user.name &quot;your name&quot;
+  - git config user.email &quot;your email&quot;
+  - git add .
+  - git commit -m &quot;Update docs&quot;
+  - git push --force --quiet &quot;https://$&#123;GH_TOKEN&#125;@$&#123;GH_REF&#125;&quot; master:master
+
+branches:
+  only:
+    - blog-source # 触发持续集成的分支
+
+env:
+  global:
+    - GH_REF: github.com/liyang5945/liyang5945.github.io.git
+</code></pre>
+<p>但是这样会有一个问题，那就是commit记录只有一条，如果你在意这个问题，那就使用下面的写法，先拉取到本地再push：</p>
+<pre><code class="yaml">after_script:
+  - git clone https://$&#123;GH_REF&#125; .deploy_git  # GH_REF是最下面配置的仓库地址
+  - cd .deploy_git
+  - git checkout master
+  - cd ../
+  - mv .deploy_git/.git/ ./public/   # 这一步之前的操作是为了保留master分支的提交记录，不然每次git init的话只有1条commit
+  - cd ./public
+  - git config user.name &quot;your name&quot;  
+  - git config user.email &quot;your email&quot;  
+  - git add .
+  - git commit -m &quot;Travis CI Auto Builder at `date +&quot;%Y-%m-%d %H:%M&quot;`&quot;  # 提交记录包含时间 跟上面更改时区配合
+  - git push --force --quiet &quot;https://$&#123;Travis_Token&#125;@$&#123;GH_REF&#125;&quot; master:master  #
+</code></pre>
+<h4 id="4-测试是否成功"><a href="#4-测试是否成功" class="headerlink" title="4. 测试是否成功"></a>4. 测试是否成功</h4><p>改动本地文件然后commit，并push到github，不出意外的话可以看到travis云服务器执行命令的过程：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/travis-ci/20200118_115731.png"></p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/travis-ci/20200118_115632.png"></p>
+<p>我们再去github和腾讯cos里看一下，可以看到commit记录和文件上传日期都是最新的。</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/travis-ci/20200118_115141.png"></p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/travis-ci/20200118_115525.png"></p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2020-01-16';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

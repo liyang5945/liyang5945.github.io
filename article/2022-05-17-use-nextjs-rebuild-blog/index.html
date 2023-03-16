@@ -1,0 +1,438 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>使用next.js重构博客 | liyang&#x27;s  blog</title><meta name="keywords" content="hexo next.js 博客"/><meta name="description" content="&lt;p&gt;我的博客也建立快三年了，之前用的是hexo-theme-matery主题，最近感觉这个主题有点腻了。最近封闭在家，就准备进行重构一下，这一次就不准备用hexo了，虽然hexo有很多好看的主题，但是每个主题我都有觉得不满意的地方，想要修改一下，想要修改的话各种主题使用的都是ejs这种蛋疼的模板语法，改动起来也比较麻烦。&lt;/p&gt;"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">使用next.js重构博客</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2022-05-17</span><span>文章字数：<!-- -->3.4<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>我的博客也建立快三年了，之前用的是hexo-theme-matery主题，最近感觉这个主题有点腻了。最近封闭在家，就准备进行重构一下，这一次就不准备用hexo了，虽然hexo有很多好看的主题，但是每个主题我都有觉得不满意的地方，想要修改一下，想要修改的话各种主题使用的都是ejs这种蛋疼的模板语法，改动起来也比较麻烦。</p>
+<span id="more"></span>
+
+<pre><code class="ejs">&#123;% import 'menu-item.njk' as menu_item with context %&#125;
+
+&#123;%- if theme.menu or theme.algolia_search.enable or theme.local_search.enable %&#125;
+&lt;nav class=&quot;site-nav&quot;&gt;
+  &lt;ul class=&quot;main-menu menu&quot;&gt;
+    &#123;%- for node in theme.main_menu %&#125;
+    &#123;&#123;- menu_item.render(node) | trim &#125;&#125;
+    &#123;%- endfor %&#125;
+
+    &#123;%- if theme.algolia_search.enable or theme.local_search.enable %&#125;
+    &lt;li class=&quot;menu-item menu-item-search&quot;&gt;
+      &lt;a role=&quot;button&quot; class=&quot;popup-trigger&quot;&gt;
+        &#123;%- if theme.menu_settings.icons %&#125;&lt;i class=&quot;fa fa-search fa-fw&quot;&gt;&lt;/i&gt;&#123;% endif %&#125;&#123;&#123; __('menu.search') &#125;&#125;
+      &lt;/a&gt;
+    &lt;/li&gt;
+    &#123;%- endif %&#125;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+&#123;%- endif %&#125;
+</code></pre>
+<h4 id="why-next-js"><a href="#why-next-js" class="headerlink" title="why next.js"></a>why next.js</h4><p>因为之前收在收藏夹里也存了一些优秀的博客，就挨个点击去寻找一些灵感，碰巧看到一个老哥最近也对博客进行了重构：<a href="https://blog.skk.moe/post/use-nextjs-and-hexo-to-rebuild-my-blog">使用 Next.js + Hexo 重构我的博客</a>。 看完我惊呆了，还有这种操作。不过这位老哥并没有开源，只放出了一些零散的代码。</p>
+<p>看完我觉得这种方案灰常不错，可定制性非常强(从零开始)，还能实践一下新技术，因为之前从来没有用过react的技术栈，这次就准备也采用react+ts来开发。</p>
+<p>去next.js官网看了一下文档，然后我选用了<a href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter-typescript">blog-starter-typescript</a>这个项目作为脚手架。</p>
+<h4 id="开发过程"><a href="#开发过程" class="headerlink" title="开发过程"></a>开发过程</h4><p>因为那个老哥并没有开源，我也不知道他的项目结构是怎样的，我试了几次才把他的代码成功运行：项目根目录新建一个hexo.ts文件，把他的代码复制进去，导出initHexo方法，然后在<code>lib/api.ts</code>这个文件里引入initHexo方法，然后获取文章之类的方法就需要自己写了，比如下面的获取所有文章方法。</p>
+<p>hexo.ts</p>
+<pre><code class="ts">import Hexo from &#39;hexo&#39;;
+import fs from &#39;fs&#39;
+import &#123;join&#125; from &#39;path&#39;
+
+let __SECRET_HEXO_INSTANCE__: Hexo | null = null;
+
+const initHexo = async () =&gt; &#123;
+  if (__SECRET_HEXO_INSTANCE__) &#123;
+    return __SECRET_HEXO_INSTANCE__;
+  &#125;
+  const hexo = new Hexo(process.cwd(), &#123;
+    silent: true,
+    // 在 next dev 时包含草稿
+    draft: process.env.NODE_ENV !== &#39;production&#39;
+  &#125;);
+
+  const dbPath = join(hexo.base_dir, &#39;db.json&#39;);
+  if (process.env.NODE_ENV !== &#39;production&#39;) &#123;
+    if (fs.existsSync(dbPath)) &#123;
+      await fs.promises.unlink(dbPath);
+    &#125;
+  &#125;
+
+  await hexo.init();
+  await hexo.load();
+
+  if (hexo.env.init &amp;&amp; hexo._dbLoaded) &#123;
+    if (!fs.existsSync(dbPath)) &#123;
+      if (process.env.NODE_ENV === &#39;production&#39;) &#123;
+        await hexo.database.save();
+      &#125;
+    &#125;
+  &#125;
+
+  __SECRET_HEXO_INSTANCE__ = hexo;
+  return hexo;
+&#125;;
+
+export default initHexo
+</code></pre>
+<p>lib&#x2F;api.ts</p>
+<pre><code class="ts">import initHexo from &quot;../hexo&quot;;
+// 获取所有文章列表
+export async function getAllPosts() &#123;
+  const hexo = await initHexo();
+  let rawPostList = hexo.database.model(&#39;Post&#39;).find(&#123;&#125;).sort(&#39;-date&#39;)
+  return rawPostList.map(post =&gt; &#123;
+    return &#123;
+      title: post.title,
+      date: post.date.format(&#39;MM-DD&#39;),
+      year: post.date.format(&quot;YYYY&quot;),
+      articlePath: post.articlePath,
+      tags: post.tags.find(&#123;&#125;).map(item =&gt; item.name),
+      categories: post.categories.find(&#123;&#125;).map(item =&gt; item.name),
+    &#125;
+  &#125;)
+&#125;
+</code></pre>
+<p>因为之前没有经验，博客的文章链接是用的这种格式：<code>:year/:month/:day/:title/</code>，而且这个title竟然还是文件名，就会导致url里含有中文，实际就变成了这种蛋疼的格式:<code>xxx/2020/02/27/%E5%89%8D%E7%AB%AF/%E4%BD%BF%E7%94%A/</code>。这一次我就调整了一下，在每个md文件里自己定义一个<code>articlePath</code>字段，作为文章的永久链接，我是使用了日期加英文关键字定义，例本文链接：<code>2022-05-10-use-nextjs-rebuild-blog</code>，但是文件名还是中文的：<code>2022-05-重构博客.md</code>，这样以后需要修改的时候也好查找。</p>
+<p>之前的主题首页会在首页为每个文章生成一个头图，可以自己定义或是在一堆图片里随机选择，影响加载速度不说还浪费CDN流量。我这次就准备做一个极简风格的主题，连分类标签页这些都不要了，把他们合并到了归档页面，点击对应标签和分类就可以筛选对应文章，因为之前hexo会为每个标签和分类都生成一个目录和html文件，标签比文章的数量还要多。</p>
+<p>完成初版进行生成之后，我发现nextjs生成的最终目录会多一些json文件和js文件，而且在html里还会引入他们，文件还不小，总共有几百KB，研究一番之后发现是react的依赖文件及props文件，就是每个文章的数据源。而且我发现生成的html会多出一段script，也存着页面的props数据。因为是静态博客，生成了html就不需要react的这些依赖文件了，props也是多余的，因为生成的html已经包含了这些数据，比如文章的标题、内容等。</p>
+<p><img src="https://images.liyangzone.com/article_img/2022_05_rebuild_blog/2022_0517_204633.png"></p>
+<p>google了一下之后，果然也有人提出过相同的问题：<a href="https://piccalil.li/quick-tip/disable-client-side-react-with-next-js/">Disable client-side React with Next JS</a>，解决方案也是有的，在页面文件里上加上这一段配置即可:</p>
+<pre><code class="ts">
+import &#123;PageConfig&#125; from &#39;next&#39;;
+
+export const config: PageConfig = &#123;
+  unstable_runtimeJS: false
+&#125;;
+</code></pre>
+<p>这样生成的就是一个纯粹的html，只引入了css文件，没有引入任何js，这样生成的一个html文件大小视字数而定，大小在十几KB到几十KB不等，CSS文件约30KB+。</p>
+<p><img src="https://images.liyangzone.com/article_img/2022_05_rebuild_blog/2022_0517_204508.png"></p>
+<h4 id="动态嵌入script实现交互"><a href="#动态嵌入script实现交互" class="headerlink" title="动态嵌入script实现交互"></a>动态嵌入script实现交互</h4><p>当然只有干巴巴的html还是不行的，还有一些页面需要使用js实现功能。这里我写了几个scriptComponent，返回的是一段script文本，需要使用react的dangerouslySetInnerHTML属性来插入到html，在这样的文本中嵌入props是这样实现的，我把所有文章列表赋值给window，供下面的脚本使用。</p>
+<pre><code class="jsx">
+export function ArchivesPropsScript(props) &#123;
+  return (
+    &lt;script id=&quot;ArchivesPropsScript&quot; dangerouslySetInnerHTML=&#123;&#123;
+      __html: `
+      window.totalArticleList = '$&#123;JSON.stringify(props.pageProps.articleList)&#125;';
+    `
+    &#125;&#125;/&gt;
+  )
+&#125;
+</code></pre>
+<p>归档页面的交互逻辑我使用了jquery实现，因为要重新生成文章列表，需要操作dom，操作dom的话还是jquery比较方便一些，相册页面使用了另外两个插件<code>justifiedGallery</code>(相册布局插件，也依赖jquery)和<code>fancybox</code>(相册弹层插件)。在开发相册页面逻辑的时候，因为是本地开发，jquery插件还没加载完成的时候总是报<code>$ is not defined</code>这个错误，这里我写了一个同步加载script标签的方法来动态加载第三方插件，确保jquery加载完成后再加载justifiedGallery，两个都加载完成后再进行初始化。</p>
+<pre><code class="js">function PromiseForEach(arr, cb) &#123;
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) =&gt; &#123;
+      result = result.then(() =&gt; &#123;
+        return cb(a).then((res) =&gt; &#123;
+          realResult.push(res)
+        &#125;)
+      &#125;)
+    &#125;)
+    return result.then(() =&gt; &#123;
+      return realResult
+    &#125;)
+ &#125;
+function addScript(url) &#123;
+   return new Promise((resolve, reject) =&gt; &#123;
+     let script = document.createElement(&#39;script&#39;);
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=&gt;&#123;
+       return resolve(&#39;success&#39;)
+     &#125;
+     script.onerror = ()=&gt;&#123;
+       return reject(&#39;error&#39;)
+     &#125;
+   &#125;)
+ &#125;
+let urlList = [
+  &#39;https://cdn.staticfile.org/jquery/2.2.0/jquery.min.js&#39;,
+  &#39;https://cdn.staticfile.org/justifiedGallery/3.7.0/js/jquery.justifiedGallery.min.js&#39;,
+]
+PromiseForEach(urlList,addScript).then(res=&gt;&#123;
+  //加载完jquery和justifiedGallery,先初始化justifiedGallery插件
+  $(&quot;#gallery-box&quot;).justifiedGallery(&#123;margins: 5, rowHeight: 200&#125;);
+  //再加载fancybox，，因为这个文件有点耗时，后加载不影响页面显示，js加载完成后会自动初始化
+  addScript(&#39;/libs/fancybox/fancybox.umd.js&#39;);
+  AddCss(&#39;/libs/fancybox/fancybox.css&#39;);
+&#125;)
+</code></pre>
+<p>后面引入站点统计的js也是使用这个方法，确保不会阻塞dom。</p>
+<p>之后加入切换夜间模式的代码，使用原生js实现，无需引入jquery</p>
+<pre><code class="js">let html = document.documentElement;
+    let  colorScheme = localStorage.getItem(&#39;colorScheme&#39;)
+    if(colorScheme&amp;&amp;colorScheme==&#39;dark&#39;)&#123;
+      html.setAttribute(&#39;data-color-mode&#39;, &#39;dark&#39;)
+    &#125; else &#123;
+      html.setAttribute(&#39;data-color-mode&#39;, &#39;light&#39;)
+    &#125;
+    let btn_toggle_theme = document.querySelector(&#39;#btn_toggle_theme&#39;);
+    btn_toggle_theme.addEventListener(&#39;click&#39;, function () &#123;
+    let theme = html.dataset.colorMode;
+      if (theme == &#39;light&#39;) &#123;
+        html.setAttribute(&#39;data-color-mode&#39;, &#39;dark&#39;)
+        localStorage.setItem(&#39;colorScheme&#39;,&#39;dark&#39;);
+      &#125; else if (theme == &#39;dark&#39;) &#123;
+        html.setAttribute(&#39;data-color-mode&#39;, &#39;light&#39;)
+        localStorage.setItem(&#39;colorScheme&#39;,&#39;light&#39;);
+      &#125;
+    &#125;)
+</code></pre>
+<p>根据每个页面的名称加载不同的scriptComponent(_document.tsx)：</p>
+<pre><code class="jsx">export default class MyDocument extends Document &#123;
+  render() &#123;
+    return (
+      &lt;Html lang=&quot;zh-cn&quot;
+            data-color-mode=&quot;light&quot;
+      &gt;
+        &lt;Head/&gt;
+        &lt;body&gt;
+        &lt;Main/&gt;
+        &lt;NextScript/&gt;
+        &lt;/body&gt;
+        &lt;DarkModeScript/&gt;
+        &lt;DynamicLoadScript/&gt;
+        &#123;this.props.__NEXT_DATA__.page==&#39;/article/[articlePath]&#39; &amp;&amp; &lt;ArticleScript &#123;...this.props.__NEXT_DATA__.props&#125;/&gt;&#125;
+        &#123;this.props.__NEXT_DATA__.page==&#39;/archives&#39; &amp;&amp; &lt;ArchivesPropsScript &#123;...this.props.__NEXT_DATA__.props&#125;/&gt;&#125;
+        &#123;this.props.__NEXT_DATA__.page==&#39;/archives&#39; &amp;&amp; &lt;ArchivesScript /&gt;&#125;
+        &#123;this.props.__NEXT_DATA__.page==&#39;/gallery/[galleryPath]&#39; &amp;&amp; &lt;DynamicLoadScript/&gt;&#125;
+        &#123;this.props.__NEXT_DATA__.page==&#39;/gallery/[galleryPath]&#39; &amp;&amp; &lt;GalleryScript/&gt;&#125;
+        &lt;StatisticScript/&gt;
+      &lt;/Html&gt;
+    )
+  &#125;
+&#125;
+</code></pre>
+<h4 id="代码段高亮"><a href="#代码段高亮" class="headerlink" title="代码段高亮"></a>代码段高亮</h4><p>使用hilight.js，我使用了github风格的代码高亮，暗色模式也有，去highlightjs官方仓库下载<a href="https://github.com/highlightjs/highlight.js/blob/main/src/styles/github.css">github.css</a> 及<a href="https://github.com/highlightjs/highlight.js/blob/main/src/styles/github-dark-dimmed.css">github-dark-dimmed.css</a>，复制其中的样式到主题配色文件(styles&#x2F;theme.scss)里，再加载highlight.js。</p>
+<pre><code class="js">
+addScript(&#39;https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js&#39;).then(res =&gt; &#123;
+   document.querySelectorAll(&#39;pre code&#39;).forEach((el) =&gt; &#123;
+    hljs.highlightElement(el);
+  &#125;);
+&#125;) 
+</code></pre>
+<p>最后快开发完成的时候，我发现文章字数统计这个功能还没有，查看一些hexo主题的源码之后，发现是用了一个插件<code>hexo-wordcount</code>，可以直接在模板文件中这样调用<code>wordcount(page.content)</code>，查看了这个插件的源码之后，它是扩展了hexo的helper方法：<code>hexo.extend.helper.register(&#39;wordcount&#39;)……</code>，之后我通过<code>hexo.extend.helper.store.wordcount</code>找到了它，虽然也能凑合用，不过它返回的站点总字数单位是千字，而且后面还加了个字母k，我还是决定另写一下，这样还不用引入<code>hexo-wordcount</code>的npm包，把这个插件源码里的counter方法复制出来放到api.ts头部，在访问文章详情的时候调用，统计站点总字数的时候返回万字。</p>
+<pre><code class="js">/**
+ * 文章字数统计
+ * @param: post.content
+ * @return: [中文字数,英文字数]
+ */
+function wordCounter(content) &#123;
+  content = stripHTML(content);
+  const cn = (content.match(/[\u4E00-\u9FA5]/g) || []).length;
+  const en = (content.replace(/[\u4E00-\u9FA5]/g, &#39;&#39;).match(/[a-zA-Z0-9_\u0392-\u03c9\u0400-\u04FF]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af\u0400-\u04FF]+|[\u00E4\u00C4\u00E5\u00C5\u00F6\u00D6]+|\w+/g) || []).length;
+  return [cn, en];
+&#125;
+
+/**
+ * 获取站点信息，分类数、标签数、文章字数等
+ * @param: empty
+ * @return: siteInfo
+ */
+export async function getSiteInfo() &#123;
+  const hexo = await initHexo();
+  const posts = hexo.database.model(&#39;Post&#39;).find(&#123;&#125;);
+  const tags = hexo.database.model(&#39;Tag&#39;).find(&#123;&#125;);
+  const categories = hexo.database.model(&#39;Category&#39;).find(&#123;&#125;);
+  let count = 0;
+  posts.forEach(function (post) &#123;
+    const len = wordCounter(post.content);
+    count += len[0] + len[1];
+  &#125;);
+  if (count &lt; 1000) &#123;
+    return count;
+  &#125;
+  return &#123;
+    postCount: posts.length,
+    tagCount: tags.length,
+    categoryCount: categories.length,
+    wordCount: Math.round(count / 1000) / 10 // 总字数，单位万字
+  &#125;
+&#125;
+
+</code></pre>
+<h4 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h4><p>废话就不多说了，下面是项目结构：</p>
+<pre><code>├── components─────────────────────────组件目录
+│   ├── article-toc.tsx────────────────文章目录组件
+│   ├── article.tsx────────────────────首页文章列表组件
+│   ├── container.tsx──────────────────布局容器组件
+│   ├── external-script.tsx────────────附加scrip标签组件
+│   ├── footer.tsx─────────────────────footer组件
+│   ├── header.tsx─────────────────────header组件
+│   ├── layout.tsx─────────────────────布局组件
+│   ├── meta.tsx───────────────────────meta标签组件
+│   ├── paginator.tsx──────────────────分页组件
+│   ├── post-body.tsx──────────────────文章主体组件
+│   └── post-header.tsx────────────────文章头部组件
+├── lib────────────────────────────────lib目录
+│   ├── api.ts─────────────────────────api，数据源
+│   └── constants.ts───────────────────常量文件
+├── pages──────────────────────────────页面路由目录
+│   ├── article────────────────────────文章路由目录
+│   │   └── [articlePath].tsx──────────文章详情页面
+│   ├── gallery────────────────────────相册路由目录
+│   │   ├── [galleryPath].tsx──────────相册详情页面
+│   │   └── index.tsx──────────────────相册主页
+│   ├── page───────────────────────────分页路由目录
+│   │   └── [index].tsx────────────────分页页面
+│   ├── 404.tsx────────────────────────404页面
+│   ├── about.tsx──────────────────────关于页面
+│   ├── _app.tsx───────────────────────app入口
+│   ├── archives.tsx───────────────────归档页面
+│   ├── _document.tsx──────────────────自定义文档结构
+│   └── index.tsx──────────────────────首页
+├── public─────────────────────────────站点根目录文件
+│   ├── libs───────────────────────────第三方库目录
+│   │   └── fancybox──────────────────fancybox
+│   └── medias─────────────────────────资源目录
+│       ├── avatar.jpg─────────────────头像图片
+│       └── favicon.png────────────────站点图标
+├── source─────────────────────────────hexo目录
+│   ├── _data──────────────────────────自定义数据目录
+│   │   ├── friends.json───────────────友链数据
+│   │   └── gallery.json───────────────相册数据
+│   └── _posts─────────────────────────文章目录
+│       ├── 笔记────────────────────────分类目录
+│       ├── 技术────────────────────────分类目录
+│       ├── 生活────────────────────────分类目录
+│       └── 折腾────────────────────────分类目录
+├── styles─────────────────────────────样式目录
+│   ├── custom-markdown.scss────────────文章样式
+│   ├── custom.sass─────────────────────自定义样式
+│   ├── index.css───────────────────────
+│   └── theme.scss──────────────────────主题颜色定义
+├── _config.yml─────────────────────────hexo配置文件
+├── hexo.ts─────────────────────────────hexo初始化文件，提供数据源
+├── next.config.js──────────────────────next配置文件
+├── next-env.d.ts───────────────────────？？unknown
+├── package.json────────────────────────
+├── postcss.config.js───────────────────
+├── README.md───────────────────────────
+├── tailwind.config.js──────────────────tailwind配置文件
+└── tsconfig.json───────────────────────ts配置文件
+</code></pre>
+<h4 id="配置GitHub-Actions"><a href="#配置GitHub-Actions" class="headerlink" title="配置GitHub Actions"></a>配置GitHub Actions</h4><p>生成静态页面之后，再配置一下GitHub Actions，检测到blog-source分支提交后自动部署到master分支和腾讯COS，再用两段linux命令把生成的json和js文件也都一并删除了，这里的222333是我自定义的buildId，在next.config.js文件里，不然nextjs自动生成的是一段随机的字符串。</p>
+<pre><code>on:
+  push:
+    branches:
+      - blog-source
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: $&#123;&#123; github.workflow &#125;&#125;-$&#123;&#123; github.ref &#125;&#125;
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+          npm run export
+      - name: clean useless file
+        run: |
+          find out/_next/  -name *.js -or -name *.json  |xargs rm -rf
+          find out/_next/  -type d -name data -or -name chunks -or -name 222333  |xargs rm -rf
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: master
+          folder: out
+          single-commit: true
+      - name: Deploy Cos
+        uses: TencentCloud/cos-action@v1
+        with:
+          secret_id: $&#123;&#123; secrets.SECRETID &#125;&#125;
+          secret_key: $&#123;&#123; secrets.SECRETKEY &#125;&#125;
+          cos_bucket: $&#123;&#123; secrets.COS_BUCKET &#125;&#125;
+          cos_region: $&#123;&#123; secrets.COS_REGION &#125;&#125;
+          local_path: out
+          remote_path: &#39;&#39;
+          clean: false
+</code></pre>
+<p>最后，开源是必须的，源码地址:<a href="https://github.com/liyang5945/liyang5945.github.io">点击前往</a> </p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2022-05-17';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

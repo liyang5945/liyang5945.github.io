@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>sync-player：使用websocket实现异地同步看视频 | liyang&#x27;s  blog</title><meta name="keywords" content="websocket"/><meta name="description" content="前段时间我有这样一个需求，想和一个异地的人一起看电影，先后在网上找了一些方案，不过那几个方案都有一些缺点
+
+coplay 一个浏览器插件，只能播放各大视频网站的视频，视频资源有限，我想要看的视频没有，比如一些经典电影和美剧之类
+
+微光APP 还是上面的问题，而且只有手机端
+
+向日葵等远程桌面 受限于网络问题，卡顿很严重，体验不好
+
+
+除了这几个方案之外我也尝试了直播的方案：
+
+通过B站等直播平台进……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">sync-player：使用websocket实现异地同步看视频</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2020-09-20</span><span>文章字数：<!-- -->2.1<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>前段时间我有这样一个需求，想和一个异地的人一起看电影，先后在网上找了一些方案，不过那几个方案都有一些缺点</p>
+<ul>
+<li><p><strong>coplay</strong> 一个浏览器插件，只能播放各大视频网站的视频，视频资源有限，我想要看的视频没有，比如一些经典电影和美剧之类</p>
+</li>
+<li><p><strong>微光APP</strong> 还是上面的问题，而且只有手机端</p>
+</li>
+<li><p><strong>向日葵等远程桌面</strong> 受限于网络问题，卡顿很严重，体验不好</p>
+</li>
+</ul>
+<p>除了这几个方案之外我也尝试了直播的方案：</p>
+<ul>
+<li><p><strong>通过B站等直播平台进行直播，</strong> 缺点：有几十秒的延迟，而且不能保证两端播放进度同步，总会差个几秒，而且直播对上传带宽要求较高。</p>
+</li>
+<li><p><strong>自建直播平台，</strong>，我首先使用了腾讯云上的<code>云直播</code>解决方案，后来我又在自己的云服务器上使用<code>nginx+rtmp</code>搭建了直播服务，两个方案延迟差不多，大概在5-10秒，但还是无法解决两端视频不同步问题。</p>
+</li>
+</ul>
+<p>作为一个切图仔，对用户体验还是有一定追求的，我是一个下载党，看电影必须下载到本地看，基本不看视频网站上的玩意</p>
+<p>那么有没有能实现同步播放本地文件的方案呢，答案是肯定的，经过我的一些摸索和研究，我实现了本地文件的同步播放，同时支持PC和手机端，而且还支持外挂字幕等高级功能，如何实现请往下看。</p>
+<h1 id="功能介绍-amp-特性："><a href="#功能介绍-amp-特性：" class="headerlink" title="功能介绍&amp;特性："></a>功能介绍&amp;特性：</h1><p>一个可以同步看视频的播放器，可用于异地同步观影、观剧，支持多人同时观看。<br>本项目有两个版本，web版运行在浏览器上，可跨平台，不限操作系统、设备，功能简单适用于要求不高的用户。还有基于SPlayer(射手影音)DIY的客户端版本(windows、MAC)，播放4K高清文件、外挂字幕，统统没问题。</p>
+<h1 id="演示demo"><a href="#演示demo" class="headerlink" title="演示demo:"></a>演示demo:</h1><p>web版同步效果</p>
+<p><img src="https://s1.ax1x.com/2020/09/19/wI60je.gif" alt="wI60je.gif"></p>
+<p>客户端与web版同步效果</p>
+<p><img src="https://s1.ax1x.com/2020/09/20/wofbYd.gif" alt="wofbYd.gif"></p>
+<h1 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h1><p>基于websocket实现，与一些用websocket实现的聊天室类似，只不过这个聊天室里的消息换成了播放暂停的动作和时间信息，客户端收到消息后执行相应的动作:播放、暂停、快进，以达到同时播放的效果。</p>
+<h1 id="项目所用到的"><a href="#项目所用到的" class="headerlink" title="项目所用到的"></a>项目所用到的</h1><ul>
+<li>node.js </li>
+<li>socket.io</li>
+<li>HTML5 video API </li>
+<li>vue.js</li>
+</ul>
+<h1 id="如何使用："><a href="#如何使用：" class="headerlink" title="如何使用："></a>如何使用：</h1><p>本项目的核心是websocket，所以至少需要一台服务器提供websocket服务，websocket服务可以自己部署，可以使用第三方平台GoEasy提供的websocket服务(可免费使用两个月)。</p>
+<p>1、自己部署：websocket服务器可以是一台具有公网IP的云服务器，也可以是一台具有公网IP的普通PC，没有公网IP也可以。你也可以使用zerotier或其他VPN工具将两台设备组成一个大局域网，让它们能互相通信。websocket服务器操作系统不限，只要有node.js环境。</p>
+<p>websocket服务端部署方法：安装node.js环境，将server目录移动到服务器上，进入server目录，执行以下命令</p>
+<p>安装项目依赖包</p>
+<pre><code class="bash">
+# 安装项目依赖包
+
+npm install 
+
+# 启动websocket服务
+
+node index.js
+</code></pre>
+<p>2、使用GoEasy的websocket服务</p>
+<p>注册GoEasy开发者账号并创建一个应用，获得appkey，复制到本项目相应位置即可。</p>
+<p>GoEasy官网：<a href="https://www.goeasy.io/">https://www.goeasy.io</a></p>
+<p>无论是使用哪种websocket服务都可以，本项目写了两套代码，只需将不用的那套注释掉即可(默认GoEasy)。</p>
+<p>除了websocket服务器之外，还需要两个http服务端，一个是web服务端(提供html、css、js等文件的访问)，一个是视频服务端(提供视频文件访问)。</p>
+<p>3、使用leancloud-realtime</p>
+<p>leancloud-realtime是啥玩意？简单来说就是一个即时通讯SDK，这里不多介绍，请去<a href="https://leancloud.cn/docs/realtime_v2.html">leancloud官网</a> 了解。这个服务也是使用websocket传输数据的，所以本项目也能用，我们只要把传输的文本消息换成一个JSON字符串即可。而且leancloud为开发者提供了一些免费额度，消息数量不限，只有120次&#x2F;分钟的限制，个人使用的话是完全够用的，强烈推荐这个。</p>
+<p>首先注册leancloud开发者账号，进入控制台，获得appId、appKey等信息，复制到对应位置(client&#x2F;script&#x2F;main.js)，第一次执行(使用浏览器打开页面)这段代码时会生成一个对话(conversation)，在leancloud控制台&gt;即时通讯&gt;对话下面，复制一个conversation id到对应位置</p>
+<p><img src="https://s4.ax1x.com/2022/01/05/TvG1Qs.png" alt="TvG1Qs.png"></p>
+<p><img src="https://s4.ax1x.com/2022/01/05/TvGQzj.png" alt="TvGQzj.png"></p>
+<p>你可以将web服务部端署到以下位置：</p>
+<ul>
+<li>具有公网IP的服务器</li>
+<li>github-pages或国内的码云提供的静态web服务</li>
+<li>localhost(本地服务器)，同一个局域网内的设备访问该服务器内网IP</li>
+</ul>
+<p>视频文件只需一个视频地址就行，也有以下几种选择：</p>
+<ul>
+<li>具有公网IP的服务器</li>
+<li>localhost(本地服务器)，同一个局域网内的设备访问该服务器内网IP</li>
+<li>第三方视频地址</li>
+</ul>
+<p><img src="https://s1.ax1x.com/2020/09/17/wfntdU.png" alt="wfntdU.png"></p>
+<p>使用场景1：云服务器带宽足够大(至少要大于播放视频的码率)，云服务器既可以作为websocket服务端，也可以作为http服务端。上图中所有设备都访问云服务器的ip或域名。</p>
+<p>使用场景2：云服务器的带宽很小，这时候它只能作为websocket服务端，这时可以用上图中的PC1和PC2作为http服务端，PC1和PHONE1在一个内网访问PC1的内网IP，PC2和PHONE2在一个内网访问PC2的内网IP，PC3可作为自己的http服务端，PHONE3若是有提供视频文件的服务端，也可以使用。</p>
+<p><img src="https://s1.ax1x.com/2020/09/17/wfnYZT.png" alt="wfnYZT.png"></p>
+<p>使用场景3：需要使用zerotier或其他VPN工具将异地设备组成一个大局域网，其中任意一台PC均可作为websocket服务端和http服务端(需要上传带宽足够大)。上图中各设备都访问那台PC的内网ip即可。</p>
+<p>最简单的使用方法，下载nginx开启一个本地服务器，下载本项目client文件夹放到到nginx根目录里，视频文件也放到里面。注册leancloud开发者账号并创建一个应用，获得appId、appKey等信息，并填入到代码(<code>script/main.js</code>)相应位置。然后浏览器打开 <code>192.168.3.58/client/</code>，填入你的视频地址<code>192.168.3.58/movie/xxx.mp4</code>或网络视频地址，对方也这样操作一番，即可实现同步播放视频。</p>
+<p>web版本的功能比较简单，而且受限于网络问题，快进之类的操作需要缓冲一段时间。如果你不满足web版功能，对用户体验有更高的要求，如支持更多文件格式、播放高清本地视频文件、外挂字幕等，我也找到了另一种方式来满足你的需求。</p>
+<p>那就是DIY一个开源的播放器的源码：SPlayer(射手影音)。</p>
+<p>射手影音官网：<a href="https://splayer.org/">https://splayer.org</a></p>
+<p>源码地址：<a href="https://github.com/chiflix/splayerx">https://github.com/chiflix/splayerx</a></p>
+<p>在以<strong>electron + 播放器</strong>为关键字一番搜索之后，我找到了这个基于electron实现的开源播放器，并下载了源码来研究。</p>
+<p>经过一番研究之后，我找到了控制视频播放、暂停、快进的代码位置，并将控制同步的代码移植了进去，从而也实现了同步功能，并且与web版兼容。</p>
+<p>具体方法请看：<a href="https://github.com/liyang5945/sync-player/blob/master/how-to-modify-splayer.md">修改教程</a></p>
+<p>PS：射手影音官方的代码打包之后会有一个bug，窗口无法拖动，我自己fork了一个分支，修正了这个bug，控制同步的代码也都加进去了，需要的可以直接fork，修改一下appKey即可，地址：<a href="https://github.com/liyang5945/splayerx">https://github.com/liyang5945/splayerx</a></p>
+<p>本项目部分图标样式来源于此项目: <a href="https://github.com/Justineo/coplay">coplay</a> </p>
+<h1 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h1><p>2022-01-05</p>
+<ul>
+<li>添加leancloud即时通讯方案、完善修改射手影音的教程。</li>
+</ul>
+<p>2022-01-18</p>
+<ul>
+<li>添加m3u8视频支持。</li>
+</ul>
+<p>本项目github地址：<a href="https://github.com/liyang5945/sync-player">点击前往</a> ，欢迎⭐⭐⭐STAR⭐⭐⭐</p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2020-09-20';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

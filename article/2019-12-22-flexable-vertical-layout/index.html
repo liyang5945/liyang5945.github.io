@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>使用FLEX实现一种上下高度不固定的自适应布局 | liyang&#x27;s  blog</title><meta name="keywords" content="CSS FLEX布局"/><meta name="description" content="此布局的需求是：头部高度不固定，由子元素撑高，中间内容高度不固定，自动填满父容器剩余高度，底部高度固定。
+这种布局是下面这种布局的变种：
+
+头部和中间内容都变成了不固定的，一般用于后台管理系统，上部分是一些查询条件和操作按钮，查询条件个数不固定，中间部分是表格内容，底部一般用于分页，固定高度。
+此种布局用flex可以很容易的实现：父容器设置高度为100%，flex-direction设置为colu……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">使用FLEX实现一种上下高度不固定的自适应布局</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2019-12-22</span><span>文章字数：<!-- -->1.3<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>此布局的需求是：头部高度不固定，由子元素撑高，中间内容高度不固定，自动填满父容器剩余高度，底部高度固定。<br><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/FLEX%E4%B8%8A%E4%B8%8B%E5%B8%83%E5%B1%80/20191221_103338.png"></p>
+<p>这种布局是下面这种布局的变种：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/FLEX%E4%B8%8A%E4%B8%8B%E5%B8%83%E5%B1%80/20191221_101238.png"></p>
+<p>头部和中间内容都变成了不固定的，一般用于后台管理系统，上部分是一些查询条件和操作按钮，查询条件个数不固定，中间部分是表格内容，底部一般用于分页，固定高度。</p>
+<p>此种布局用flex可以很容易的实现：父容器设置高度为100%，flex-direction设置为column(主轴设置为竖向)，上部flex-shrink设置0，下部flex-grow设置1，底部flex-shrink设置0。</p>
+<p>CSS部分：</p>
+<pre><code class="css">    * &#123;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    &#125;
+
+    html, body &#123;
+        width: 100%;
+        height: 100%;
+    &#125;
+
+    .wrapper &#123;
+        height: 100%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+    &#125;
+
+    .head &#123;
+        border: 1px solid red;
+        padding: 15px;
+        flex-shrink: 0;
+        margin-bottom: 10px;
+    &#125;
+
+    .content &#123;
+        border: 1px solid blue;
+        flex: 1;
+        padding: 15px;
+        margin-bottom: 10px;
+        line-height: 50px;
+        overflow: auto; //此行是关键 
+    &#125;
+
+    .foot &#123;
+        flex-shrink: 0;
+        padding: 10px;
+        border: 1px solid green;
+    &#125;
+</code></pre>
+<p>HTML部分：</p>
+<pre><code class="html">&lt;div class=&quot;wrapper&quot;&gt;
+  &lt;div class=&quot;head&quot;&gt;
+    &lt;p&gt;子元素&lt;/p&gt;
+    &lt;p&gt;子元素&lt;/p&gt;
+    &lt;p&gt;子元素&lt;/p&gt;
+    &lt;p&gt;子元素&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;content&quot;&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+    &lt;p&gt;内容&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;foot&quot;&gt;
+    &lt;p&gt;底部&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/FLEX%E4%B8%8A%E4%B8%8B%E5%B8%83%E5%B1%80/20191221_105339.png"></p>
+<p>中间的内容用来放element-ui的表格，表格高度设置为100%，可以达到固定表头内容滚动的效果，一切看起来都很美好。</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/FLEX%E4%B8%8A%E4%B8%8B%E5%B8%83%E5%B1%80/20191221_110422.png"></p>
+<p>然而最近我重装了一次系统然后把chrome升级到79版本后，发现一个蛋疼的事情，这种方式居然失效了，出现了下面的情况：</p>
+<p><img src="https://images.liyangzone.com/article_img/%E6%8A%80%E6%9C%AF%E7%9B%B8%E5%85%B3/FLEX%E4%B8%8A%E4%B8%8B%E5%B8%83%E5%B1%80/20191221_135805.png"></p>
+<p>中间的内容高度设置失效了，也变成了由子元素撑高。起初我怀疑是element-ui的锅，然后换了不同版本的element-ui后还是如此，然后我又怀疑可能是node版本的问题，因为我重装系统后把node由v8换成了v10,当我切换成v8后还是如此。后来我在同事的电脑上查看，他们居然没有出现这种情况，问题到底出现在了哪里？经过仔细排查后，这个锅最终落在了chrome头上，当我把chrome装回78版本后，一切又变得正常了。</p>
+<p>然后我发现这个问题也在firefox上面出现了，这种布局似乎只能在chrome78及以下生效(IE11也生效)。然而我不能阻止用户把chrome升级到79版本或使用firefox浏览器，所以这个问题的根源也不在chrome或firefox,一定是别的什么地方出现了问题。</p>
+<p>最终问题定位到了BFC(块格式化上下文,Block Formatting Context)上面，关于BFC的概念你可以前往<a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context">MDN</a>查看。</p>
+<p>问题的关键就是要为page-body为这个div创建BFC，让它里面的元素不会影响到外面的元素，下列方式会创建块格式化上下文：</p>
+<pre><code>根元素(&lt;html&gt;)
+浮动元素（元素的 float 不是 none）
+绝对定位元素（元素的 position 为 absolute 或 fixed）
+行内块元素（元素的 display 为 inline-block）
+表格单元格（元素的 display为 table-cell，HTML表格单元格默认为该值）
+表格标题（元素的 display 为 table-caption，HTML表格标题默认为该值）
+匿名表格单元格元素（元素的 display为 table、table-row、 table-row-group、table-header-group、table-footer-group（分别是HTML table、row、tbody、thead、tfoot的默认属性）或 inline-table）
+overflow 值不为 visible 的块元素
+display 值为 flow-root 的元素
+contain 值为 layout、content或 paint 的元素
+弹性元素（display为 flex 或 inline-flex元素的直接子元素）
+网格元素（display为 grid 或 inline-grid 元素的直接子元素）
+多列容器（元素的 column-count 或 column-width 不为 auto，包括 column-count 为 1）
+column-span 为 all 的元素始终会创建一个新的BFC，即使该元素没有包裹在一个多列容器中（标准变更，Chrome bug）。
+</code></pre>
+<p>不过我试了多种方式，都没有生效，只有设置 <code>overflow: auto</code> 之后才生效。</p>
+<p>这个问题的根本原因就是浏览器创建BFC的规则不一致，chrome78以下版本和IE11会为<code>display</code>为<code>flex</code>的直接子元素创建BFC，不管这个子元素的overflow值为什么(默认值为visible)， chrome79版本及firefox则不会，只有设置 了<code>overflow: auto</code>之后才会创建BFC，不确定这是chrome79的feature还是bug。</p>
+<p>原生HTML+CSS源码地址:<a href="https://codepen.io/liyang5945/pen/povvVbe">点击前往</a>。<br>vue + element-ui版源码地址：<a href="https://codepen.io/liyang5945/pen/abzJybY">点击前往</a>。</p>
+</div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2019-12-22';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-cn" data-color-mode="light"><head><meta charSet="utf-8"/><link rel="shortcut icon" href="/medias/favicon.png"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><meta content="on" http-equiv="x-dns-prefetch-control"/><meta content="telephone=no" name="format-detection"/><title>Vue-Gantt-chart甘特图实现拖拽功能 | liyang&#x27;s  blog</title><meta name="keywords" content="vue 甘特图 拖拽"/><meta name="description" content="去年做了一个展示任务计划的甘特图项目，我使用了Vue-Gantt-chart 这个插件来实现，要求实现拖拽功能还有一些别的需求，最近抽空把实现拖拽功能的代码重新整理了一下，发布出来。改动如下：
+
+样式调整，添加顶部部的时间刻度格和左侧日期。滚动插件使用 iscroll 实现，使滚动条样式在各浏览器下保持一致，支持鼠标按住拖动，类似手机上的按住滚动效果。
+
+数据分组：不同属性的甘特行可以分组，分组后……"/><meta name="next-head-count" content="8"/><link rel="preload" href="/_next/static/css/59727fef85d99607.css" as="style"/><link rel="stylesheet" href="/_next/static/css/59727fef85d99607.css" data-n-g=""/><noscript data-n-css=""></noscript></head><body><div id="__next" data-reactroot=""><div class="blog-header min-w-full"><div class="container max-w-screen-lg px-2 clear-both"><div class="block text-center sm:inline-block sm:text-left "><div class=" inline-block align-top rounded-full my-2 mr-2 w-8 h-8 overflow-hidden bg-blue-400"><img class="site-logo" src="/medias/avatar.jpg" alt=""/></div><span class=" inline-block align-top mt-2.5 text-xl">liyang&#x27;s  blog</span></div><div class="block text-center sm:inline-block sm:text-left sm:float-right"><a class="inline-block nav-link py-3 px-2" href="/">首页</a><a class="inline-block nav-link py-3 px-2" href="/archives/">归档</a><a class="inline-block nav-link py-3 px-2" href="/gallery/">相册</a><a class="inline-block nav-link py-3 px-2" href="/about/">关于</a><span class="inline-block nav-link py-3 px-2" id="btn_toggle_theme" title="切换暗色模式"><i class="theme-icon"></i></span></div></div></div><div class="blog-body pt-10 pb-10"><div class="container max-w-screen-lg px-3"><main class="flex"><article class="article-content mb-5 rounded p-5 w-full "><h1 class="text-xl md:text-2xl lg:text-2xl font-bold tracking-tighter leading-tight md:leading-none mb-6 text-center md:text-left">Vue-Gantt-chart甘特图实现拖拽功能</h1><p class="mb-5 text-sm"><span class="mr-3">发布日期：<!-- -->2022-05-31</span><span>文章字数：<!-- -->1.1<!-- -->K</span></p><div class="mx-auto"><div class="markdown-body"><p>去年做了一个展示任务计划的甘特图项目，我使用了<a href="https://github.com/w1301625107/Vue-Gantt-chart">Vue-Gantt-chart</a> 这个插件来实现，要求实现拖拽功能还有一些别的需求，最近抽空把实现拖拽功能的代码重新整理了一下，发布出来。改动如下：</p>
+<ul>
+<li><p>样式调整，添加顶部部的时间刻度格和左侧日期。滚动插件使用 <a href="https://github.com/cubiq/iscroll">iscroll</a> 实现，使滚动条样式在各浏览器下保持一致，支持鼠标按住拖动，类似手机上的按住滚动效果。</p>
+</li>
+<li><p>数据分组：不同属性的甘特行可以分组，分组后数据渲染也是动态的，即只渲染浏览器视口内的数据，我本机测试万级数据(500行25列)轻微卡顿。</p>
+</li>
+<li><p>数据搜索：搜索后高亮显示结果，并滚动到相应任务位置，若搜索到多个结果，继续点搜索按钮跳转到下一个结果。</p>
+</li>
+<li><p>甘特块拖拽调整：基于浏览器原生拖拽事件实现，不同行之间的甘特块可以拖拽调整，调整时可以做一些校验，代码里暂时只做了时间校验，拖拽后默认会有一个黑色阴影块显示原来的任务，在配置项里可以设置为不显示，调整确认弹窗也可以选择显示或不显示(默认不显示)。</p>
+</li>
+<li><p>右键菜单：若想要调整的行竖向间距过大不方便拖拽时，可使用右键菜单调整任务，可以选择复制或交换。</p>
+</li>
+</ul>
+<p>因为原插件的代码只包含了一个甘特图，添加了分组功能后，原来的动态渲染的代码就失效了，分组后的动态渲染功能我是这样实现的：</p>
+<p>分组时给每一行的甘特数据添加一个rawIndex(原始索引)字段，甘特行的位置采用绝对定位，使用rawIndex来计算绝对定位的top值，直接rawIndex * 行高就是top值，这样即使上面的元素不显示也不影响渲染的元素位置。</p>
+<p>然后使用getBoundingClientRect这个API来获取每个甘特组元素相对于浏览器窗口的top和bottom值，计算出需要显示的起始索引和结束索引。这是垂直方向上的动态渲染实现。水平方向上的动态渲染没有改动，是根据时间判断的。</p>
+<p>判断的逻辑还是比较绕的，需要判断负值的情况，详细代码如下：</p>
+<pre><code class="js">
+ /**
+     * 分割出dom中需要显示的数据
+     */
+    sliceData() &#123;
+      if (!this.wrapperElement) return false;
+
+      const &#123;
+        unVisibleHeight,
+        heightOfBlocksWrapper,
+        cellHeight,
+        preload,
+        datas
+      &#125; = this;
+
+      const ClientRect = this.wrapperElement.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      let startPosition = 0;
+      let endPosition = 0;
+      const top = ClientRect.top;
+      const bottom = ClientRect.bottom;
+      this.top = top;
+      this.bottom = bottom;
+      if (top &lt;= 0) &#123;
+        startPosition = Math.abs(top) + unVisibleHeight;
+        endPosition = startPosition + heightOfBlocksWrapper;
+        if (bottom &gt; unVisibleHeight &amp;&amp; bottom &lt;= windowHeight) &#123;
+          endPosition = startPosition + bottom;
+        &#125; else if (bottom &lt;= unVisibleHeight) &#123;
+          this.startRenderNum = 0;
+          this.endRenderNum = 0;
+          return;
+        &#125;
+      &#125; else if (top &gt; 0 &amp;&amp; top &lt;= unVisibleHeight) &#123;
+        startPosition = unVisibleHeight - top;
+        endPosition = startPosition + heightOfBlocksWrapper;
+      &#125; else if (top &gt; unVisibleHeight &amp;&amp; top &lt;= windowHeight) &#123;
+        startPosition = 0;
+        endPosition = windowHeight - top;
+      &#125; else if (top &gt; windowHeight) &#123;
+        this.startRenderNum = 0;
+        this.endRenderNum = 0;
+        return;
+      &#125;
+
+      //没有高度，不需要渲染元素
+      if (heightOfBlocksWrapper === 0 || cellHeight === 0) &#123;
+        this.startRenderNum = 0;
+        this.endRenderNum = 0;
+        return;
+      &#125;
+
+      // 为 0 全部渲染
+      if (preload === 0) &#123;
+        this.startRenderNum = 0;
+        this.endRenderNum = datas.length;
+        return;
+      &#125;
+      const startRenderNum = Math.ceil(startPosition / cellHeight) - preload;
+      this.startRenderNum = startRenderNum &lt; 0 ? 0 : startRenderNum;
+
+      const endRenderNum = Math.ceil(endPosition / cellHeight) + preload;
+      this.endRenderNum =
+        endRenderNum &gt; datas.length ? datas.length : endRenderNum;
+    &#125;
+</code></pre>
+<p>以下图为例，假设红色框是浏览器的窗口，红框外面是一个甘特组，包含14行数据，每行高50像素，浏览器窗口高400，那么获取到的top和bottom就是-150和550，可以计算出渲染起始位置为：150-550索引值为中间8个：3-10。</p>
+<p><img src="https://s2.loli.net/2022/06/05/TQ3doifj7Lxw4tK.png" alt="2022_0605_120801.png"></p>
+<p>多个分组同时出现在窗口内时，如下图，上面的渲染起始位置为：100-300 索引值：2-5，下面的渲染起始位置为0-200，索引值为0-3。</p>
+<p><img src="https://s2.loli.net/2022/06/05/l48dhm7HtvEUzob.png" alt="2022_0605_120742.png"></p>
+<p>当然上面只是理想状态下的情况，如果一行的位置只滚动到一半也是不显示的，实际代码中需要加一个预渲染值，这里设置为1，起始和结尾都多渲染一列。</p>
+<h3 id="动图演示"><a href="#动图演示" class="headerlink" title="动图演示"></a>动图演示</h3><p>拖拽移动</p>
+<p><img src="https://s2.loli.net/2022/06/05/iJ1ldoPykVWsgeS.gif" alt="vue_drag_gantt_1.gif"></p>
+<p>数据分组</p>
+<p><img src="https://s2.loli.net/2022/06/05/akVXK3qdhuRr1tZ.gif" alt="vue_drag_gantt_2.gif"></p>
+<p>搜索</p>
+<p><img src="https://s2.loli.net/2022/06/05/U9AY4r2WoFwTlk6.gif" alt="vue_drag_gantt_3.gif"></p>
+<p>拖拽调整任务</p>
+<p><img src="https://s2.loli.net/2022/06/05/CbqVfTXBoLxUQkr.gif" alt="vue_drag_gantt_4.gif"></p>
+<p>右键菜单调整任务</p>
+<p><img src="https://s2.loli.net/2022/06/05/oM56LcOAugp7zKH.gif" alt="vue_drag_gantt_5.gif"></p>
+<h3 id="demo-在线演示"><a href="#demo-在线演示" class="headerlink" title="demo: 在线演示"></a>demo: <a href="https://liyang5945.github.io/vue-drag-gantt-chart">在线演示</a></h3><h3 id="github地址-https-github-com-liyang5945-vue-drag-gantt-chart"><a href="#github地址-https-github-com-liyang5945-vue-drag-gantt-chart" class="headerlink" title="github地址: https://github.com/liyang5945/vue-drag-gantt-chart"></a>github地址: <a href="https://github.com/liyang5945/vue-drag-gantt-chart">https://github.com/liyang5945/vue-drag-gantt-chart</a></h3></div><p class="date-info pt-8 font-bold leading-10 text-center hidden">本文发布于天前，文中所描述的信息可能已发生改变</p></div></article></main></div></div><footer class="blog-footer bg-neutral-50 border-neutral-200"><div class="container max-w-screen-lg px-3"><div class="md:flex justify-between block text-sm py-2"><div class="py-1 mx-3 text-center">Copyright © 2019 - 2022 <!-- -->liyang&#x27;s  blog<a href="http://beian.miit.gov.cn/"> 豫ICP备19028870号 </a></div><div class="py-1 mx-3 text-center"> Powered by<a href="https://nextjs.org/"> Next.js </a>&amp;<a href="https://hexo.io/"> Hexo </a>Created by liyang</div></div></div></footer></div></body><script id="DarkModeScript">
+    let html = document.documentElement;
+    let  colorScheme = localStorage.getItem('colorScheme')
+    if(colorScheme&&colorScheme=='dark'){
+      html.setAttribute('data-color-mode', 'dark')
+    } else {
+      html.setAttribute('data-color-mode', 'light')
+    }
+    let btn_toggle_theme = document.querySelector('#btn_toggle_theme');
+    btn_toggle_theme.addEventListener('click', function () {
+    let theme = html.dataset.colorMode;
+      if (theme == 'light') {
+        html.setAttribute('data-color-mode', 'dark')
+        localStorage.setItem('colorScheme','dark');
+      } else if (theme == 'dark') {
+        html.setAttribute('data-color-mode', 'light')
+        localStorage.setItem('colorScheme','light');
+      }
+    })</script><script id="DynamicLoadScript">
+function PromiseForEach(arr, cb) {
+    let realResult = []
+    let result = Promise.resolve()
+    arr.forEach((a, index) => {
+      result = result.then(() => {
+        return cb(a).then((res) => {
+          realResult.push(res)
+        })
+      })
+    })
+    return result.then(() => {
+      return realResult
+    })
+ }
+function addScript(url) {
+   return new Promise((resolve, reject) => {
+     let script = document.createElement('script');
+     script.src = url;
+     document.documentElement.appendChild(script);
+     script.onload = ()=>{
+       return resolve('success')
+     }
+     script.onerror = ()=>{
+       return reject('error')
+     }
+   })
+ }     
+function AddCss(url) {
+      document.head.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="${url}">`);
+}
+</script><script id="ArticleTocScript">
+       window.articleDate = '2022-05-31';
+      let tocLinks = document.querySelectorAll('.toc-text');
+      let targetLinks = document.querySelectorAll('.headerlink')
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+        let target = event.target
+        event.preventDefault()
+        event.stopPropagation()
+        let parent = target.parentNode;
+        let hash = decodeURI(parent.hash);
+        let targetLink = Array.prototype.find.call(targetLinks, function (item) {
+          return item.getAttribute('href') == hash
+        })
+        let top = targetLink.offsetTop
+        window.scrollTo(0, top - 100)
+        })
+      })
+      let dateInfoEle = document.querySelector('.date-info');
+      var articleDate = new Date(window.articleDate)
+    if(new Date().getTime()-articleDate.getTime()>180 * 24 * 3600 *1000){
+      let date = Math.ceil((new Date().getTime()-articleDate.getTime())/24/3600/1000)
+      dateInfoEle.style.display = 'block';
+      dateInfoEle.innerText = `本文发布于${date}天前，文中所描述的信息可能已发生改变。`
+    }
+addScript('https://unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js').then(res => {
+   document.querySelectorAll('pre code').forEach((el) => {
+    hljs.highlightElement(el);
+  });
+})     
+      </script><script id="StatisticScript">
+let runningOnBrowser = typeof window !== "undefined";
+    let isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== "undefined" && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+let supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+    if(!isBot&&supportsIntersectionObserver){
+      if(!navigator.userAgent.includes('Chrome/78')){
+        addScript('https://hm.baidu.com/hm.js?3123469f7f81d45d6c4cd4a6a84ccf68');
+        addScript('https://js.users.51.la/21306481.js');
+      }
+    }
+  </script></html>
